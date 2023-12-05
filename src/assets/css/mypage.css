@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body{
+    background-color: #F5F5F5;
+    text-align: -webkit-center;
+}
+#myInfoLayout{
+    text-align: -webkit-center;
+    margin: auto;
+    width: 885px;
+    height: 940px;
+    border-radius: 30px;
+    box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.10);
+    overflow: hidden; /* 이 부분을 추가해보세요 */
+}
+#userPic{
+    margin-top: 100px; /* 예시로 추가한 마진 */
+    width: 200px;
+    height: 200px;
+    border-radius: 200px;
+    border: 1px solid #000;
+    background: lightgray 50% / cover no-repeat;
+}
+div#currentUser {
+    color: #000;
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 26px;
+    letter-spacing: 0.1px;
+    margin-top: 51px;
+}
+div#currentUserEmail {
+    width: 180px;
+    height: 20px;
+    color: #696974;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    letter-spacing: 0.1px;
+    margin-top: 26px;
+}
+.follow {
+    display: contents;
+}
+div#userInfoChart {
+    margin-top: 90px;
+    margin-bottom: 43px;
+}
+.infoChartTitle {
+    margin-left: 112px;
+    margin-right: 90px;
+}
+
+
