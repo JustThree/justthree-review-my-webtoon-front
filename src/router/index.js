@@ -8,8 +8,8 @@ const router= createRouter({
     history: createWebHistory(),
 
     routes : [
-        {path:'/userinfo',component:UserInfo},
-        {path:'/userinfo/updateuserinfo',component:UpdateUserInfo},
+        {path:'/mypage/userinfo',component:UserInfo},
+        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
     ]
 })
