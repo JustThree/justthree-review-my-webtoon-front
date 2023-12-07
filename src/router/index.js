@@ -2,10 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
-
-
-const router= createRouter({
-    history: createWebHistory(),
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 
 import Login from "@/pages/Login.vue";
@@ -15,6 +11,8 @@ import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
 import boardForm from "@/pages/board/boardForm.vue"
+
+
 const router= createRouter({
     history: createWebHistory(),
     routes : [
@@ -28,11 +26,8 @@ const router= createRouter({
         //board
         {path:'/boardform', component: boardForm},
 
-    routes : [
         {path:'/mypage/userinfo',component:UserInfo},
-        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
-
-    ]
-})
+        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
+)
 
 export default router;
