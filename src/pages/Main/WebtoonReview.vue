@@ -149,7 +149,7 @@ const color = ref('#BEADFA')
       </v-card>
     </v-row>
     <v-row align="center" justify="center"
-           style="height: 300px;
+           style="
            width: 100%;"
            class="m-lg-2"
     >
@@ -158,43 +158,38 @@ const color = ref('#BEADFA')
           height="100%"
           width="100%"
           :color="color"
-          style="display: flex; flex-direction: column;"
+          style="display: flex;
+          flex-direction: column;"
       >
-        <v-container class="bg-surface-variant">
-          <v-row no-gutters>
-            <v-col order="last">
-              <v-sheet class="pa-4 ma-2 ga-2">
-                First, but last
+        <v-container class="bg-blue-grey-lighten-2"
+        >
+
+          <v-row  no-gutters
+                  v-for="(item,idx) in 2"
+          >
+            <v-col v-for="(itemCol,idxCol) in 4">
+
+              <v-sheet class="pa-2 ma-6 g"
+              >
+                <v-card style="height: 200px"
+                >
+                    <h3>똑똑한 청년.</h3>
+                  <v-divider></v-divider>
+                  <h5>너무 재밌어요~~~</h5>
+                  <v-divider></v-divider>
+                  <div>
+                    <span>
+                      아이콘1
+                    </span>
+                    <span>
+                      아이콘2
+                    </span>
+                  </div>
+                  <v-divider></v-divider>
+                  <div>아이콘3</div>
+                </v-card>
               </v-sheet>
-            </v-col>
-            <v-col>
-              <v-sheet class="pa-2 ma-2 ga-2">
-                Second, but unordered
-              </v-sheet>
-            </v-col>
-            <v-col order="first">
-              <v-sheet class="pa-2 ma-2">
-                Third, but first
-              </v-sheet>
-            </v-col>
-          </v-row>
-        </v-container>
-        <v-container class="bg-surface-variant">
-          <v-row no-gutters>
-            <v-col order="last">
-              <v-sheet class="pa-2 ma-2">
-                First, but last
-              </v-sheet>
-            </v-col>
-            <v-col>
-              <v-sheet class="pa-2 ma-2">
-                Second, but unordered
-              </v-sheet>
-            </v-col>
-            <v-col order="first">
-              <v-sheet class="pa-2 ma-2">
-                Third, but first
-              </v-sheet>
+
             </v-col>
           </v-row>
         </v-container>
