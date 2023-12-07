@@ -9,6 +9,11 @@ body{
     background-color: #F5F5F5;
     text-align: -webkit-center;
 }
+#userPic img {
+    width: 100%; /* 이미지가 부모 요소에 꽉 차도록 설정 */
+    height: 100%; /* 이미지가 부모 요소에 꽉 차도록 설정 */
+    /*object-fit: cover; !* 이미지가 자동으로 잘리지 않도록 설정 *!*/
+}
 #myInfoLayout{
     text-align: -webkit-center;
     margin: auto;
@@ -24,8 +29,8 @@ body{
     width: 200px;
     height: 200px;
     border-radius: 200px;
-    border: 1px solid #000;
-    background: lightgray 50% / cover no-repeat;
+    /*border: 1px solid #000;*/
+    /*background: lightgray 50% / cover no-repeat;*/
 }
 div#currentUser {
     color: #000;
@@ -128,8 +133,14 @@ button.btn.btn-primary.btn-block {
     color: black;
     border-color: aliceblue;
 }
-
-
+.link-text {
+    color: black; /* 부모 요소의 텍스트 색상 상속 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+.nav_text{
+    color: black;
+    text-decoration: none;
+}
 /* Line 5 */
 
 /*position: absolute;*/

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="myInfoLayout">
-      <div id="userPic"><img src="" alt=""></div>
+      <div id="userPic"><img src="@/assets/images/blackDUK.png" alt=""></div>
       <div id="currentUser">현덕냥</div>
       <div id="currentUserEmail">cat@naver.com</div>
       <div class="followerInfo">
@@ -16,26 +16,45 @@
 
       <div id="userInfoChart">
         <div class="infoChartTitle">
+          <router-link class="nav_text" :to="{path:`/mypage/rated`}">
           <div>평가</div>
           <div>1</div>
+          </router-link>
         </div>
         <div class="infoChartTitle">
+          <router-link class="nav_text" :to="{path:`/mypage/reviewd`}">
           <div>리뷰</div>
           <div>2</div>
+          </router-link>
+
         </div>
 
         <div class="infoChartTitle">
+          <router-link class="nav_text" :to="{path:`/mypage/interested`}">
           <div>관심웹툰</div>
           <div>3</div>
+          </router-link>
+
         </div>
       </div>
-      <div class="col-sm-10">
-        <button type="button" router-link to="/userinfo/updateuserinfo" class="btn btn-primary btn-block">내 정보 수정</button>
+      <div @click="goToUpdateUserInfo"  class="col-sm-10">
+        <button type="button" class="btn btn-primary btn-block">내 정보 수정</button>
       </div>
 
     </div>
   </div>
 </template>
+<script>
+export default {
+  methods:{
+    goToUpdateUserInfo(){
+      this.$router.push('/mypage/userinfo/updateuserinfo');
+    }
+
+  }
+}
+</script>
 <style scoped>
 @import "@/assets/css/mypage.css";
+
 </style>

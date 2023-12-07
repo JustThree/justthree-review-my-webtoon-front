@@ -3,9 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 
-
-const router= createRouter({
-    history: createWebHistory(),
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 
 import Login from "@/pages/Login.vue";
@@ -27,8 +24,7 @@ const router= createRouter({
 
         //board
         {path:'/boardform', component: boardForm},
-
-    routes : [
+        //mypage
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
