@@ -4,8 +4,13 @@
       <div id="userPic"><img src="" alt=""></div>
       <div id="currentUser">현덕냥</div>
       <div id="currentUserEmail">cat@naver.com</div>
-      <div id="followerInfo">
-        <div class="follow">팔로워  0 </div><div class="follow">팔로잉  3</div>
+      <div class="followerInfo">
+        <div class="follow">팔로워
+          <div id="follower">0</div>
+        </div>
+        <div class="follow">  팔로잉
+          <div id="following">3</div>
+        </div>
       </div>
       <div id="usertext">야옹 야옹 야옹이</div>
 
@@ -25,7 +30,7 @@
         </div>
       </div>
       <div class="col-sm-10">
-        <button type="submit" router-link to="/userinfo/updateuserinfo" class="btn btn-primary btn-block">내 정보 수정</button>
+        <button type="button" router-link to="/userinfo/updateuserinfo" class="btn btn-primary btn-block">내 정보 수정</button>
       </div>
 
     </div>
