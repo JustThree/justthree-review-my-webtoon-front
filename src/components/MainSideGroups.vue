@@ -7,7 +7,6 @@ const title = props.title;
 <template>
   <v-sheet
       class="mx-auto"
-      elevation="8"
       max-width="1300"
   >
     <h2 v-text="title"></h2>
@@ -41,8 +40,12 @@ const title = props.title;
 
           </v-img>
           <div
-              class="no-underline"
               v-text="itemWebtoon.title"
+              style="font-weight: 600;"
+          ></div>
+          <div
+              style="font-size:0.8em"
+              v-text="itemWebtoon.writer"
           ></div>
           <div class="d-flex fill-height align-center justify-center">
             <v-scale-transition>
