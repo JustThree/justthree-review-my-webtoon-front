@@ -20,7 +20,6 @@ const currentParticipants = ref("");
     <div>
         <h5>{{title}}</h5>
         <h6>{{ genre }} / {{ writer }}, {{ painter }}</h6>
-        <h6>참여 인원 : {{currentParticipants}}</h6>
     </div>
 </body>
 </template>
