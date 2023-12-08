@@ -12,7 +12,6 @@ import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
 import boardForm from "@/pages/board/boardForm.vue"
-
 const router= createRouter({
     history: createWebHistory(),
     routes : [
@@ -25,7 +24,9 @@ const router= createRouter({
 
         //board
         {path:'/boardform', component: boardForm},
-    ]
-})
+
+        {path:'/mypage/userinfo',component:UserInfo},
+        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
+)
 
 export default router;
