@@ -1,6 +1,6 @@
 <script setup>
 import ChatDetail  from "@/components/chat/ChatDetail.vue";
-import ChatInfo from "@/components/chat/ChatInfo.vue"
+import ChatInfo  from "@/components/chat/ChatInfo.vue";
 
 </script>
 
@@ -8,15 +8,14 @@ import ChatInfo from "@/components/chat/ChatInfo.vue"
 
     <body style="text-align: -webkit-center; height: 100%;">
         <div class="chat">
-            <ChatInfo></ChatInfo>
+            <ChatInfo :masterId="$route.params.masterId"></ChatInfo>
             <hr>
-            <ChatDetail></ChatDetail>
+            <ChatDetail :masterId="$route.params.masterId"></ChatDetail>
         </div>
 
     </body>
 </template>
 <style scoped>
-@import "@/assets/css/chat.css";
 
 @font-face {
     font-family: 'Pretendard-Regular';
