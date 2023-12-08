@@ -1,6 +1,5 @@
 <script setup>
-import ChatDetail  from "@/components/chat/ChatDetail.vue";
-import ChatInfo  from "@/components/chat/ChatInfo.vue";
+import ChatList from '@/components/chat/ChatList.vue';
 
 </script>
 
@@ -8,9 +7,7 @@ import ChatInfo  from "@/components/chat/ChatInfo.vue";
 
     <body style="text-align: -webkit-center; height: 100%;">
         <div class="chat">
-            <ChatInfo :masterId="$route.params.masterId"></ChatInfo>
-            <hr>
-            <ChatDetail :masterId="$route.params.masterId"></ChatDetail>
+            <ChatList></ChatList>
         </div>
 
     </body>

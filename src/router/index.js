@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 
+import ChatListPage from "@/pages/Chat/ChatList.vue"
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 
 import Login from "@/pages/Login.vue";
@@ -20,6 +21,7 @@ const router= createRouter({
         {path:'/review',component:WebtoonReview},
         {path:'/comment',component:WebtoonCommentList},
         {path:'/userinfo',component:UserInfo},
+        {path:'/chat',component:ChatListPage},
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/login',component:Login},
         {path:'/join', component:Join},

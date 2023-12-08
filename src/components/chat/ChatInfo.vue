@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineProps} from 'vue';
+import {ref, defineProps, onBeforeMount} from 'vue';
 import { api } from '@/common.js';
 
 const props = defineProps(['masterId']);
@@ -9,24 +9,31 @@ const title = ref("");
 const genre = ref("");
 const writer = ref("");
 const painter = ref("");
-const currentParticipants = ref("");
+onBeforeMount(() => {
 
-// api()
+    api(`chats/info/${masterId}`, "GET", {})
+        .then((resp) => {
+            title.value = resp.title;
+            genre.value = resp.genre;
+            writer.value = resp.writer;
+            painter.value = resp.value != null ? ", " + resp.value : "";
+        })
+})
+
 
 </script>
 
 <template>
 <body>
-    <div>
         <h5>{{title}}</h5>
-        <h6>{{ genre }} / {{ writer }}, {{ painter }}</h6>
-    </div>
+        <h6>{{ genre }} / {{ writer }} {{ painter }}</h6>
+
 </body>
 </template>
 
 <style scoped>
-div{
-    text-align: left;padding-inline-start:20px
+*{
+    text-align: left;
 }
 h5{
     font-weight: 700;
