@@ -17,8 +17,8 @@ const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        {path:'/review',component:WebtoonReview},
-        {path:'/comment',component:WebtoonCommentList},
+        {path:'/review/:masterId',component:WebtoonReview},
+        {path:'/comment/:masterId',component:WebtoonCommentList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/login',component:Login},

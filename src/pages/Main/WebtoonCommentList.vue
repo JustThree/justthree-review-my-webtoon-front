@@ -1,5 +1,9 @@
 <script setup>
 
+
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 </script>
 
 <template>
@@ -7,7 +11,7 @@
       class="v-col-md-12"
       color="#F1F1F5"
   >
-    <router-link to="/review">
+    <router-link :to="'/review/'+ route.params.masterId">
       <v-btn
           style="margin-left: 2%"
           icon="mdi-arrow-left">

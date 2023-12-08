@@ -1,9 +1,23 @@
 <script setup>
 
 import { ref } from 'vue'
+import {api} from "@/common.js";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 
 const variants = ['elevated']
 const color = ref('#BEADFA')
+const data = ref([]);
+
+
+api("api/webtoon/"+ route.params.masterId,
+    "GET",
+).then((response) =>{
+      data.value = response;
+      console.log(data.value)
+    }
+);
 
 </script>
 <template>
@@ -20,22 +34,26 @@ const color = ref('#BEADFA')
             class="mx-auto card-all"
             height="100%"
             width="100%"
-            :color="color"
             style="display: flex;
             flex-direction: column-reverse;
             background-repeat: no-repeat;
             background-size: 100%;
-            background-position-y: 50%;
-            background-image: url('https://i.namu.wiki/i/PZme727xUUxTIxQJxee2QY2apLmzmDnWdyY64-EkeSoKCevFv49ajTgFRa7EshOQElDUqd_q7ciUxWIjr13TQbcKKrGFgykJuituI2j2-ydDdSRwccfiGedO1pTtTsPl9Tzr3mXavBKJ6a0pDdcfJQ.webp')
-"
-        >
+            background-position-y: 50%;"
+            :style="
+            {
+              backgroundImage: 'url(' + data.imgUrl +')'
+              }
+            ">
           <v-card-item>
             <div>
               <div class="text-h2 mb-1" style="margin: 0 0 10px 20px
-                ">
-                사쿠라 사쿠
+                "
+                   v-text="data.title"
+              >
               </div>
-              <div class="text-h4" style="margin: 20px 0 10px 20px">사키사카 아오 <span>/로맨스</span></div>
+              <div class="text-h4" style="margin: 20px 0 10px 20px"
+                   v-text="data.writer"
+              ></div>
             </div>
           </v-card-item>
         </v-card>
@@ -53,7 +71,7 @@ const color = ref('#BEADFA')
         style="display: flex"
     >
       <v-img
-      src="https://i.namu.wiki/i/PZme727xUUxTIxQJxee2QY2apLmzmDnWdyY64-EkeSoKCevFv49ajTgFRa7EshOQElDUqd_q7ciUxWIjr13TQbcKKrGFgykJuituI2j2-ydDdSRwccfiGedO1pTtTsPl9Tzr3mXavBKJ6a0pDdcfJQ.webp"
+          :src="data.imgUrl"
       width="20%"
       height="100%"
       >
@@ -105,7 +123,8 @@ const color = ref('#BEADFA')
                 color: red;
                 text-align: center;
                 justify-content: center"
-              >3.2
+                v-text="data.avgRating"
+              >
                 </div>
                   </div>
                 </v-col>
@@ -151,8 +170,10 @@ const color = ref('#BEADFA')
         <div style="padding: 20px 20px 20px 20px;
         margin: 20px 20px 20px 20px;
         font-size: 1.2em;
-           ">
-          눈에 띄지 않고, 있으나 없으나 마찬가지인 존재였던 후지가야 사쿠. 어느 날 전철에서 '사쿠라'라는 이름을 가진 사람에게 도움을 받은 사쿠는 그 일을 계기로 자신도 도움이 필요한 사람을 그냥 지나치지 않기로 결심한다. 시간이 흘러 입학한 고등학교에서 그녀는 '사쿠라'라고 불리는 소년을 만나는데…?! SAKURA, SAKU. ⓒ 2021 by Io Sakisaka/SHUEISHA Inc.
+           "
+          v-text="data.outline"
+        >
+
         </div>
           <div>
             <v-btn
@@ -199,7 +220,7 @@ const color = ref('#BEADFA')
 
         </v-card-item>
         <v-card-item>
-          <router-link to="/comment">
+          <router-link :to="'/comment/' + route.params.masterId">
           <div class="text-h4 flex-row-reverse" style="margin: 20px;
           float: right"
           >
