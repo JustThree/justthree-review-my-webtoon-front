@@ -11,6 +11,7 @@ import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
 import boardForm from "@/pages/board/boardForm.vue"
+import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 
 
 const router= createRouter({
@@ -18,6 +19,7 @@ const router= createRouter({
     routes : [
         {path:'/',component:Main},
         {path:'/review',component:WebtoonReview},
+        {path:'/comment',component:WebtoonCommentList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chat',component:ChatDetailPage},
         {path:'/login',component:Login},
