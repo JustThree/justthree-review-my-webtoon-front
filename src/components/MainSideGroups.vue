@@ -20,6 +20,7 @@ const title = props.title;
           v-for="(itemWebtoon,indexWebtoon) in webtoons"
           :key="indexWebtoon"
           v-slot="{ isSelected, toggle, selectedClass }"
+
       >
         <router-link
             class="no-underline"
@@ -29,16 +30,20 @@ const title = props.title;
             :class="['ma-4', selectedClass]"
             :width="200"
         >
+          <div
+              style="height:300px;"
+          >
           <v-img
               class="elevation-0"
-              height="300"
-              width="200"
-              cover
+              height="100%"
+              width="100%"
+              style="object-fit: cover"
               :src="itemWebtoon.imgUrl"
               @click="toggle"
           >
 
           </v-img>
+          </div>
           <div
               v-text="itemWebtoon.title"
               style="font-weight: 600;"
