@@ -12,6 +12,10 @@ import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
 import boardForm from "@/pages/board/boardForm.vue"
+//mypage
+import Interest from "@/pages/MyPage/Interest.vue";
+import Rated from "@/pages/MyPage/Rated.vue";
+import Reviewed from "@/pages/MyPage/Reviewed.vue";
 const router= createRouter({
     history: createWebHistory(),
     routes : [
@@ -25,9 +29,16 @@ const router= createRouter({
         //board
         {path:'/boardform', component: boardForm},
         //mypage
-        {path:'/mypage/userinfo',component:UserInfo},
+        //유저 정보 페이지
+        {path:'/mypage/userinfo/:usersId',component:UserInfo},
+        //유저 업데이트
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
-
+        //평가 웹툰 목록
+        {path:'/mypage/rated/:usersId',component:Rated},
+        //웹툰 리뷰 목록
+        {path:'/mypage/reviewed/:usersId',component:Reviewed},
+        //관심 웹툰 목록
+        {path:'/mypage/interested/:usersId',component:Interest},
     ]
 })
 

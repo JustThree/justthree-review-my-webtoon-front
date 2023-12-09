@@ -1,15 +1,10 @@
 <template>
-  <MyPageUserInfo></MyPageUserInfo>
+  <MyPageUserInfo :usersId="$route.params.usersId"></MyPageUserInfo>
 </template>
 
-<script>
-import MyPageUserInfo from '@/components/MyPageUserInfo.vue'
+<script setup>
+import MyPageUserInfo from '@/components/mypage/UserInfo.vue'
 
-export default {
-  components: {
-    MyPageUserInfo,
-  }
-}
 </script>
 
 <style>

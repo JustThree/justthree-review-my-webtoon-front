@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="myInfoLayout">
-      <div id="userPic"><img src="@/assets/images/blackDUK.png" alt=""></div>
+      <div id="userPic"><img src="../../assets/images/blackDUK.png" alt=""></div>
       <div id="currentUser">현덕냥</div>
       <div id="currentUserEmail">cat@naver.com</div>
       <div class="followerInfo">
@@ -44,15 +44,39 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  methods:{
-    goToUpdateUserInfo(){
-      this.$router.push('/mypage/userinfo/updateuserinfo');
-    }
+<script setup>
+import {api} from '@/common.js'
+import {defineProps, onBeforeMount, reactive, ref} from "vue";
 
-  }
+const props = defineProps(['usersId']);
+let usersId=props.usersId;
+const goToUpdateUserInfo = () => {
+  this.$router.push('/mypage/userinfo/updateuserinfo');
 }
+
+let info = reactive(['usersId'])
+const profileUrl = ref("");
+const usersNickname = ref("");
+const ratedCount = ref("");
+const reviewedCount = ref("");
+const interestedCount = ref("");
+const followerCount = ref("");
+const followingCount = ref("");
+
+onBeforeMount( () => {
+  console.log("start")
+  try {
+    api(`mypage/userinfo/${usersId}`, "GET", {})
+        .then((resp) => {
+          console.log(resp)
+          info.values=resp;
+        })
+    console.log("API Response:", info);
+  } catch (error) {
+    console.error("API Error:", error);
+  }
+});
+
 </script>
 <style scoped>
 @import "@/assets/css/mypage.css";
