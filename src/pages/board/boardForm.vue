@@ -1,140 +1,79 @@
 <template>
-  <h1>글 등록화면 예정</h1>
-  <span>글 제목</span>
-  <input type="text" v-model="title"/>
-  <div class="frame-editor">
-    <div id="editor"></div>
-    <div>
-      <input type="file" multiple @change="uploadFileChange($event)" />
-    </div>
-    <div>
-      <ul>
-        <li v-for="file in attachedFiles" :key="file.name">
-          {{ file.name }}
-          <button @click="removeAttachedFile(file)">삭제</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <button @click="submitBoard">등록</button>
+  <v-container>
+    <v-row class="frame-title">
+      <v-col cols="12">
+        <v-text-field
+            counter
+            class="input-title"
+            variant="standard"
+            v-model="boardTitle"
+            maxlength="30"
+            bg-color="#EDE7F6"
+            :style="{ 'font-weight': 700 }"
+            placeholder="글 제목을 입력해주세요(30자 이내)">
+        </v-text-field>
+      </v-col>
+    </v-row>
+    <v-row class="frame-content">
+      <v-col cols="12">
+        <v-textarea
+            counter
+            clearable
+            no-resize
+            variant="outlined"
+            clear-icon="mdi-close-circle"
+            bg-color="white"
+            v-model="boardContent"
+            placeholder="작성 규칙 &#13;&#10; - 존댓말(높임말) 사용 &#13;&#10; - 광고 및 홍보성 게시글은 사전고지 없이 삭제 처리되며 내용에 따라 강퇴 조치">
+        </v-textarea>
+      </v-col>
+      <v-file-input
+          multiple
+          v-model="boardFiles"
+      ></v-file-input>
+    </v-row>
+
+    <v-row class="frame-bottom">
+      <v-col cols="12">
+        <v-btn @click="createBoard">등록하기</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import {api} from "@/common.js";
 
-let editor;
-const title = ref('');
-const content = ref('');
-const uploadedFileName = ref('');
+const boardTitle = ref('');
+const boardContent = ref('');
+const boardFiles = ref([]);
 
-const attachedFiles = ref([]);
-
-const uploadFileChange = (event) => {
-  const files = event.target.files;
-  for (let i = 0; i < files.length; i++) {
-    attachedFiles.value.push(files[i]);
-  }
-};
-
-const removeAttachedFile = (file) => {
-  const index = attachedFiles.value.indexOf(file);
-  if (index !== -1) {
-    attachedFiles.value.splice(index, 1);
-  }
-};
-
-const submitBoard = async () => {
-  const titleValue = title.value;
-  const contentValue = content.value;
-  // 등록 로직 작성
+const createBoard = async () => {
   const formData = new FormData();
-  formData.append('title', titleValue);
-  formData.append('content', contentValue);
-  for (let i = 0; i < attachedFiles.value.length; i++) {
-    formData.append('imagefiles', attachedFiles.value[i]);
+  formData.append('title', boardTitle.value);
+  formData.append('content', boardContent.value);
+  for (let i = 0; i < boardFiles.value.length; i++) {
+    formData.append('imageFiles', boardFiles.value[i]);
   }
-  console.log(formData);
+  formData.append("noticeYn", 0);// 0: 자유 1: 공지
+  formData.append("users", 1); // users_id
+  const response = await api("board", "POST", formData); //apiToken으로 변경해야함
+  if(response instanceof Error){
+    console.log(response.response.data); //서버에서 예외처리 필요
+  }else{
+    if(response){
+      console.log("성공");
+      alert("글이 성공적으로 등록되었습니다.");
+      //router.replace("/boardlist"); //글 목록 페이지로 이동
+    }else{
+      alert("등록 실패..");
+    }
+  }
 };
 
-onMounted(() => {
-  ClassicEditor
-      .create(document.querySelector('#editor'), {
-        placeholder: '자유롭게 글을 작성해주세요',
-        toolbar: [
-          'heading',
-          '|',
-          'fontColor',
-          'fontSize',
-          'bold',
-          'italic',
-          '|',
-          'alignment',
-          'bulletedList',
-          'numberedList',
-          'indent',
-          'outdent',
-          '|',
-          //'imageUpload',
-          'insertTable',
-          'link',
-          '|',
-          'undo',
-          'redo',
-        ],
-        ckfinder: {
-          uploadUrl: 'http://localhost:8089/api/upload',
-        },
-      })
-      .then(newEditor => {
-        editor = newEditor;
-        editor.setData(content.value);
-        editor.model.document.on('change:data', () => {
-          content.value = editor.getData();
-        });
-
-        /*
-        //이미지 업로드 로직
-        editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
-          return {
-            upload: async () => {
-              const file = await loader.file;
-              console.log("file");
-              console.log(file);
-              console.log(file.name);
-              uploadedFileName.value = file.name;
-              return {file};
-            }
-          };
-        };
-        */
-
-      })
-      .catch(error => {
-        console.error(error);
-      });
-});
 </script>
 
 <style>
-.frame-editor{
-  height: 600px;
-  border: solid 1px;
 
-}
-/* CKEditor 스타일 수정 */
-.ck-editor__editable {
-  height: 500px !important;
-  font-size: 20px !important;
-  color: #333 !important;
-}
-ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  margin-right: 10px;
-}
 </style>
