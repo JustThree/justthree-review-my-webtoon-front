@@ -7,15 +7,19 @@ import {ref} from "vue";
 
 
 const data = ref([]);
+const apiList = ["recent","recentend","fantasy","love","famous"]
 
-api("api/webtoon/webtoonlist?keyword=" + "recent",
-    "GET",
-).then((response) =>{
-  console.log(response)
-      data.value[0] = response;
-      console.log(data.value[0])
-    }
-);
+for (const idx in apiList) {
+  console.log(apiList[idx])
+  api("api/webtoon/webtoonlist?keyword=" + apiList[idx],
+      "GET",
+  ).then((response) =>{
+        data.value[idx] = response;
+        console.log(data.value)
+      }
+  );
+}
+
 
 
 </script>
@@ -25,19 +29,19 @@ api("api/webtoon/webtoonlist?keyword=" + "recent",
     <main-side-groups :title="'최근 연재 시작한 웹툰'" :webtoons="data[0]"></main-side-groups>
   </div>
   <div>
-    <main-side-groups :title="'정주행하기 좋은 완결 웹툰'"></main-side-groups>
+    <main-side-groups :title="'최근 완결 웹툰'" :webtoons="data[1]"></main-side-groups>
+  </div>
+<!--  <div>-->
+<!--    <main-side-groups :title="'화요일에 보기 좋은 웹툰'"></main-side-groups>-->
+<!--  </div>-->
+  <div>
+    <main-side-groups :title="'#판타지'" :webtoons="data[2]"></main-side-groups>
   </div>
   <div>
-    <main-side-groups :title="'화요일에 보기 좋은 웹툰'"></main-side-groups>
+    <main-side-groups :title="'#로맨스'" :webtoons="data[3]"></main-side-groups>
   </div>
   <div>
-    <main-side-groups :title="'#판타지'"></main-side-groups>
-  </div>
-  <div>
-    <main-side-groups :title="'#로맨스'"></main-side-groups>
-  </div>
-  <div>
-    <main-side-groups :title="'인기있는'"></main-side-groups>
+    <main-side-groups :title="'인기있는'" :webtoons="data[4]"></main-side-groups>
   </div>
 </template>
 <script>
