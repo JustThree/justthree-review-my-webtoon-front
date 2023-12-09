@@ -32,9 +32,32 @@
           v-model="board.boardFiles"
       ></v-file-input>
     </v-row>
+    <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
+      <div class="ma-4">
+        <div class="text-subtitle-2">Default</div>
+        <v-img
+            class="bg-white"
+            width="300"
+            :aspect-ratio="1"
+            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+        ></v-img>
+      </div>
+
+      <div class="ma-4">
+        <div class="text-subtitle-2">Cover</div>
+        <v-img
+            class="bg-white"
+            width="300"
+            :aspect-ratio="1"
+            :src=board.boardImgMapList[0].accessUrl
+            cover
+        ></v-img>
+      </div>
+    </div>
     <v-row class="frame-bottom">
       <v-col cols="12">
-        <v-btn @click="submitBoard">{{buttonText}}하기</v-btn>
+        <v-btn @click="submitBoard" >{{buttonText}}</v-btn>
+        <v-btn v-if="buttonText==='수정하기'" @click="deleteBoard" >삭제하기</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -43,19 +66,37 @@
 <script setup>
 import { ref, defineEmits } from 'vue';
 import {api} from "@/common.js";
+const props = defineProps({
+  board : {
+    type: Object
+  },
+  buttonText: {
+    type:String,
+    required: true
+  },
+})
 
-const board = ref({
+
+/*const board = ref({
   title: '',
   content: '',
   boardFiles: [],
   noticeYn: 0,
   users: ''
-});
-const buttonText = "등록";
+});*/
+
+
 const emit = defineEmits(['submit']);
 const submitBoard = () => {
-  emit('submit', board.value);
+  //emit('submit', board.value); //등록
+  emit('submit', props.board);
 };
+
+//삭제(수정일 때만)
+const deleteBoard = () => {
+  emit('deleteBoard', props.board); // delete 이벤트 emit
+}
+
 </script>
 
 <style>

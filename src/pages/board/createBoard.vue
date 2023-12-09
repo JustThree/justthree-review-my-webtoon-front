@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <board-form :board="board" buttonText="등록" @submit="createBoard"></board-form>
+    <board-form :board="board" :buttonText="'등록하기'" @submit="createBoard"></board-form>
   </v-container>
 </template>
 
@@ -14,8 +14,11 @@ const board = ref({
   content: '',
   boardFiles: [],
   noticeYn: 0,
-  users: ''
+  users: '',
+  //기존 데이터 조회
+  boardImgMapList: [],
 });
+
 const createBoard = async (board) => {
   //console.log(board.boardFiles);
   if(board.title.trim() === '' || board.content.trim() === '') {

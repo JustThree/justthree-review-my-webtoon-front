@@ -11,8 +11,11 @@ import Main from "@/pages/Main/Main.vue";
 import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
-import boardForm from "@/pages/board/createBoard.vue"
+import createBoard from "@/pages/board/createBoard.vue"
+import updateBoard from "@/pages/board/updateBoard.vue"
+
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
+
 const router= createRouter({
     history: createWebHistory(),
     routes : [
@@ -25,7 +28,8 @@ const router= createRouter({
         {path:'/join', component:Join},
 
         //board
-        {path:'/boardform', component: boardForm},
+        {path:'/post/new', component: createBoard},
+        {path:'/post/edit/:boardId', component: updateBoard},
 
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
