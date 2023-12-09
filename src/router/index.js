@@ -11,7 +11,7 @@ import Main from "@/pages/Main/Main.vue";
 import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
-import boardForm from "@/pages/board/boardForm.vue"
+import boardForm from "@/pages/board/createBoard.vue"
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 const router= createRouter({
     history: createWebHistory(),
