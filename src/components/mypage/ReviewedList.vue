@@ -1,36 +1,57 @@
 <template>
-  <section>
-    <v-card class="mx-auto" color="#26c6da" theme="dark" max-width="400" prepend-icon="mdi-twitter" title="Twitter" v-for="index in 20">
-      <template v-slot:prepend><v-icon size="x-large"></v-icon></template>
+    <section>
+      <div id="layout">
+          <v-col v-for="review in reviewed.values"  cols="7" >
+        <div>
+          <v-avatar size="24">
+            <img src="@/assets/images/blackDUK.png" alt="profileimg" style="width: 100%">
+          </v-avatar>
+          <div>{{review.usersNickname}}</div>
+        </div>
 
-      <v-card-text class="text-h5 py-2"><!--리뷰 컨텐트-->"Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."</v-card-text>
+        <hr>
 
-      <v-card-actions>
-        <v-list-item class="w-100">
-          <template v-slot:prepend>
-            <v-avatar color="grey-darken-3" image="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-avatar>
-          </template>
-          <v-list-item-title>Evan You</v-list-item-title>
-          <v-list-item-subtitle>Vue Creator</v-list-item-subtitle>
+        <div>
+          <div>
+        <a><img :src="review.imageUrl"></a><!--웹툰 사진 -->
+          </div>
+          <div>
+            <div>{{ review.title }}</div>
+            <div>{{ review.pictrWritrNm }} {{review.sntncWritrNm}}</div>
+            <v-card-text>{{review.content}}</v-card-text>
 
-          <template v-slot:append>
-            <div class="justify-self-end">
-              <v-icon class="me-1" icon="mdi-heart"></v-icon>
-              <span class="subheading me-2">256</span>
-              <span class="me-1">·</span>
-              <v-icon class="me-1" icon="mdi-share-variant"></v-icon>
-              <span class="subheading">45</span>
-            </div>
-          </template>
-        </v-list-item>
-      </v-card-actions>
-    </v-card>
-  </section>
+          </div>
+        </div>
+        <hr>
+        <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>{{review.reviewHeartCount}}
+        <v-btn size="small" color="surface-variant" variant="text" icon="mdi-account"></v-btn>{{review.reviewReplyCount}}
+          </v-col>
+      </div>
+    </section>
 </template>
 <script setup>
+import {api} from '@/common.js'
+import {defineProps, onBeforeMount, reactive} from "vue";
 
+const props = defineProps(['usersId']);
+let usersId=props.usersId;
+let reviewed = reactive([]);
 
-
+onBeforeMount(()=>{
+  console.log("start")
+  try {
+    api(`mypage/reviewed/${usersId}`,"GET",{})
+        .then((resp)=>{
+          console.log(resp)
+          reviewed.values=resp;
+        })
+    console.log("API Response",reviewed);
+  }catch (error){
+    console.error("API Error",error);
+  }
+});
 </script>
 <style>
+@import "@/assets/css/reviewed.css";
+
 </style>
