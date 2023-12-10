@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <board-form :board="board" :buttonText="'수정하기'" @submit="updateBoard" @deleteBoard="deleteBoard"></board-form>
+    <board-form :board="board" :buttonText="'수정완료'" @submit="updateBoard" @deleteBoard="deleteBoard"></board-form>
   </v-container>
 </template>
 

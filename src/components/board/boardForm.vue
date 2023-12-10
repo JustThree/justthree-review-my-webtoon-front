@@ -57,7 +57,7 @@
     <v-row class="frame-bottom">
       <v-col cols="12">
         <v-btn @click="submitBoard" >{{buttonText}}</v-btn>
-        <v-btn v-if="buttonText==='수정하기'" @click="deleteBoard" >삭제하기</v-btn>
+        <v-btn v-if="buttonText==='수정완료'" @click="deleteBoard" >삭제하기</v-btn>
       </v-col>
     </v-row>
   </v-container>

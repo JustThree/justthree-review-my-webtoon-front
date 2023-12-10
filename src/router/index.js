@@ -13,6 +13,7 @@ import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 //board(SY)
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
+import getBoard from "@/pages/board/getBoard.vue"
 
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 
@@ -30,6 +31,7 @@ const router= createRouter({
         //board
         {path:'/post/new', component: createBoard},
         {path:'/post/edit/:boardId', component: updateBoard},
+        {path:'/post/:boardId', component: getBoard},
 
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
