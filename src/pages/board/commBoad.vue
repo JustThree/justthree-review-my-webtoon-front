@@ -43,9 +43,9 @@
     </v-row>
     <!-- 글 목록   Frame-->
     <Board v-for="(data, idx) in commBoardList" :key="idx" :boardone="data"></Board>
-    <v-row>
-    </v-row>
-  </v-container>
+    <!-- 더 보기 버튼 -->
+    <v-btn v-if="showLoadMoreButton" @click="loadMore">더 보기</v-btn>
+    </v-container>
 </template>
 
 <script setup>
@@ -55,29 +55,59 @@ import {api} from "@/common.js";
 import {useRoute} from "vue-router";
 
 const route = useRoute();
-const commBoardList = ref([]);
 const errorMsg = ref("");
+const commBoardList = ref([]);
+
+//페이징
+let page = 1;
+const itemPerPage = 10;
+const showLoadMoreButton = ref(false);
+
+/*const handleScroll = () => {
+  const container = $refs.scrollContainer;
+  const scrollHeight = container.scrollHeight;
+  const scrollTop = container.scrollTop;
+  const clientHeight = container.clientHeight;
+
+  if (scrollTop + clientHeight >= scrollHeight) {
+    page++; // 다음 페이지로 이동
+    fetchData(); // API 호출
+  }
+};*/
 
 onMounted(async  ()=>{
- /*
- const response = await api("board", "GET");
- console.log(response);
- */
-  api("board", "GET")
-      .then(response => {
-        if(response instanceof Error) {
+  await fetchData();
+});
+const fetchData = async () => {
+  console.log(page);
+  console.log(itemPerPage);
+  api("board?page="+page+"&size="+itemPerPage, "GET").then(
+      (response) => {
+        if (response instanceof Error) {
           let errorRes = response;
-          //에러처리
           console.log(errorRes.response);
           errorMsg.value = errorRes.response.data;
           commBoardList.value = [];
-        }else{
-          //console.log(response);
-          commBoardList.value = response;
+        } else {
+          //commBoardList.value = response;
+          //기존 목록에 이어서 조회됨
+          commBoardList.value =[...commBoardList.value, ...response];
           console.log(commBoardList.value);
+          if (response.length === itemPerPage) {
+            showLoadMoreButton.value = true;
+          } else {
+            showLoadMoreButton.value = false;
+          }
         }
-      })
-})
+      }
+  );
+};
+
+const loadMore = async () => {
+  page++;
+  console.log(page);
+  await fetchData();
+};
 
 </script>
 
