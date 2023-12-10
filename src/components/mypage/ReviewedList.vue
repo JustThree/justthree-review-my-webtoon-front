@@ -1,30 +1,32 @@
 <template>
     <section>
       <div id="layout">
-          <v-col v-for="review in reviewed.values"  cols="7" >
-        <div>
-          <v-avatar size="24">
+          <v-col v-for="review in reviewed.values" id="section">
+        <div id="review_uppercontent">
+          <v-avatar size="24" id="profileimg">
             <img src="@/assets/images/blackDUK.png" alt="profileimg" style="width: 100%">
           </v-avatar>
-          <div>{{review.usersNickname}}</div>
+          <div id="nickname">{{review.usersNickname}}</div>
         </div>
 
         <hr>
 
-        <div>
+        <div id="midcontent">
           <div>
-        <a><img :src="review.imageUrl"></a><!--웹툰 사진 -->
+        <a id="image_a"><img :src="review.imageUrl" id="webtoonimg"></a><!--웹툰 사진 -->
           </div>
-          <div>
+          <div id="midcontent_text">
             <div>{{ review.title }}</div>
             <div>{{ review.pictrWritrNm }} {{review.sntncWritrNm}}</div>
-            <v-card-text>{{review.content}}</v-card-text>
+            <div>{{review.content}}</div>
 
           </div>
         </div>
         <hr>
-        <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>{{review.reviewHeartCount}}
-        <v-btn size="small" color="surface-variant" variant="text" icon="mdi-account"></v-btn>{{review.reviewReplyCount}}
+            <div id="botcontetnt">
+              <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>{{review.reviewHeartCount}}
+              <v-btn size="small" color="surface-variant" variant="text" icon="mdi-account"></v-btn>{{review.reviewReplyCount}}
+            </div>
           </v-col>
       </div>
     </section>

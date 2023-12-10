@@ -16,13 +16,13 @@
 
       <div id="userInfoChart">
         <div class="infoChartTitle">
-          <router-link class="nav_text" :to="{path:`/mypage/rated`}">
+          <router-link class="nav_text" :to="{path:`/mypage/rated/${usersId}`}">
           <div>평가</div>
           <div>1</div>
           </router-link>
         </div>
         <div class="infoChartTitle">
-          <router-link class="nav_text" :to="{path:`/mypage/reviewd`}">
+          <router-link class="nav_text" :to="{path:`/mypage/reviewed/${usersId}`}">
           <div>리뷰</div>
           <div>2</div>
           </router-link>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="infoChartTitle">
-          <router-link class="nav_text" :to="{path:`/mypage/interested`}">
+          <router-link class="nav_text" :to="{path:`/mypage/interested/${usersId}`}">
           <div>관심웹툰</div>
           <div>3</div>
           </router-link>
