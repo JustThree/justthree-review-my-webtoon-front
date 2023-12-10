@@ -30,7 +30,7 @@ const router= createRouter({
 
         //board
         {path:'/post/new', component: createBoard},
-        {path:'/post/edit/:boardId', component: updateBoard},
+        {path:'/post/edit/:boardId', component: updateBoard, name: 'updateBoard'},
         {path:'/post/:boardId', component: getBoard},
 
         {path:'/mypage/userinfo',component:UserInfo},
