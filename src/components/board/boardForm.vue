@@ -32,24 +32,14 @@
           v-model="board.boardFiles"
       ></v-file-input>
     </v-row>
+    <!-- 이미지 첨부파일   -->
     <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
-      <div class="ma-4">
-        <div class="text-subtitle-2">Default</div>
+      <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
+        <div class="text-subtitle-2">{{imgMap.originName}}</div>
         <v-img
             class="bg-white"
             width="300"
-            :aspect-ratio="1"
-            src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
-        ></v-img>
-      </div>
-
-      <div class="ma-4">
-        <div class="text-subtitle-2">Cover</div>
-        <v-img
-            class="bg-white"
-            width="300"
-            :aspect-ratio="1"
-            :src=board.boardImgMapList[0].accessUrl
+            :src=imgMap.accessUrl
             cover
         ></v-img>
       </div>

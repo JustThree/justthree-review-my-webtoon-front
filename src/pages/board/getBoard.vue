@@ -29,7 +29,12 @@ onMounted(async () =>{
   console.log(route.params.boardId);
   const response = await api("board/"+route.params.boardId, "GET");
   if (response instanceof Error) {
-    console.log(response.response.data); // 서버에서 예외처리 필요
+    console.log(response.response);
+    if(response.response.status === 404){
+      if(alert("존재하지 않는 게시글입니다.")){
+        //글 목록으로 이동
+      }
+    }
   } else {
     board.value = response; // 가져온 데이터를 변수에 저장
     console.log(board.value.boardImgMapList.length);
