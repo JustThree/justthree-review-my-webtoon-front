@@ -19,7 +19,7 @@ api("api/webtoon/"+ route.params.masterId,
       data.value = response;
       if (response.links) {
         if (response.links.indexOf("_")>0) {
-          const linkSplit = response.links.split("_")
+          const linkSplit = response.links.split("*")
           for (const linkSplitIdx in linkSplit) {
             links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
             links.value.link[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[1]
@@ -96,7 +96,7 @@ api("api/webtoon/"+ route.params.masterId,
         class="mx-auto"
         width="100%"
         min-height="600px"
-        :color="'#F8F8F8'"
+        :color="'#F8F8F8  '"
         style="display: flex;
         align-items: center;
 "
