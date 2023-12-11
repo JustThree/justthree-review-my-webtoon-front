@@ -2,14 +2,9 @@
   <MyPageUpdateUserInfo></MyPageUpdateUserInfo>
 </template>
 
-<script>
-import MyPageUpdateUserInfo from "@/components/MyPageUpdateUserInfo.vue";
+<script setup>
+import MyPageUpdateUserInfo from "@/components/mypage/UpdateUserInfo.vue";
 
-export default {
-  components: {
-    MyPageUpdateUserInfo,
-  }
-}
 </script>
 
 <style>
