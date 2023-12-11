@@ -38,7 +38,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function login(email, password) {
         try {
-            alert("로그인 시작");
             const response = await axios.post(loginUrl, {"usersEmail" : email, "usersPw" : password}, {
                 headers: {'X-Requested-With': 'XMLHttpRequest'}});
             // const response = await api(import.meta.env.VITE_LOGIN_API_PATH,"post",{"usersEmail" : email, "usersPw" : password});
