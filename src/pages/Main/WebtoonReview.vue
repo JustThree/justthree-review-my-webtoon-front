@@ -1,14 +1,63 @@
 <script setup>
 
-import { ref } from 'vue'
+import {ref} from 'vue'
+import {api} from "@/common.js";
+import {useRoute} from "vue-router";
 
-const variants = ['elevated']
+const route = useRoute();
 const color = ref('#BEADFA')
+const data = ref([]);
+const links = ref({
+    platform:[],
+    link:[]
+});
+
+// 화면 기초 정보
+api("api/webtoon/"+ route.params.masterId,
+    "GET",
+).then((response) =>{
+      data.value = response;
+      if (response.links) {
+        if (response.links.indexOf("_")>0) {
+          const linkSplit = response.links.split("*")
+          for (const linkSplitIdx in linkSplit) {
+            links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
+            links.value.link[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[1]
+          }
+
+        } else {
+          if (response.links[0].indexOf("$")) {
+            console.log(response.links.split("$")[0])
+            links.value.platform[0] = response.links.split("$")[0]
+            links.value.link[0] = response.links.split("$")[1]
+            console.log(links.value)
+          }
+        }
+      }
+    }
+);
+// 평점 구하기
+
+// 리뷰 리스트 가져오기
+
+
+// 별점 남기기 api
+
+
+// 관심 등록 api
+
+// 리뷰 api => 모달
+
+
+
 
 </script>
 <template>
   <v-container
-      style="width: 100%; "
+      style="width: 85%;
+      display: flex;
+    flex-direction: column;
+    align-items: center;"
   >
 
     <v-row align="center" justify="center"
@@ -17,48 +66,51 @@ const color = ref('#BEADFA')
            class="m-lg-2"
     >
         <v-card
-            class="mx-auto card-all"
+            class="mx-auto card-all image-header"
             height="100%"
-            width="100%"
-            :color="color"
-            style="display: flex;
-            flex-direction: column-reverse;
-            background-repeat: no-repeat;
-            background-size: 100%;
-            background-position-y: 50%;
-            background-image: url('https://i.namu.wiki/i/PZme727xUUxTIxQJxee2QY2apLmzmDnWdyY64-EkeSoKCevFv49ajTgFRa7EshOQElDUqd_q7ciUxWIjr13TQbcKKrGFgykJuituI2j2-ydDdSRwccfiGedO1pTtTsPl9Tzr3mXavBKJ6a0pDdcfJQ.webp')
-"
-        >
+            width="90%"
+            :style="
+            {
+              backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),' +'url(' + data.imgUrl +')'
+              }
+            ">
           <v-card-item>
             <div>
-              <div class="text-h2 mb-1" style="margin: 0 0 10px 20px
-                ">
-                사쿠라 사쿠
+              <div class="text-h2 mb-1" style="margin: 0 0 10px 20px; z-index:1;color:white"
+                   v-text="data.title"
+              >
               </div>
-              <div class="text-h4" style="margin: 20px 0 10px 20px">사키사카 아오 <span>/로맨스</span></div>
+              <div class="text-h4" style="margin: 20px 0 10px 20px; z-index:1;color:white"
+                   v-text="data.writer"
+              ></div>
             </div>
           </v-card-item>
         </v-card>
     </v-row>
     <v-row align="center" justify="center"
-           style="min-height: 500px;
-           width: 100%;"
+           style="min-height: 600px;
+           width: 90%;"
            class="m-lg-2"
     >
     <v-card
         class="mx-auto"
         width="100%"
-        height="400px"
-        :color="'#F8F8F8'"
-        style="display: flex"
+        min-height="600px"
+        :color="'#F8F8F8  '"
+        style="display: flex;
+        align-items: center;
+"
     >
-      <v-img
-      src="https://i.namu.wiki/i/PZme727xUUxTIxQJxee2QY2apLmzmDnWdyY64-EkeSoKCevFv49ajTgFRa7EshOQElDUqd_q7ciUxWIjr13TQbcKKrGFgykJuituI2j2-ydDdSRwccfiGedO1pTtTsPl9Tzr3mXavBKJ6a0pDdcfJQ.webp"
-      width="20%"
-      height="100%"
+      <div
+          style="width:30%"
+      >
+        <v-img
+          :src="data.imgUrl"
+      height="300px"
       >
       </v-img>
-      <v-card
+      </div>
+        <v-card
       width="70%"
       height="100%"
       >
@@ -105,7 +157,8 @@ const color = ref('#BEADFA')
                 color: red;
                 text-align: center;
                 justify-content: center"
-              >3.2
+                v-text="data.avgRating"
+              >
                 </div>
                   </div>
                 </v-col>
@@ -147,30 +200,41 @@ const color = ref('#BEADFA')
         </v-card>
         <v-card
             height="75%"
+            style="
+            min-height: 500px;"
         >
-        <div style="padding: 20px 20px 20px 20px;
+        <div id="outline" style="padding: 20px 20px 20px 20px;
         margin: 20px 20px 20px 20px;
         font-size: 1.2em;
-           ">
-          눈에 띄지 않고, 있으나 없으나 마찬가지인 존재였던 후지가야 사쿠. 어느 날 전철에서 '사쿠라'라는 이름을 가진 사람에게 도움을 받은 사쿠는 그 일을 계기로 자신도 도움이 필요한 사람을 그냥 지나치지 않기로 결심한다. 시간이 흘러 입학한 고등학교에서 그녀는 '사쿠라'라고 불리는 소년을 만나는데…?! SAKURA, SAKU. ⓒ 2021 by Io Sakisaka/SHUEISHA Inc.
+        min-height: 400px;
+           "
+          v-text="data.outline"
+        >
         </div>
-          <div>
+          <div style="display:flex;
+            flex-direction: row-reverse;"
+          >
+          <div
+              v-for="(linkEle,linkIdx) in links.platform" :key="linkIdx"
+          >
+
+
             <v-btn
                 style="float: right;
                  margin-right: 10px"
-                color="#BEADFA"
+                color="#5302FE"
                 elevation="4"
                 rounded="sm"
-                href="https://naver.com"
+                :href="links.link[linkIdx]"
             >
               <span
                   style="color: #FFFFFF"
+                v-text="links.platform[linkIdx]"
               >
-              네이버
               </span>
             </v-btn>
           </div>
-
+          </div>
         </v-card>
       </v-card>
 
@@ -178,7 +242,7 @@ const color = ref('#BEADFA')
     </v-row>
     <v-row align="center" justify="center"
            style="height: 300px;
-           width: 100%;"
+           width: 90%;"
            class="m-lg-2"
     >
       <v-card
@@ -199,7 +263,7 @@ const color = ref('#BEADFA')
 
         </v-card-item>
         <v-card-item>
-          <router-link to="/comment">
+          <router-link :to="'/comment/' + route.params.masterId">
           <div class="text-h4 flex-row-reverse" style="margin: 20px;
           float: right"
           >
@@ -211,7 +275,7 @@ const color = ref('#BEADFA')
     </v-row>
     <v-row align="center" justify="center"
            style="
-           width: 100%;"
+           width: 90%;"
            class="m-lg-2"
     >
       <v-card
@@ -226,20 +290,18 @@ const color = ref('#BEADFA')
                      style="background: #FFFFFF"
         >
 
-          <v-row  no-gutters
-                  v-for="(item,idx) in 2"
-          >
-            <v-col v-for="(itemCol,idxCol) in 4"
+            <v-row class="justify-center">
+            <v-col v-for="(itemCol,idxCol) in 12"
                    cols="3"
+                   style="min-width:300px"
             >
-
               <v-sheet class="pa-2 ma-6 "
               >
-                <v-card style="height: 300px;
+                <v-card style="height: 200px;
                    background: #F2F2F2;"
                 >
                   <v-container>
-                    <v-row style="max-width: 300px;align-items: center;">
+                    <v-row style="width: 300px;align-items: center;">
                       <v-col class="v-col-9">
                       <v-avatar color="surface-variant"
                       >
@@ -298,7 +360,7 @@ const color = ref('#BEADFA')
               </v-sheet>
 
             </v-col>
-          </v-row>
+            </v-row>
         </v-container>
 
       </v-card>
@@ -310,6 +372,16 @@ const color = ref('#BEADFA')
 
 
 <style scoped>
+
+.image-header{
+  display: flex;
+  flex-direction: column-reverse;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position-y: 50%;
+
+  z-index: 1;
+}
 
 
 </style>
