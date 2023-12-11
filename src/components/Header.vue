@@ -17,22 +17,29 @@
         <router-link class="nav_text" to="/chat" >채팅</router-link>
       </div>
 
-      <div v-if="!getIsLogin">
+      <div v-if = "user === null">
         <div class="nav-button">
           <button class="base-button side-button" onclick="location.href='/user/register'">회원가입</button>
           <button class="base-button" onclick="location.href='/user/login'">로그인</button>
         </div>
       </div>
-      <div v-else>
+      <div v-if = "user != null">
         <div class="nav-button">
           <button class="base-button  side-button" onclick="location.href='/mypage'">마이페이지</button>
-          <button class="base-button" @click="logout">로그아웃</button>
+          <button class="base-button" @click="authStore.logout()">로그아웃</button>
         </div>
       </div>
     </div>
   </nav>
 </template>
 <script setup>
+import {computed, onMounted, ref, watch} from "vue";
+    import { useAuthStore } from '@/stores/auth.store';
+    import { storeToRefs } from 'pinia';
+
+    const authStore = useAuthStore()
+    const { user } = storeToRefs(authStore);
+    const getIsLogin = ref(false);
 
 </script>
 <style scoped>
