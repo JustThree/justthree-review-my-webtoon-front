@@ -35,7 +35,7 @@
 const props = defineProps({
 boardone: Object
 });
-console.log(props.boardone);
+//console.log(props.boardone);
 </script>
 
 <style scoped>

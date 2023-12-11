@@ -11,7 +11,7 @@
         <router-link class="nav_text" to="/webtoon">웹툰</router-link>
       </div>
       <div class="nav_div">
-        <router-link class="nav_text" to="/community">커뮤니티</router-link>
+        <router-link class="nav_text" to="/comm">커뮤니티</router-link>
       </div>
       <div class="nav_div">
         <router-link class="nav_text" to="/chat" >채팅</router-link>

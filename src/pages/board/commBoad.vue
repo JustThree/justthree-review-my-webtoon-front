@@ -18,16 +18,13 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item
-                v-for="(item, index) in items"
-                :key="index"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item  v-for="(menuitem, index) in menuitems"  :key="index" >
+              <v-list-item-title>{{ menuitem.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
-      <v-col  cols="3">
+      <v-col  cols="5">
         <v-text-field
             class="input-keyword"
             variant="standard"
@@ -42,9 +39,14 @@
       </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
-    <Board v-for="(data, idx) in commBoardList" :key="idx" :boardone="data"></Board>
-    <!-- 더 보기 버튼 -->
-    <v-btn v-if="showLoadMoreButton" @click="loadMore">더 보기</v-btn>
+    <v-infinite-scroll height="700"  @load="load" >
+      <template v-for="(data, idx) in commBoardList" :key="idx">
+        <Board :boardone="data"></Board>
+      </template>
+      <template v-slot:loading>
+       시간이 조금 걸립니다:)
+      </template>
+    </v-infinite-scroll>
     </v-container>
 </template>
 
@@ -57,30 +59,26 @@ import {useRoute} from "vue-router";
 const route = useRoute();
 const errorMsg = ref("");
 const commBoardList = ref([]);
+//const commBoardList = ref(Array.from({ length: 10 }, (k, v) => v + 1))
 
 //페이징
 let page = 1;
 const itemPerPage = 10;
-const showLoadMoreButton = ref(false);
-
-/*const handleScroll = () => {
-  const container = $refs.scrollContainer;
-  const scrollHeight = container.scrollHeight;
-  const scrollTop = container.scrollTop;
-  const clientHeight = container.clientHeight;
-
-  if (scrollTop + clientHeight >= scrollHeight) {
-    page++; // 다음 페이지로 이동
-    fetchData(); // API 호출
-  }
-};*/
+//
+let loadVal = 1;
+//정렬 드롭다운 메뉴
+const menuitems = ref([
+  { title: "오래된 순" },
+  { title: "조회수 순" },
+  { title: "최신순" },
+]);
 
 onMounted(async  ()=>{
   await fetchData();
 });
 const fetchData = async () => {
-  console.log(page);
-  console.log(itemPerPage);
+/*  console.log(page);
+  console.log(itemPerPage);*/
   api("board?page="+page+"&size="+itemPerPage, "GET").then(
       (response) => {
         if (response instanceof Error) {
@@ -92,22 +90,32 @@ const fetchData = async () => {
           //commBoardList.value = response;
           //기존 목록에 이어서 조회됨
           commBoardList.value =[...commBoardList.value, ...response];
-          console.log(commBoardList.value);
-          if (response.length === itemPerPage) {
-            showLoadMoreButton.value = true;
-          } else {
-            showLoadMoreButton.value = false;
-          }
+          //console.log(commBoardList.value);
         }
       }
   );
 };
-
+//페이징 Vuetify Infinie scroller componenet
+const load = ({ done }) => {
+  if (loadVal===1) {
+    loadVal = 0;
+    setTimeout(async () => {
+      page++;
+      await fetchData();
+      commBoardList.value.push(...Array.from({length: itemPerPage}, (k, v) => v + commBoardList.value.slice(-1)[0] + 1));
+      done('ok')
+    }, 2000)
+  }
+  loadVal = 1;
+}
+/*
+//페이징 더보기 버튼 사용
 const loadMore = async () => {
   page++;
   console.log(page);
   await fetchData();
 };
+*/
 
 </script>
 
