@@ -4,7 +4,7 @@ import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
-
+import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
 import Main from "@/pages/Main/Main.vue";
@@ -21,8 +21,9 @@ const router= createRouter({
         {path:'/comment',component:WebtoonCommentList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chat/:masterId',component:ChatDetailPage},
-        {path:'/login',component:Login},
+        {path:'/user/login',component:Login},
         {path:'/join', component:Join},
+        {path:'/tui', component: TestUserInfo},
 
         //board
         {path:'/boardform', component: boardForm},
