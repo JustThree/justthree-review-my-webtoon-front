@@ -17,7 +17,6 @@ import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
 import commBoardList from "@/pages/board/commBoad.vue"
 
-import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
@@ -48,7 +47,7 @@ const router= createRouter({
         {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
 
         {path:'/mypage/userinfo',component:UserInfo},
-        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
+        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
         //mypage
         //유저 정보 페이지
@@ -63,7 +62,5 @@ const router= createRouter({
         {path:'/mypage/interested/:usersId',component:Interest},
     ]
 })
-
-)
 
 export default router;
