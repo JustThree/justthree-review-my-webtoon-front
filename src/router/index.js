@@ -11,7 +11,14 @@ import Main from "@/pages/Main/Main.vue";
 import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
 
 //board(SY)
-import boardForm from "@/pages/board/boardForm.vue"
+
+import createBoard from "@/pages/board/createBoard.vue"
+import updateBoard from "@/pages/board/updateBoard.vue"
+import getBoard from "@/pages/board/getBoard.vue"
+import commBoardList from "@/pages/board/commBoad.vue"
+
+import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
+
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";
@@ -19,6 +26,7 @@ import Reviewed from "@/pages/MyPage/Reviewed.vue";
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
+
 const router= createRouter({
     history: createWebHistory(),
     routes : [
@@ -33,7 +41,14 @@ const router= createRouter({
         {path:'/search', component:Search},
 
         //board
-        {path:'/boardform', component: boardForm},
+        {path:'/comm', component: commBoardList, name: 'commBoardList'},
+        {path:'/comm/new', component: createBoard, name: 'newBoard'},
+        {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
+        {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
+
+        {path:'/mypage/userinfo',component:UserInfo},
+        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo}]}
+
         //mypage
         //유저 정보 페이지
         {path:'/mypage/userinfo/:usersId',component:UserInfo},
@@ -47,6 +62,7 @@ const router= createRouter({
         {path:'/mypage/interested/:usersId',component:Interest},
     ]
 })
+
 )
 
 export default router;
