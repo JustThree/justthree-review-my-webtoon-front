@@ -27,11 +27,12 @@
             maxlength="20"
             bg-color="#EDE7F6"
             :style="{ 'font-weight': 700 }"
+            v-model="searchKeyword"
             placeholder="검색 키워드를 작성해주세요">
         </v-text-field>
       </v-col>
       <v-col cols="4">
-        <v-btn>검색</v-btn>
+        <v-btn @click="searchBoard">검색</v-btn>
       </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
@@ -63,6 +64,52 @@ const itemPerPage = 10;
 let sortings = ref("sortDesc");
 let shouldResetPage = true;
 
+//검색
+const searchKeyword = ref(""); // 검색어
+
+const searchBoard = async () => {
+    // 검색어가 비어 있는 경우 아무 작업도 수행하지 않음
+    if (!searchKeyword.value.trim()) {
+        return;
+    }
+    console.log(searchKeyword.value);
+    // 페이지 리셋 및 검색 결과 초기화
+   page = 1;
+    commBoardList.value = [];
+    pagingMsg.value = "시간이 조금 걸립니다:)";
+    // 검색에 필요한 작업 수행
+    await fetchData();
+   // await getSearchResult();
+};
+//검색결과 조회
+/*const getSearchResult = async () =>{
+    page = 1;
+    commBoardList.value = [];
+    pagingMsg.value = "시간이 조금 걸립니다:)";
+    api("board/search?page="+page+"&size="+itemPerPage+"&keyword="+searchKeyword.value, "GET")
+        .then((response) => {
+                if (response instanceof Error) {
+                    let errorRes = response;
+                    console.log(errorRes.response);
+                    errorMsg.value = errorRes.response;
+                    commBoardList.value = [];
+                } else {
+                    console.log("검색 결과 개수")
+                    console.log(response.length);
+                    console.log(response);
+                    if(response.length < itemPerPage){
+                        pagingMsg.value = "더 이상 존재하지 않습니다.";
+                        commBoardList.value = [...commBoardList.value, ...response];
+                    }else {
+                        //기존 목록에 이어서 조회
+                        //shouldResetPage = false;
+                        commBoardList.value = [...commBoardList.value, ...response];
+                        console.log(commBoardList.value);
+                    }
+                }
+            }
+        );
+};*/
 //정렬 드롭다운 메뉴
 const menuitems = ref([
   { title: "오래된 순" },
@@ -79,7 +126,7 @@ const sortList = (sorting) => {
     sorting = "sortDesc";
   }
   console.log(sorting);
-  console.log(sortings.value);
+  console.log(sortings.value); //기존 정렬값
   if (sorting === sortings.value) {
     shouldResetPage = false;
     //return; // 이미 선택된 정렬 조건일 경우 함수 종료
@@ -91,8 +138,11 @@ const sortList = (sorting) => {
     page = 1; // 페이지 리셋
     commBoardList.value = []; // 목록 초기화
     pagingMsg .value= "시간이 조금 걸립니다:)"; //메시지 초기화
-    load({});
+    //let done = '';
+    //load({done});
+   // load({});
   }
+  console.log(pagingMsg.value)
   sortings.value = sorting;
   console.log(sortings.value);
   //shouldResetPage = true; // 페이지 리셋 플래그 설정
@@ -103,8 +153,9 @@ onMounted(async  ()=>{
   await fetchData();
 });
 const fetchData = async () => {
-  api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value, "GET")
+  api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
       .then((response) => {
+        //console.log(1)
         if (response instanceof Error) {
           let errorRes = response;
           console.log(errorRes.response);
@@ -128,17 +179,19 @@ const fetchData = async () => {
 
 //페이징
 const load = ({ done }) => {
-  if(pagingMsg.value !== "더 이상 존재하지 않습니다.") { //존재할 경우
-    shouldResetPage = false; // 페이지 리셋 방지
-    setTimeout(async () => {
-      page++;
-      await fetchData();
-      done('ok')
-    }, 2000)
-  }else {
-    shouldResetPage = true; // 다음 정렬 조건 변경 시 페이지 리셋
-  }
+    //console.log(done);
+    if(pagingMsg.value !== "더 이상 존재하지 않습니다.") { //존재할 경우
+        shouldResetPage = false; // 페이지 리셋 방지
+        setTimeout(async () => {
+            page++;
+            await fetchData();
+            done('ok')
+        }, 2000)
+    }else {
+        shouldResetPage = true; // 다음 정렬 조건 변경 시 페이지 리셋
+    }
 }
+
 </script>
 
 <style scoped>
