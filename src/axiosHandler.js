@@ -17,7 +17,6 @@ export function setupAxiosInterceptors(store){
         const isLoggedIn = (null === user.value) ? false : true ;// 로그인 여부
         const publicApiPaths = import.meta.env.VITE_PUBLIC_API_PATHS.split(','); // 로그인이 필요하지 않은 API 목록
         const isPublicApiPath = publicApiPaths.includes(new URL(config.url).pathname); // 로그인이 필요하지 않은 API 여부
-
         let token;
         if (isLoggedIn && !isPublicApiPath){
             const tokenDto = JSON.parse(user.value.token);
