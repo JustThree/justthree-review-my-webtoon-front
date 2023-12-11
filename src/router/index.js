@@ -17,16 +17,20 @@ import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";
 import Reviewed from "@/pages/MyPage/Reviewed.vue";
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
+import WebtoonList from "@/pages/Main/WebtoonList.vue";
+import Search from "@/pages/Main/Search.vue";
 const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        {path:'/review',component:WebtoonReview},
-        {path:'/comment',component:WebtoonCommentList},
+        {path:'/review/:masterId',component:WebtoonReview},
+        {path:'/comment/:masterId',component:WebtoonCommentList},
+        {path:'/webtoon',component:WebtoonList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/login',component:Login},
         {path:'/join', component:Join},
+        {path:'/search', component:Search},
 
         //board
         {path:'/boardform', component: boardForm},
