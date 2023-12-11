@@ -16,13 +16,15 @@ import boardForm from "@/pages/board/boardForm.vue"
 import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";
 import Reviewed from "@/pages/MyPage/Reviewed.vue";
+import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
         {path:'/review',component:WebtoonReview},
+        {path:'/comment',component:WebtoonCommentList},
         {path:'/userinfo',component:UserInfo},
-        {path:'/chat',component:ChatDetailPage},
+        {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/login',component:Login},
         {path:'/join', component:Join},
 
@@ -41,5 +43,6 @@ const router= createRouter({
         {path:'/mypage/interested/:usersId',component:Interest},
     ]
 })
+)
 
 export default router;
