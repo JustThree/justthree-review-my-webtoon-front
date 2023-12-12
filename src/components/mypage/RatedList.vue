@@ -1,18 +1,28 @@
 <template>
 <section>
-  <div>
-  <header>
-      <div><button></button></div>
-      <div id="title">평가한 작품들</div>
-  </header>
-  <div>
-      <ul>
-        <div >전체</div>
-        <div>별점순</div>
-      </ul>
+  <div class="text-center">
+    <hr class="line">
+    <div id="btn_back_line">
+      <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+        <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
+      <div id="pagetitle">평가한 웹툰</div>
     </div>
+    <hr class="line">
   </div>
-  <div id="listsection" class="responsive-list"><!--반응형 하려고 뷰티파이로 바꿈 -->
+
+
+  <v-card>
+    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+      <v-tab :value="1">기본 순</v-tab>
+      <v-tab :value="2">별점 높은 순</v-tab>
+      <v-tab :value="3">별점 낮은 순</v-tab>
+      <v-tab :value="4">응애</v-tab>
+      <v-tab :value="5">하이</v-tab>
+    </v-tabs>
+  </v-card>
+
+
+  <div id="listsection" class="responsive-list"><!--반응형 하려고뷰티빠이 바꿈 -->
     <v-container>
       <v-row>
         <v-col v-for="(item, index) in rated.values" cols="1" >
@@ -21,34 +31,22 @@
           </div>
           <router-link :to="{path:`/`}" id="titletext">{{item.title}}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
           <div id="tooninfo">
-            {{ item.pictrWritrNm }} 별아이콘{{item.starVal}}.0
+            {{ item.pictrWritrNm }}     <v-icon style="margin-bottom:2px " icon="mdi-star" size="small"></v-icon>{{item.starVal}}.0
           </div>
         </v-col>
       </v-row>
     </v-container>
-
-<!--    <ul v-for="(item,index) in rated.values" :key="index" id="webtoonlist">-->
-<!--      <li v-for="item in getSlice(index)" :key="item.mastrId" id="ratedtoon">-->
-<!--          <div>-->
-<!--            <img :src="item.imageUrl" id="thumbnail">-->
-<!--          </div>-->
-<!--        <router-link :to="{path:`/`}" id="titletext">{{item.title}}</router-link>&lt;!&ndash;a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 &ndash;&gt;-->
-<!--        <div id="tooninfo">-->
-<!--          {{ item.pictrWritrNm }}-->
-<!--          </div>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
   </div>
 </section>
 </template>
 
 <script setup>
 import {api} from '@/common.js'
-import {defineProps, onBeforeMount, reactive} from "vue";
+import {defineProps, onBeforeMount, reactive,ref} from "vue";
 
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
+const tab = ref(null);
 
 let rated = reactive([]);
 
@@ -72,8 +70,13 @@ const getSlice = (index) => {
   const end = start + 13;
   return rated.values.slice(start, end);
 };
-
+const goBack = () => {
+  window.history.back();
+};
 </script>
+
+
+
 <style scoped>
 @import "@/assets/css/ratedlist.css";
 
