@@ -8,6 +8,7 @@
     <!-- 검색 Frame -->
     <v-row>
       <!--  정렬    -->
+        <v-col  cols="1">
       <div class="text-center">
         <v-menu   open-on-hover>
           <template v-slot:activator="{ props }">
@@ -20,6 +21,7 @@
           </v-list>
         </v-menu>
       </div>
+        </v-col>
       <v-col  cols="5">
         <v-text-field
             class="input-keyword"
@@ -31,9 +33,12 @@
             placeholder="검색 키워드를 작성해주세요">
         </v-text-field>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="2">
         <v-btn @click="searchBoard">검색</v-btn>
       </v-col>
+        <v-col cols="4">
+            <v-btn @click="$router.push(`/comm/new`)" >작성하기</v-btn>
+        </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
     <v-infinite-scroll height="500"  @load="load" >

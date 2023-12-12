@@ -24,6 +24,20 @@
         <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
       </v-col>
     </v-row>
+      <v-row v-if="board.boardImgMapList.length>0">
+          <!-- 이미지 첨부파일   -->
+          <div class="d-flex justify-space-around align-center bg-grey-lighten-4">
+              <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
+                  <div class="text-subtitle-2">{{imgMap.originName}}</div>
+                  <v-img
+                      class="bg-white"
+                      width="300"
+                      :src=imgMap.accessUrl
+                      cover
+                  ></v-img>
+              </div>
+          </div>
+      </v-row>
     <v-row class="frame-content" style="height: 500px;">
       <v-col cols="12">
         <v-textarea
@@ -37,18 +51,10 @@
         </v-textarea>
       </v-col>
     </v-row>
-    <!-- 이미지 첨부파일   -->
-    <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
-      <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
-        <div class="text-subtitle-2">{{imgMap.originName}}</div>
-        <v-img
-            class="bg-white"
-            width="300"
-            :src=imgMap.accessUrl
-            cover
-        ></v-img>
-      </div>
-    </div>
+      <!--  댓글 목록   -->
+      <v-row>
+
+      </v-row>
   </v-container>
 </template>
 
@@ -59,19 +65,26 @@ import {api} from "@/common.js";
 
 const router = useRouter();
 const props = defineProps({
-  board : Object,
+  board : Object
 })
-console.log(props);
+const pprops = toRef(props, "board");
+console.log(props.board)
+console.log(pprops);
+
 //const { boardId, ...otherProps } = toRefs(props.board);
+/*
+//1212
 const {boardFiles, users, boardId, title, content, view_count, created, updated, noticeYn,
-  userEmail, userNickname, boardImgMapList} = toRefs(props.board);
+  userEmail, userNickname, boardImgMapList} = toRefs(props.board);*/
 //const pp = toRef(props, "board");
 //const boardOne = { boardId: boardId.value, ...otherProps };
 //console.log(pp.value);
+
+/*//1212
 const  boardOne = props.board;
 console.log( "boardOne" );
 console.log(boardOne);
-console.log(boardOne.boardId);
+console.log(boardOne.boardId);*/
 
 //수정버튼 클릭 시
 function gotoUpdateBoard(){
