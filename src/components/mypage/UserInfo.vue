@@ -2,14 +2,14 @@
   <div>
     <div id="myInfoLayout">
       <div id="userPic"><img src="../../assets/images/blackDUK.png" alt=""></div>
-      <div id="currentUser">현덕냥</div>
-      <div id="currentUserEmail">cat@naver.com</div>
+      <div id="currentUser">{{usersNickname}}</div>
+      <div id="currentUserEmail">{{ usersEmail }}</div>
       <div class="followerInfo">
         <div class="follow">팔로워
-          <div id="follower">0</div>
+          <div id="follower">{{followerCount}}</div>
         </div>
-        <div class="follow">  팔로잉
-          <div id="following">3</div>
+        <div class="follow"> 팔로잉
+          <div id="following">{{followingCount}}</div>
         </div>
       </div>
       <div id="usertext">야옹 야옹 야옹이</div>
@@ -18,13 +18,13 @@
         <div class="infoChartTitle">
           <router-link class="nav_text" :to="{path:`/mypage/rated/${usersId}`}">
           <div>평가</div>
-          <div>1</div>
+          <div>{{ratedCount}}</div>
           </router-link>
         </div>
         <div class="infoChartTitle">
           <router-link class="nav_text" :to="{path:`/mypage/reviewed/${usersId}`}">
           <div>리뷰</div>
-          <div>2</div>
+          <div>{{reviewedCount}}</div>
           </router-link>
 
         </div>
@@ -32,13 +32,13 @@
         <div class="infoChartTitle">
           <router-link class="nav_text" :to="{path:`/mypage/interested/${usersId}`}">
           <div>관심웹툰</div>
-          <div>3</div>
+          <div>{{interestedCount}}</div>
           </router-link>
 
         </div>
       </div>
       <div @click="goToUpdateUserInfo"  class="col-sm-10">
-        <button type="button" class="btn btn-primary btn-block">내 정보 수정</button>
+        <button type="button" class="btn btn-primary btn-block" >내 정보 수정</button>
       </div>
 
     </div>
@@ -51,7 +51,7 @@ import {defineProps, onBeforeMount, reactive, ref} from "vue";
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
 const goToUpdateUserInfo = () => {
-  this.$router.push('/mypage/userinfo/updateuserinfo');
+  this.$router.push(`/mypage/updateuserinfo/${usersId}`);
 }
 
 let info = reactive(['usersId'])
@@ -62,14 +62,23 @@ const reviewedCount = ref("");
 const interestedCount = ref("");
 const followerCount = ref("");
 const followingCount = ref("");
+const usersEmail = ref("");
 
 onBeforeMount( () => {
   console.log("start")
   try {
     api(`mypage/userinfo/${usersId}`, "GET", {})
         .then((resp) => {
-          console.log(resp)
+          console.log(resp.profileUrl)
           info.values=resp;
+          profileUrl.value=resp.profileUrl;
+          usersNickname.value=resp.usersNickname;
+          usersEmail.value=resp.usersEmail;
+          reviewedCount.value=resp.reviewedCount;
+          ratedCount.value=resp.ratedCount;
+          interestedCount.value=resp.interestedCount;
+          followerCount.value=resp.followerCount;
+          followingCount.value=resp.followingCount;
         })
     console.log("API Response:", info);
   } catch (error) {
@@ -80,5 +89,4 @@ onBeforeMount( () => {
 </script>
 <style scoped>
 @import "@/assets/css/mypage.css";
-
 </style>

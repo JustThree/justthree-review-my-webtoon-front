@@ -16,6 +16,7 @@ import ChatInfo  from "@/components/chat/ChatInfo.vue";
     </body>
 </template>
 <style scoped>
+@import "@/assets/css/chat.css";
 
 @font-face {
     font-family: 'Pretendard-Regular';

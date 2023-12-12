@@ -1,18 +1,23 @@
 <template>
   <section>
-    <div>
-      <header>
-        <div><button></button></div>
-        <div id="title">관심웹툰</div>
-      </header>
-      <div>
-        <ul>
-          <div >전체</div>
-        </ul>
+    <div class="text-center">
+      <hr class="line">
+      <div id="btn_back_line">
+        <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+          <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
+        <div id="pagetitle">관심 웹툰</div>
       </div>
+      <hr class="line">
     </div>
+
+    <v-card>
+      <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+        <v-tab :value="1">기본 순</v-tab>
+      </v-tabs>
+    </v-card>
+
     <div id="listsection" class="responsive-list">
-      <ul v-for="(item,index) in interested.values" :key="index" id="webtoonlist">
+      <ul v-for="(item,index) in interested.values" :key="index" id="webtoonlist" >
         <li v-for="item in getSlice(index)" :key="item.mastrId" id="ratedtoon">
           <div>
             <img :src="item.imageUrl" id="thumbnail">
@@ -29,12 +34,13 @@
 
 <script setup>
 import {api} from '@/common.js'
-import {defineProps, onBeforeMount, reactive} from "vue";
+import {defineProps, onBeforeMount, reactive, ref} from "vue";
 
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
 
 let interested = reactive([]);
+const tab = ref(null);
 
 onBeforeMount( () => {
   console.log("start")
