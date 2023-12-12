@@ -128,6 +128,7 @@ fetchData()
     <v-container
     >
       <v-row
+          class=""
       >
         <v-col
             class="v-col-3"
@@ -152,12 +153,11 @@ fetchData()
           </v-select>
         </v-col>
       </v-row>
-        <v-row>
+        <v-row class="justify-center">
         <v-col v-for=" (item, idx) in pageContents"
                cols="2"
                style="min-height:150px
-                      ;height:150px
-                      ;width:100px"
+                      ;min-width:150px"
         >
           <router-link :to="'/webtoon/' + item.masterId"
             style="  color : black;
