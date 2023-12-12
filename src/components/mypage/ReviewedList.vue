@@ -1,4 +1,22 @@
 <template>
+  <div class="text-center">
+  <hr class="line">
+    <div id="btn_back_line">
+      <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+        <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
+      <div id="pagetitle">작성 리뷰 목록</div>
+    </div>
+    <hr class="line">
+  </div>
+
+  <v-card>
+    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+      <v-tab :value="1">기본 순</v-tab>
+      <v-tab :value="2">좋아요 순</v-tab>
+      <v-tab :value="3">댓글 순</v-tab>
+    </v-tabs>
+  </v-card>
+
     <section>
       <div id="layout">
           <v-col v-for="review in reviewed.values" id="section">
@@ -8,12 +26,10 @@
           </v-avatar>
           <div id="nickname">{{review.usersNickname}}</div>
         </div>
-
         <hr>
-
         <div id="midcontent">
           <div>
-        <a id="image_a"><img :src="review.imageUrl" id="webtoonimg"></a><!--웹툰 사진 -->
+        <a id="image_a"><img :src="review.imageUrl" id="webtoonimg"></a>
           </div>
           <div id="midcontent_text">
             <div>{{ review.title }}</div>
@@ -30,14 +46,34 @@
           </v-col>
       </div>
     </section>
+<!--  #####################################################Footers###########################################-->
+  <v-layout class="overflow-visible" style="height: 56px;">
+    <v-bottom-navigation v-model="value" color="purple" grow>
+      <v-btn>
+        <v-icon>mdi-history</v-icon>
+        Rated
+      </v-btn>
+      <v-btn>
+        <v-icon>mdi-heart</v-icon>
+        Liked
+      </v-btn>
+      <v-btn>
+        <v-icon>mdi-map-marker</v-icon>
+        Reviewed
+      </v-btn>
+    </v-bottom-navigation>
+  </v-layout>
 </template>
 <script setup>
 import {api} from '@/common.js'
-import {defineProps, onBeforeMount, reactive} from "vue";
+import {ref,defineProps, onBeforeMount, reactive} from "vue";
 
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
 let reviewed = reactive([]);
+const tab = ref(null);
+
+
 
 onBeforeMount(()=>{
   console.log("start")
@@ -52,8 +88,14 @@ onBeforeMount(()=>{
     console.error("API Error",error);
   }
 });
+
+
+const goBack = () => {
+  window.history.back();
+};
 </script>
+
+
 <style>
 @import "@/assets/css/reviewed.css";
-
 </style>

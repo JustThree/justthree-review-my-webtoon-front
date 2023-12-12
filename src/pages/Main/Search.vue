@@ -1,27 +1,167 @@
 <script setup>
+import {api} from '@/common.js'
+import {ref, watch} from "vue";
+import {useRoute} from "vue-router";
 
+const route = useRoute();
+let type = 1;
+let content = ref([[],[],[],[]]);
+let pages = ref([0,0,0,0]);
+let ends = ref(true,true,true,true)
+let size = 24;
+const typeJson = {
+  1:"title",
+  2:"outline",
+  3:"writer"
+}
+
+
+
+
+const changeType = function (type) {
+  pages = ref([0,0,0,0]);
+  this.type = type;
+}
+
+
+const fetchData = async (idx) => {
+  try {
+    const response = await api(`api/webtoon/search?type=${typeJson[idx]}&word=${route.query.searchword}&page=${pages.value[idx]}&size=${size}`, "GET");
+    if (!response.size){
+      return response.size;
+    }
+    if (response.totalPages < pages.value[idx])
+    {
+      return "end"
+    }
+    console.log(response)
+    if (response instanceof Error) {
+      // 에러 처리
+    } else {
+      for (const contentElement of response.content) {
+        content.value[idx].push({ ...contentElement, idx });
+      }
+      return response.content.size
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const load = (
+    { done }
+) => {
+  setTimeout(async () => {
+      pages.value[type]++;
+      const returnVal = await fetchData(type);
+      if (!returnVal || returnVal==="end"){
+        done("empty")
+      } else {
+        done('ok')
+      }
+    }, 2000)
+}
+
+//
+watch(
+    () =>route.query.searchword,
+    (nowword,lastword) => {
+      content = ref([[],[],[],[]]);
+      pages = ref([0,0,0,0]);
+      type = 1;
+      size = 24
+      fetchData(1)
+      fetchData(2)
+      fetchData(3)
+    }
+)
+fetchData(1);
+fetchData(2);
+fetchData(3);
+type = 1
 </script>
 
 <template>
+  <v-infinite-scroll :height="800" :items="content[type]"
+                     :onLoad="load"
+                     empty-text="만화가 더 없어요"
+                      aria-hidden="true"
 
-  <v-app
 
   >
-  <v-navigation-drawer
-      style="height:90%
-      ;margin-top:6%;
-"
+  <div>
+  <v-card
+    style="width:70%
+    ;margin:auto"
   >
+    <v-tabs
+        v-model="tab"
+        color="deep-purple-accent-4"
+        align-tabs="center"
+    >
+      <v-tab :value="1"
+      @click="changeType(1)"
+      >제목</v-tab>
+      <v-tab :value="2"
+      @click="changeType(2)"
+      >내용</v-tab>
+      <v-tab :value="3"
+     @click="changeType(3)"
+      >작가</v-tab>
+    </v-tabs>
+    <v-window v-model="tab"
+    >
+      <v-window-item
+          v-for="n in 3"
+          :key="n"
+          :value="n"
+      >
+        <v-container >
+          <v-row>
+            <v-col
+                v-for="(item,idx) in content[n]"
+                :key="idx"
+                cols="12"
+                md="4"
+            ><router-link :to="/webtoon/ + item.masterId"
+              style="color:black;
+              text-decoration:none"
+            >
+              <v-img
+                  :src="item.imgUrl"
+                  aspect-ratio="1"
+              ></v-img>
+              <div
+              v-text="item.title + '/' + item.writer">
+              </div>
+            </router-link>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-window-item>
+    </v-window>
+  </v-card>
+  </div>
 
-    <v-list-item title="My Application" subtitle="Vuetify"></v-list-item>
-    <v-divider></v-divider>
-    <v-list-item  title="List Item 1"></v-list-item>
-    <v-list-item  title="List Item 2"></v-list-item>
-    <v-list-item  title="List Item 3"></v-list-item>
-  </v-navigation-drawer>
-  </v-app>
+</v-infinite-scroll>
 </template>
 
 <style scoped>
+body{
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 
 </style>
+<script>
+export default {
+  data: () => ({
+    tab: null,
+  }),
+}
+
+</script>

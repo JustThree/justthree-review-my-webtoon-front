@@ -24,7 +24,7 @@ const title = props.title;
       >
         <router-link
             class="no-underline"
-            :to="'/review/' + itemWebtoon.masterId">
+            :to="'/webtoon/' + itemWebtoon.masterId">
         <v-card
           class="elevation-0"
             :class="['ma-4', selectedClass]"
