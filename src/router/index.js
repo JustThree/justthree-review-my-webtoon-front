@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 import ChatListPage from "@/pages/chat/ChatList.vue"
-import ChatDetailPage from "@/pages/chat/ChatBoard.vue"
 
 
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
