@@ -1,5 +1,7 @@
 <template>
     <body>
+        
+        <h6>참여 인원 : {{currentParticipants}}</h6>
         <div id='chatt'>
             <input type='text' v-model='sender' placeholder="닉네임을 입력해 주세요" required>
             <br />
@@ -15,42 +17,43 @@
 <script setup>
 import {ref,  onBeforeMount,onUnmounted, defineProps} from 'vue';
 import { api } from '@/common.js'
-import "@/assets/css/chat.css";
-
-
 const props = defineProps(['masterId']);
 const masterId = props.masterId;
-
 
 const sender = ref("");
 let talk = ref([]);
 const contents = ref("");
+const currentParticipants = ref("0");
 
 let ws;
 onBeforeMount(() => {
     // 기존 DB 채팅 내용 load
-    api(`chats?master_id=${masterId}`, "GET", {})
+    api(`chats/list/${masterId}`, "GET", {})
     .then((resp) => {
         resp.forEach(element => {
             formatMessage(element);
         });
     })
+  const token = sessionStorage.getItem("token");
 
-
-    // Connect WebSocket  
-    ws = new WebSocket(`ws://localhost:8089/chat/${masterId}/users/123`);
+    // Connect WebSocket
+    ws = new WebSocket(`ws://localhost:8089/chat?${token}%${masterId}`/*, [token, masterId]*/);
     // 2022008592
     // 2022008651
 
-    // sender -> sessionStorage(token)
+    // sender -> sessionStorage(token) 변경 예정
     ws.onmessage = function (onmessage) {
         console.log(onmessage)
         let data = JSON.parse(onmessage.data);
-        
-        formatMessage(data);
+        if(data.currentParticipants == undefined){
+            formatMessage(data);
+        }else{
+            currentParticipants.value = data.currentParticipants;
+        }
     }
-}
-) 
+
+})
+
 const formatMessage = (msg) => {
 
     let css;
