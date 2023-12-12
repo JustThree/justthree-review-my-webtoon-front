@@ -1,15 +1,9 @@
 <template>
-  <MyPageUpdateUserInfo></MyPageUpdateUserInfo>
+  <MyPageUpdateUserInfo :usersId="$route.params.usersId"></MyPageUpdateUserInfo>
 </template>
 
-<script>
-import MyPageUpdateUserInfo from "@/components/MyPageUpdateUserInfo.vue";
-
-export default {
-  components: {
-    MyPageUpdateUserInfo,
-  }
-}
+<script setup>
+import MyPageUpdateUserInfo from "@/components/mypage/UpdateUserInfo.vue";
 </script>
 
 <style>

@@ -19,6 +19,11 @@ import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
 // make sure to also import the coresponding css
 import "@mdi/font/css/materialdesignicons.css"; // Ensure you are using css-loader
 import "@fortawesome/fontawesome-free/css/all.css"; //
+
+//axois intercepter
+import { useAuthStore } from './stores/auth.store.js'
+import { setupAxiosInterceptors } from './axiosHandler.js';
+
 const app = createApp(App);
 
 const vuetify = createVuetify({
@@ -45,3 +50,6 @@ app.use(VueAwesomePaginate);
 app.use(vuetify);
 
 app.mount('#app');
+
+const authStore = useAuthStore();
+setupAxiosInterceptors(authStore);

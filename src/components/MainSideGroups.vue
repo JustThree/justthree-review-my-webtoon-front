@@ -1,14 +1,15 @@
 <script setup>
-const title = defineProps(['title'])
+const props = defineProps(['title','webtoons'])
+const title = props.title;
+
 </script>
 
 <template>
   <v-sheet
       class="mx-auto"
-      elevation="8"
       max-width="1300"
   >
-    <h2 v-text="title.title"></h2>
+    <h2 v-text="title"></h2>
     <v-slide-group
         v-model="model"
         class="pa-4"
@@ -16,19 +17,41 @@ const title = defineProps(['title'])
         show-arrows
     >
       <v-slide-group-item
-          v-for="n in 15"
-          :key="n"
+          v-for="(itemWebtoon,indexWebtoon) in webtoons"
+          :key="indexWebtoon"
           v-slot="{ isSelected, toggle, selectedClass }"
+
       >
-        <router-link to="/review">
+        <router-link
+            class="no-underline"
+            :to="'/review/' + itemWebtoon.masterId">
         <v-card
-            color="grey-lighten-1"
-            image="https://i.namu.wiki/i/PZme727xUUxTIxQJxee2QY2apLmzmDnWdyY64-EkeSoKCevFv49ajTgFRa7EshOQElDUqd_q7ciUxWIjr13TQbcKKrGFgykJuituI2j2-ydDdSRwccfiGedO1pTtTsPl9Tzr3mXavBKJ6a0pDdcfJQ.webp"
+          class="elevation-0"
             :class="['ma-4', selectedClass]"
-            height="200"
-            width="200"
-            @click="toggle"
+            :width="200"
         >
+          <div
+              style="height:300px;"
+          >
+          <v-img
+              class="elevation-0"
+              height="100%"
+              width="100%"
+              style="object-fit: cover"
+              :src="itemWebtoon.imgUrl"
+              @click="toggle"
+          >
+
+          </v-img>
+          </div>
+          <div
+              v-text="itemWebtoon.title"
+              style="font-weight: 600;"
+          ></div>
+          <div
+              style="font-size:0.8em"
+              v-text="itemWebtoon.writer"
+          ></div>
           <div class="d-flex fill-height align-center justify-center">
             <v-scale-transition>
               <v-icon
@@ -55,5 +78,8 @@ const title = defineProps(['title'])
 <style scoped>
 h2 {
   padding: 10px 0 0 10px;
+}
+.no-underline{
+  text-decoration: none;
 }
 </style>

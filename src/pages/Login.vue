@@ -1,15 +1,115 @@
 <script setup>
+    import {useAuthStore} from "@/stores/auth.store.js";
+    import {ref} from "vue";
 
+    const email = ref('')
+    const password = ref('')
+    const authStore = useAuthStore()
+    const submit = () => {
+        if(!email.value || !password.value){
+          alert("아이디와 비밀번호를 입력해주세요");
+        }else {
+          authStore.login(email.value, password.value);
+        }
+    }
+
+    const form = ref()
+
+    function required (v) {
+      return !!v || 'Field is required'
+    }
+
+    const emailRules = [
+      value => !!value || 'Required.',
+      value => (value || '').length <= 20 || 'Max 20 characters',
+      value => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return pattern.test(value) || 'Invalid e-mail.'
+      },
+    ]
+
+    async function validate () {
+      const { valid } = await form.value.validate()
+
+      if (valid) alert('Form is valid')
+    }
+    function reset () {
+      form.value.reset()
+    }
+    function resetValidation () {
+      form.value.resetValidation()
+    }
+
+    const visible = ref(false)
 </script>
 
 <template>
-  <form method="post" action="http://localhost:8089/api/login">
-    <input type="text" width="100px" name="usersEamil" placeholder="아이디">
-    <input type="password" width="100px" name="usersPw" placeholder="비밀번호">
-    <button type="submit">로그인</button>
-  </form>
+  <div id="LoginContainer">
+    <v-card
+        class="mx-auto pa-12 pb-8"
+        elevation="8"
+        max-width="540"
+        rounded="x-lg"
+    >
+      <h1 id="LoginTitle">웹타구 로그인</h1>
+      <div class="text-subtitle-1 text-medium-emphasis">이메일</div>
+
+      <v-text-field
+          density="compact"
+          placeholder="Email address"
+          prepend-inner-icon="mdi-email-outline"
+          variant="outlined"
+          :rules="emailRules"
+          v-model="email"
+      ></v-text-field>
+
+      <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+        비밀번호
+        <a
+            class="text-caption text-decoration-none text-blue"
+            href="#"
+            rel="noopener noreferrer"
+            target="_blank"
+        >
+          Forgot login password?</a>
+      </div>
+
+      <v-text-field
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          :type="visible ? 'text' : 'password'"
+          v-model="password"
+          density="compact"
+          placeholder="Enter your password"
+          prepend-inner-icon="mdi-lock-outline"
+          variant="outlined"
+          @click:append-inner="visible = !visible"
+          :rules="[required]"
+      ></v-text-field>
+
+      <v-btn
+          block
+          class="mb-8 basicBtnColor"
+          color="black"
+          size="large"
+          variant="tonal"
+          @click="submit"
+      >
+        로그인
+      </v-btn>
+    </v-card>
+  </div>
+
 </template>
 
 <style scoped>
+@import '@/assets/css/login.css';
+  #LoginTitle{
+    text-align : center;
+    margin-bottom : 20px;
+  }
+  #LoginContainer{
+    margin-top : 150px;
+
+  }
 
 </style>
