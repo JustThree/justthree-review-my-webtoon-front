@@ -36,7 +36,7 @@ const router= createRouter({
         {path:'/userinfo',component:UserInfo},
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/user/login',component:Login},
-        {path:'/join', component:Join},
+        {path:'/user/register', component:Join},
         {path:'/tui', component: TestUserInfo},
         {path:'/search', component:Search},
 
