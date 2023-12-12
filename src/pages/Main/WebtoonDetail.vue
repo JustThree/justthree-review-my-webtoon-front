@@ -21,7 +21,7 @@ apiToken("api/webtoon/" + route.params.masterId,
       data.value = response;
       rating.value = response.userStar / 2
       if (response.links) {
-        if (response.links.indexOf("_") > 0) {
+        if (response.links.indexOf("*") > 0) {
           const linkSplit = response.links.split("*")
           for (const linkSplitIdx in linkSplit) {
             links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
