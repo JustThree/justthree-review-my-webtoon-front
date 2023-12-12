@@ -122,7 +122,10 @@ type = 1
                 :key="idx"
                 cols="12"
                 md="4"
-            ><router-link :to="/review/ + item.masterId">
+            ><router-link :to="/review/ + item.masterId"
+              style="color:black;
+              text-decoration:none"
+            >
               <v-img
                   :src="item.imgUrl"
                   aspect-ratio="1"
