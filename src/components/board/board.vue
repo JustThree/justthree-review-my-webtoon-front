@@ -4,19 +4,19 @@
   <v-card
       variant="outlined"
       width="90%"
-      :title="boardone.title"
-      :subtitle="boardone.userNickname"
-      :text="boardone.content"
-      @click="$router.push(`/comm/${boardone.boardId}`)"  >
+      :title="title"
+      :subtitle="userNickname"
+      :text="content"
+      @click="$router.push(`/comm/${boardId}`)"  >
     <div>
-      {{boardone.created}}
+      {{created}}
     </div>
     <div style="display: flex; justify-content: flex-end;">
       <div>
         댓글수
       </div>
       <div>
-        /조회수 {{boardone.viewCount}}
+        /조회수 {{viewCount}}
       </div>
     </div>
 <!--    <div style="display: flex; justify-content: space-between;">
@@ -32,10 +32,25 @@
 </div>
 </template>
 <script setup>
+import {toRef, toRefs, watchEffect} from "vue";
+
 const props = defineProps({
-boardone: Object
+  boardone: Object
 });
-//console.log(props.boardone);
+
+const {boardId, title, content, created, noticeYn, updated, userEmail, userNickname, viewCount} = toRefs(props.boardone);
+
+const pprops = toRef(props, "boardone");
+
+watchEffect(()=>{
+  boardId.value = pprops.value.boardId;
+  title.value = pprops.value.title;
+  created.value = pprops.value.created;
+  updated.value = pprops.value.updated;
+  userEmail.value = pprops.value.userEmail;
+  userNickname.value = pprops.value.userNickname;
+  viewCount.value = pprops.value.viewCount;
+});
 </script>
 
 <style scoped>
