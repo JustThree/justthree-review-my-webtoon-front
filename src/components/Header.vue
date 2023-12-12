@@ -1,40 +1,63 @@
-
-
 <template>
-  <nav class="base-header-group">
-    <div class="logo">
-      <img alt="" src="@/assets/images/blackDUK.png" class="logo-image">
-      <span class="logo-text">WebTaCKU</span>
-    </div>
-    <div id="navbar" class="frame-3" aria-expanded="false">
-      <div class="nav_div">
-        <router-link class="nav_text" to="/webtoon">웹툰</router-link>
-      </div>
-      <div class="nav_div">
-        <router-link class="nav_text" to="/community">커뮤니티</router-link>
-      </div>
-      <div class="nav_div">
-        <router-link class="nav_text" to="/chat" >채팅</router-link>
-      </div>
+  <v-card>
+    <v-toolbar class="w-75 mx-auto" color="white" height="80">
 
-      <div v-if="!getIsLogin">
-        <div class="nav-button">
-          <button class="base-button side-button" onclick="location.href='/user/register'">회원가입</button>
-          <button class="base-button" onclick="location.href='/user/login'">로그인</button>
-        </div>
-      </div>
-      <div v-else>
-        <div class="nav-button">
-          <button class="base-button  side-button" onclick="location.href='/mypage'">마이페이지</button>
-          <button class="base-button" @click="logout">로그아웃</button>
-        </div>
-      </div>
-    </div>
-  </nav>
+      <img alt="logo" src="@/assets/images/blackDUK.png" @click="$router.push('/')">
+
+      <v-toolbar-title class="ml-2">
+        <v-btn href="/webtoon"> 웹툰 </v-btn>
+        <v-btn herf="/board"> 커뮤니티 </v-btn>
+        <v-btn href="/chatlist"> 채팅 </v-btn>
+      </v-toolbar-title >
+
+      <v-toolbar-items class="w-25">
+        <v-card-text class="mt-1">
+          <v-text-field
+              :loading = "loading"
+              density="compact"
+              variant="outlined"
+              label="Search templates"
+              append-inner-icon="mdi-magnify"
+              single-line
+              hide-details
+              @click:append-inner="onClick"
+          ></v-text-field>
+        </v-card-text>
+        <v-btn href="/login">
+          로그인
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+  </v-card>
+
 </template>
 <script setup>
+import {ref} from "vue";
+import {api} from "@/common.js";
+const loading = ref(false);
+const onClick = () => {
+  // 검색 중 로딩 표시
+  loading.value = true;
+
+  // 웹툰 검색
+  // api("/webtoon/search", "GET", {})
+  //     .then((resp) => {
+  //       // 검색이 끝나면 로딩표시 해제
+  //       loading.value = false
+  //     })
+}
+
 
 </script>
 <style scoped>
-@import '@/assets/css/header.css';
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+*{
+  font-family: 'Pretendard-Regular';
+}
 </style>

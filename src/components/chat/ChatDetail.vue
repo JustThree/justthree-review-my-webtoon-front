@@ -30,14 +30,14 @@ onBeforeMount(() => {
     // 기존 DB 채팅 내용 load
     api(`chats/list/${masterId}`, "GET", {})
     .then((resp) => {
-        console.log(resp)
         resp.forEach(element => {
             formatMessage(element);
         });
     })
+  const token = sessionStorage.getItem("token");
 
-    // Connect WebSocket  
-    ws = new WebSocket(`ws://localhost:8089/chat/${masterId}/users/123`);
+    // Connect WebSocket
+    ws = new WebSocket(`ws://localhost:8089/chat?${token}%${masterId}`/*, [token, masterId]*/);
     // 2022008592
     // 2022008651
 
@@ -48,7 +48,7 @@ onBeforeMount(() => {
         if(data.currentParticipants == undefined){
             formatMessage(data);
         }else{
-            currentParticipants.value = data.currentParticipants;        
+            currentParticipants.value = data.currentParticipants;
         }
     }
 

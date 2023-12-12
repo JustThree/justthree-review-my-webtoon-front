@@ -1,20 +1,15 @@
 <script setup>
 import ChatList from '@/components/chat/ChatList.vue';
-
 </script>
 
 <template>
-
-    <body style="text-align: -webkit-center; height: 100%;">
-        <div class="chat">
-            <ChatList></ChatList>
-        </div>
-
+  <body style="text-align: -webkit-center; ">
+    <ChatList :page="page" @page-change="handlePageChange"/>
     </body>
 </template>
-<style scoped>
-@import "@/assets/css/chat.css";
 
+
+<style scoped>
 @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
@@ -22,7 +17,7 @@ import ChatList from '@/components/chat/ChatList.vue';
     font-style: normal;
 }
 
-*{
+* {
     font-family: 'Pretendard-Regular';
 }
 </style>
