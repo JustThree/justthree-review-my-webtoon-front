@@ -159,7 +159,7 @@ fetchData()
                       ;height:150px
                       ;width:100px"
         >
-          <router-link :to="'/review/' + item.masterId"
+          <router-link :to="'/webtoon/' + item.masterId"
             style="  color : black;
             text-decoration: none;"
           >

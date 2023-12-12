@@ -10,7 +10,7 @@ import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
 import Main from "@/pages/Main/Main.vue";
-import WebtoonReview from "@/pages/Main/WebtoonReview.vue";
+import WebtoonReview from "@/pages/Main/WebtoonDetail.vue";
 
 //board(SY)
 
@@ -33,7 +33,7 @@ const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        {path:'/review/:masterId',component:WebtoonReview},
+        {path:'/webtoon/:masterId',component:WebtoonReview},
         {path:'/comment/:masterId',component:WebtoonCommentList},
         {path:'/webtoon',component:WebtoonList},
         {path:'/userinfo',component:UserInfo},
