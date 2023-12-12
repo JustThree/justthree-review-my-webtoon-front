@@ -25,7 +25,7 @@ export function setupAxiosInterceptors(store){
             config.headers['Authorization'] = token;
         }
 
-        if (config.url === `${import.meta.env.VITE_SERVER_URL}/api/refresh`){
+        if (config.url === `${import.meta.env.VITE_SERVER_URL}/api/auth/accessoken`){
             const tokenDto = JSON.parse(user.value.token);
             token = tokenDto.refreshToken;
             config.headers['Authorization'] = token;
@@ -51,18 +51,17 @@ export function setupAxiosInterceptors(store){
         if (errResStatus === 401 || errResStatus === 403) {
             alert("권한이 없습니다. 로그아웃 되었습니다. 다시 로그인해주세요.")
             store.logout();
-        }else if(errResStatus === 402){
-            // alert("토큰 만료");
-            // alert(error.response.data.refresh);
+        }else if(errResStatus === 409){
+            alert("1.토큰 만료");
+            alert(error.response.data.refresh);
             if(error.response.data.refresh === "true"){
                 // alert("refresh 재발급 필요");
-                api("api/refresh", 'get', '').then(r  => {
-                    // alert(r);
+                api("api/auth/accessoken", 'get', '').then(r  => {
+                    alert("then");
+                    alert(r);
                     const tokenDto = JSON.parse(user.value.token);
-                    tokenDto.refreshToken = r.data;
-
-                    // alert("잠시중지");
-                    // localStorage.setItem("accessToken") = r.data;
+                    tokenDto.accessToken = "Bearer " + r.toString();
+                    alert("잠시중지");
                 });
             }
         }
