@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 import ChatListPage from "@/pages/chat/ChatList.vue"
-
-
 import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
