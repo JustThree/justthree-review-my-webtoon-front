@@ -37,7 +37,7 @@
         <v-btn @click="searchBoard">검색</v-btn>
       </v-col>
         <v-col cols="4">
-            <v-btn @click="$router.push(`/comm/new`)" >작성하기</v-btn>
+            <v-btn  v-if="user"  @click="$router.push(`/comm/new`)" >작성하기</v-btn>
         </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
@@ -57,11 +57,18 @@ import Board from "@/components/board/board.vue";
 import {onMounted, ref, nextTick, watch} from "vue";
 import {api} from "@/common.js";
 import {useRoute} from "vue-router";
+import {useAuthStore} from "@/stores/auth.store.js";
+import {storeToRefs} from "pinia";
 
 const route = useRoute();
 const errorMsg = ref("");
 const commBoardList = ref([]);
 const pagingMsg = ref("시간이 조금 걸립니다:)");
+
+//로그인여부
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore);
+console.log("user", user);
 
 //페이징
 let pageList=ref([1,1,1]); // 초기 조회 / 정렬 / 검색

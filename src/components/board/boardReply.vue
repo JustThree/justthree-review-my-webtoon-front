@@ -20,21 +20,6 @@
             <div> /   부모 댓글 id {{parentReplyId}}</div>
         </div>
     </v-card>
-<!--  <v-card
-      variant="outlined"
-      width="90%"
-      :title="replyUserNickname"
-      :subtitle="replyCreated"
-      :text="boardReplyContent">
-    <div>
-        {{boardReplyId}}
-    </div>
-    <div style="display: flex; justify-content: flex-end;">
-        <div>        댓글 작성자 id {{replyUsersId}}      </div>
-        <div> /   게시글 id {{boardId}}      </div>
-        <div> /   부모 댓글 id {{parentReplyId}}</div>
-    </div>
-  </v-card>-->
     <!-- 대댓글 컴포넌트-->
 </div>
 </template>
@@ -45,16 +30,16 @@ const props = defineProps({
     boardreply: Object,
     writerUsersId: Number,
 });
-console.log(props);
+//console.log(props);
+
 const {boardReplyId, boardId, boardReplyContent, replyCreated,
     replyUpdated, parentReplyId, replyUsersId, replyUserEmail,
     replyUserNickname, replyList, reReplyList} = toRefs(props.boardreply);
 const pprops = toRef(props, "boardreply");
-console.log(pprops.value);
+//console.log(pprops.value);
 
 const writerId = props.writerUsersId;
-console.log(writerId);
-
+//console.log(writerId);
 
 watchEffect(()=>{
     boardReplyId.value = pprops.value.boardReplyId;

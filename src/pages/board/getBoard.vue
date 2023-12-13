@@ -1,7 +1,5 @@
 <template>
   <v-container>
-<!--    <board-detail :board="board"></board-detail>-->
-    <!--댓글 컴포넌트-->
       <v-row class="frame-top">
           <v-col class="frame-title" cols="12">
               <v-text-field
@@ -21,7 +19,7 @@
               <span>{{board.viewCount}}</span>
           </v-col>
           <!--  로그인한 유저(users_id)와 작성자(users_id)가 같을 경우에만   수정/삭제 버튼 조회    -->
-          <v-col class="frame-title" cols="4">
+          <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
               <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
               <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
           </v-col>
@@ -64,15 +62,16 @@
               </div>
           </v-col>
       </v-row>
-      <v-row>
-          <v-col cols="10" sm="6" md="4">
+      <v-row no-gutters>
+          <v-col cols="10" sm="6" md="4" align-self="stretch" >
               <v-text-field
+                  v-model="txtReply"
                   placeholder="댓글을 입력해주세요"
                   variant="outlined">
               </v-text-field>
           </v-col>
-          <v-col cols="2"  sm="6"  md="4">
-                  <v-btn>등록</v-btn>
+          <v-col cols="2"  sm="6"  md="4" align-self="stretch">
+                  <v-btn @click="submitReply" >등록</v-btn>
           </v-col>
       </v-row>
       <!--  댓글 목록   -->
@@ -92,6 +91,8 @@ import {useRoute} from "vue-router";
 import {api} from "@/common.js";
 import router from "@/router/index.js";
 import BoardReply from "@/components/board/boardReply.vue";
+import {useAuthStore} from "@/stores/auth.store.js";
+import {storeToRefs} from "pinia";
 
 const board = ref({
     title: '',
@@ -109,6 +110,13 @@ const board = ref({
 
 const route = useRoute();
 //const replyList = ref([]);
+
+//로그인한 유저 확인
+/*const authStore = useAuthStore()
+const { user } = storeToRefs(authStore);
+console.log("user", user);
+console.log(user.value.usersId);*/
+let loginUsersId = ref();
 
 //수정버튼 클릭 시
 function gotoUpdateBoard(){
@@ -136,6 +144,36 @@ async function delBoard(){
         }
     }
 }
+
+//댓글 등록 버튼 클릭
+const txtReply = ref('');
+const submitReply = async () => {
+    if(!txtReply.value.trim()){
+        alert('댓글을 입력해주세요');
+        return;
+    }
+    console.log("댓글 작성자 id(로그인한 user의 usersId");
+    console.log("boardId ", board.value.boardId);
+    console.log('댓글 등록 요청', txtReply.value);
+   const response = await api("board/reply", "POST", {
+        "users" : {"usersId":4},
+        "boardId": board.value.boardId,
+        "boardReplyContent": txtReply.value,
+        "parentReplyId" : 0
+    });
+    if (response instanceof Error) {
+        console.log(response.response.data); //서버에서 예외처리 필요
+    } else {
+        if (response) {
+            console.log("성공");
+            alert("댓글이 성공적으로 등록되었습니다.");
+            await getData();
+        } else {
+            alert("등록 실패..");
+        }
+    }
+}
+
 const getData = async () =>{
     console.log(route.params.boardId);
     api("board/"+route.params.boardId, "GET")
@@ -160,6 +198,10 @@ const getData = async () =>{
 };
 //기존 데이터 파싱
 onMounted(async () =>{
+    const authStore = useAuthStore()
+    const { user } = storeToRefs(authStore);
+    //console.log("user", user);
+    loginUsersId.value = user.value.usersId;
     await getData();
 });
 
