@@ -3,45 +3,73 @@
 import {ref} from 'vue'
 import {api, apiToken} from "@/common.js";
 import {useRoute} from "vue-router";
+import {useAuthStore} from "@/stores/auth.store.js";
+import router from "@/router/index.js";
 
+const authStore = useAuthStore()
 const route = useRoute();
 const color = ref('#BEADFA')
 const data = ref([]);
 const reviewData = ref([]);
+const rating = ref(0);
+const reviewContent = ref("")
 const links = ref({
   platform: [],
   link: []
 });
-const rating = ref(0);
 // 화면 기초 정보
 
-apiToken("api/webtoon/" + route.params.masterId,
-    "GET",
-).then((response) => {
-      data.value = response;
-      rating.value = response.userStar / 2
-      if (response.links) {
-        if (response.links.indexOf("*") > 0) {
-          const linkSplit = response.links.split("*")
-          for (const linkSplitIdx in linkSplit) {
-            links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
-            links.value.link[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[1]
-          }
+if (authStore.user) {
+  apiToken("api/webtoon/" + route.params.masterId,
+      "GET",
+  ).then((response) => {
+        data.value = response;
+        rating.value = response.userStar / 2
+        if (response.links) {
+          if (response.links.indexOf("*") > 0) {
+            const linkSplit = response.links.split("*")
+            for (const linkSplitIdx in linkSplit) {
+              links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
+              links.value.link[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[1]
+            }
 
-        } else {
-          if (response.links[0].indexOf("$")) {
-            links.value.platform[0] = response.links.split("$")[0]
-            links.value.link[0] = response.links.split("$")[1]
+          } else {
+            if (response.links[0].indexOf("$")) {
+              links.value.platform[0] = response.links.split("$")[0]
+              links.value.link[0] = response.links.split("$")[1]
+            }
           }
         }
       }
-    }
-);
+  );
+} else {
+  api("api/webtoon/" + route.params.masterId,
+      "GET",
+  ).then((response) => {
+        data.value = response;
+        rating.value = response.userStar / 2
+        if (response.links) {
+          if (response.links.indexOf("*") > 0) {
+            const linkSplit = response.links.split("*")
+            for (const linkSplitIdx in linkSplit) {
+              links.value.platform[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[0]
+              links.value.link[linkSplitIdx] = linkSplit[linkSplitIdx].split("$")[1]
+            }
+
+          } else {
+            if (response.links[0].indexOf("$")) {
+              links.value.platform[0] = response.links.split("$")[0]
+              links.value.link[0] = response.links.split("$")[1]
+            }
+          }
+        }
+      }
+  );
+}
 api("api/webtoon/reviews/" + route.params.masterId,
     "GET"
 ).then((response) => {
       reviewData.value = response.content
-  console.log(response)
     }
 )
 
@@ -50,17 +78,51 @@ api("api/webtoon/reviews/" + route.params.masterId,
 
 // 별점 남기기 api
 function ratingSend() {
-  apiToken("api/webtoon/rating?" +
-      "masterId=" + route.params.masterId +
-      "&star=" + rating.value * 2,
-      "PUT",
-  ).then(
-  )
+  if (authStore.user) {
+    apiToken("api/webtoon/rating?" +
+        "masterId=" + route.params.masterId +
+        "&star=" + rating.value * 2,
+        "PUT",
+    ).then(
+      alert("별점 등록!")
+        )
+  } else {
+    alert("로그인을 먼저 해 주세요!")
+  }
 }
 
 // 관심 등록 api
-
+function interestAdd(){
+  if (authStore.user){
+    apiToken(
+        "api/webtoon/interest/" +
+        route.params.masterId,
+        "PUT",
+    ).then(
+        (response) => {
+          alert(response)
+        }
+    )
+  }
+}
 // 리뷰 api => 모달
+function submitReview(){
+  if (authStore.user){
+    apiToken(
+        "api/webtoon/review/" +
+        route.params.masterId,
+        "POST",
+        {
+          "content" : reviewContent.value
+        }
+    ).then(
+        (response) => {
+          alert(response)
+          router.go(0);
+        }
+    )
+  }
+}
 
 
 </script>
@@ -180,10 +242,11 @@ function ratingSend() {
                         color="gray "
                         size="64"
                         icon="mdi-plus-box"
+                        @click="interestAdd"
                     ></v-icon>
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
-                  <v-dialog width="500">
+                  <v-dialog width="1000" height="800px">
                     <template v-slot:activator="{ props }">
                       <v-icon
                             v-bind="props"
@@ -194,16 +257,26 @@ function ratingSend() {
                     </template>
 
                     <template v-slot:default="{ isActive }">
-                      <v-card title="Dialog">
-                        <v-card-text>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </v-card-text>
+                      <v-card title="웹툰 리뷰를 써 주세요!">
+                        <v-divider></v-divider>
 
+                        <v-textarea
+                                    v-model="reviewContent"
+                                    class="p-5"
+                                    bg-color=#F2F2F2
+                                    placeholder="(글자수 500자 이내)"
+                        >
+                        </v-textarea>
+                        <v-divider></v-divider>
                         <v-card-actions>
                           <v-spacer></v-spacer>
 
                           <v-btn
-                              text="Close Dialog"
+                              text="Write"
+                              @click="submitReview"
+                          ></v-btn>
+                          <v-btn
+                              text="Close"
                               @click="isActive.value = false"
                           ></v-btn>
                         </v-card-actions>

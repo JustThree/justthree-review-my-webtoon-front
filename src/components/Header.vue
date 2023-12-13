@@ -16,7 +16,7 @@
               :loading = "loading"
               density="compact"
               variant="outlined"
-              label="Search templates"
+              label="Search"
               append-inner-icon="mdi-magnify"
               single-line
               hide-details
@@ -34,18 +34,22 @@
 <script setup>
 import {ref} from "vue";
 import {api} from "@/common.js";
+
 const loading = ref(false);
 const onClick = () => {
   // 검색 중 로딩 표시
   loading.value = true;
 
-  // 웹툰 검색
   // api("/webtoon/search", "GET", {})
   //     .then((resp) => {
   //       // 검색이 끝나면 로딩표시 해제
   //       loading.value = false
   //     })
 }
+
+// ekz
+
+
 
 
 </script>

@@ -101,7 +101,6 @@ fetchData()
 <template>
   <v-card
       class="v-col-md-12"
-      color="#F1F1F5"
   >
     <router-link :to="'/'">
       <v-btn
