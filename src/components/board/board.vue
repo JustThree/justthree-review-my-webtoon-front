@@ -9,6 +9,7 @@
       :text="content"
       @click="$router.push(`/comm/${boardId}`)"  >
     <div>
+        {{boardId}}
       {{created}}
     </div>
     <div style="display: flex; justify-content: flex-end;">
