@@ -17,6 +17,7 @@
 <script setup>
 import {ref,  onBeforeMount,onUnmounted, defineProps} from 'vue';
 import { api, createdDiff } from '@/common.js'
+import {useAuthStore} from "@/stores/auth.store.js";
 const props = defineProps(['masterId']);
 const masterId = props.masterId;
 
@@ -34,11 +35,10 @@ onBeforeMount(() => {
             formatMessage(element);
         });
     })
-  // const token = sessionStorage.getItem("token");
-  const token = "123";
+    const token = JSON.parse(useAuthStore().user.token).accessToken;
 
     // Connect WebSocket
-    ws = new WebSocket(`ws://localhost:8089/chat?${token}%${masterId}`/*, [token, masterId]*/);
+    ws = new WebSocket(`ws://localhost:8089/chat?${token}&${masterId}`/*, [token, masterId]*/);
     // 2022008592
     // 2022008651
 

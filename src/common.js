@@ -34,7 +34,6 @@ const api = async (urn, method, data) => {
 }
 
 const createdDiff = (created) => {
-    console.log(created)
     const createdDateTime = new Date(created)
     const diff = Date.now() - createdDateTime;
 
