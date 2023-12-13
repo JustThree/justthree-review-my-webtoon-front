@@ -33,6 +33,28 @@ const api = async (urn, method, data) => {
     })).data;
 }
 
+const createdDiff = (created) => {
+    console.log(created)
+    const createdDateTime = new Date(created)
+    const diff = Date.now() - createdDateTime;
+
+    const millisecondsPerMinute = 1000 * 60;
+    const millisecondsPerHour = millisecondsPerMinute * 60;
+    const millisecondsPerDay = millisecondsPerHour * 24;
+
+    if (diff < millisecondsPerMinute) {
+        return "방금 전";
+    } else if (diff < millisecondsPerHour) {
+        const minutes = Math.floor(diff / millisecondsPerMinute);
+        return `${minutes}분 전`;
+    } else if (diff < millisecondsPerDay) {
+        const hours = Math.floor(diff / millisecondsPerHour);
+        return `${hours}시간 전`;
+    } else{
+        return `${createdDateTime.getFullYear()}년 ${createdDateTime.getMonth()}월 ${createdDateTime.getDate()}일` ;
+    }
+}
+
 export {
-    api, apiToken
+    api, apiToken, createdDiff
 };

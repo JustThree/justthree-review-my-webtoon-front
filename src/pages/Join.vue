@@ -13,6 +13,8 @@
 
   //반응형 변수
   const showToken = ref(false);
+  const emailRequired = ref(false);
+  const emailCodeRequired = ref(false);
   const emailCode = ref();
   const vars = ref(
       {
@@ -184,7 +186,7 @@
     <v-card
         class="mx-auto pa-12 pb-8"
         elevation="8"
-        max-width="700"
+        width="37%"
         rounded="lg"
     >
       <h1 id="LoginTitle">웹타구 회원가입</h1>
@@ -225,7 +227,7 @@
         </div>
       </div>
 
-      <div class="text-subtitle-1 text-medium-emphasis">닉네임</div>
+      <div class="text-subtitle-1 text-medium-emphasis" >닉네임</div>
       <div>
         <v-text-field
             :rules="[required]"
@@ -285,6 +287,7 @@
 <style scoped>
 @import '@/assets/css/login.css';
     #registerContainer{
+      width : 100%;
       display: flex;
       justify-content: center;
       align-items: center;

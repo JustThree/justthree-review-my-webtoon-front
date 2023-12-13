@@ -17,7 +17,7 @@ import getBoard from "@/pages/board/getBoard.vue"
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
-import commBoardList from "@/pages/board/commBoad.vue"
+import commBoardList from "@/pages/board/commBoadList.vue"
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";

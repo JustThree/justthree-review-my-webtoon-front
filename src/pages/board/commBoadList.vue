@@ -41,7 +41,7 @@
         </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
-    <v-infinite-scroll height="500"  @load="load" >
+    <v-infinite-scroll height="500"  @load="load"  ref="infiniteScroll">
       <template v-for="(data, idx) in commBoardList" :key="idx">
         <Board :boardone="data"></Board>
       </template>
@@ -54,7 +54,7 @@
 
 <script setup>
 import Board from "@/components/board/board.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, nextTick, watch} from "vue";
 import {api} from "@/common.js";
 import {useRoute} from "vue-router";
 
@@ -64,14 +64,17 @@ const commBoardList = ref([]);
 const pagingMsg = ref("시간이 조금 걸립니다:)");
 
 //페이징
+let pageList=ref([1,1,1]); // 초기 조회 / 정렬 / 검색
 let page = 1;
 const itemPerPage = 10;
 let sortings = ref("sortDesc");
 let shouldResetPage = true;
+const infiniteScrollRef = ref(null);
 
 //검색
 const searchKeyword = ref(""); // 검색어
 
+//검색 함수
 const searchBoard = async () => {
     // 검색어가 비어 있는 경우 아무 작업도 수행하지 않음
     if (!searchKeyword.value.trim()) {
@@ -79,42 +82,14 @@ const searchBoard = async () => {
     }
     console.log(searchKeyword.value);
     // 페이지 리셋 및 검색 결과 초기화
-   page = 1;
+   pageList[2] = 1;
+    //page[3] = 1;
     commBoardList.value = [];
     pagingMsg.value = "시간이 조금 걸립니다:)";
     // 검색에 필요한 작업 수행
-    await fetchData();
-   // await getSearchResult();
+    await getData();
 };
-//검색결과 조회
-/*const getSearchResult = async () =>{
-    page = 1;
-    commBoardList.value = [];
-    pagingMsg.value = "시간이 조금 걸립니다:)";
-    api("board/search?page="+page+"&size="+itemPerPage+"&keyword="+searchKeyword.value, "GET")
-        .then((response) => {
-                if (response instanceof Error) {
-                    let errorRes = response;
-                    console.log(errorRes.response);
-                    errorMsg.value = errorRes.response;
-                    commBoardList.value = [];
-                } else {
-                    console.log("검색 결과 개수")
-                    console.log(response.length);
-                    console.log(response);
-                    if(response.length < itemPerPage){
-                        pagingMsg.value = "더 이상 존재하지 않습니다.";
-                        commBoardList.value = [...commBoardList.value, ...response];
-                    }else {
-                        //기존 목록에 이어서 조회
-                        //shouldResetPage = false;
-                        commBoardList.value = [...commBoardList.value, ...response];
-                        console.log(commBoardList.value);
-                    }
-                }
-            }
-        );
-};*/
+
 //정렬 드롭다운 메뉴
 const menuitems = ref([
   { title: "오래된 순" },
@@ -143,21 +118,17 @@ const sortList = (sorting) => {
     page = 1; // 페이지 리셋
     commBoardList.value = []; // 목록 초기화
     pagingMsg .value= "시간이 조금 걸립니다:)"; //메시지 초기화
-    //let done = '';
-    //load({done});
-   // load({});
   }
-  console.log(pagingMsg.value)
   sortings.value = sorting;
-  console.log(sortings.value);
   //shouldResetPage = true; // 페이지 리셋 플래그 설정
-  fetchData();
+  getData();
 }
 
+
 onMounted(async  ()=>{
-  await fetchData();
+  await getData();
 });
-const fetchData = async () => {
+const getData = async () => {
   api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
       .then((response) => {
         //console.log(1)
@@ -189,14 +160,14 @@ const load = ({ done }) => {
         shouldResetPage = false; // 페이지 리셋 방지
         setTimeout(async () => {
             page++;
-            await fetchData();
+            await getData();
             done('ok')
         }, 2000)
     }else {
         shouldResetPage = true; // 다음 정렬 조건 변경 시 페이지 리셋
+        // 다 끝나고 초기화
     }
 }
-
 </script>
 
 <style scoped>

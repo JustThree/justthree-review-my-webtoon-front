@@ -3,16 +3,19 @@
     <div id="myInfoLayout">
       <div id="userPic"><img src="../../assets/images/blackDUK.png" alt=""></div>
       <div id="currentUser">{{usersNickname}}</div>
-      <div id="currentUserEmail">{{ usersEmail }}</div>
+      <div id="currentUserEmail">{{usersEmail}}</div>
       <div class="followerInfo">
+        <router-link :to="{path:`/mypage/follow/${usersId}`}">
         <div class="follow">팔로워
           <div id="follower">{{followerCount}}</div>
         </div>
-        <div class="follow"> 팔로잉
+        </router-link>
+        <router-link :to="{path:`/mypage/follow/${usersId}`}">
+        <div class="follow">팔로잉
           <div id="following">{{followingCount}}</div>
         </div>
+        </router-link>
       </div>
-      <div id="usertext">야옹 야옹 야옹이</div>
 
       <div id="userInfoChart">
         <div class="infoChartTitle">
@@ -47,11 +50,13 @@
 <script setup>
 import {api} from '@/common.js'
 import {defineProps, onBeforeMount, reactive, ref} from "vue";
+import router from "@/router/index.js";
 
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
+
 const goToUpdateUserInfo = () => {
-  this.$router.push(`/mypage/updateuserinfo/${usersId}`);
+  router.push(`/mypage/updateuserinfo/${usersId}`);
 }
 
 let info = reactive(['usersId'])
@@ -69,7 +74,7 @@ onBeforeMount( () => {
   try {
     api(`mypage/userinfo/${usersId}`, "GET", {})
         .then((resp) => {
-          console.log(resp.profileUrl)
+          console.log(resp)
           info.values=resp;
           profileUrl.value=resp.profileUrl;
           usersNickname.value=resp.usersNickname;
