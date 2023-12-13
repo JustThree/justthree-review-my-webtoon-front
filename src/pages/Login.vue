@@ -96,6 +96,16 @@
       >
         로그인
       </v-btn>
+<!--      <v-btn
+          block
+          class="mb-8 basicBtnColor"
+          color="black"
+          size="large"
+          variant="tonal"
+          @click="submit"
+      >
+        회원가입
+      </v-btn>-->
     </v-card>
   </div>
 

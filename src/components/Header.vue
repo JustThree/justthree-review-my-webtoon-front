@@ -6,7 +6,7 @@
 
       <v-toolbar-title class="ml-2">
         <v-btn href="/webtoon"> 웹툰 </v-btn>
-        <v-btn herf="/board"> 커뮤니티 </v-btn>
+        <v-btn herf="/comm"> 커뮤니티 </v-btn>
         <v-btn href="/chatlist"> 채팅 </v-btn>
       </v-toolbar-title >
 
@@ -23,8 +23,18 @@
               @click:append-inner="onClick"
           ></v-text-field>
         </v-card-text>
-        <v-btn href="/login">
+        <v-btn v-if="!user" href="/user/login">
           로그인
+        </v-btn>
+
+<!--        <v-btn v-if="user" href="/mypage/userinfo">
+          마이페이지
+        </v-btn>-->
+        <v-btn v-if="user" @click="goToMymage">
+          마이페이지
+        </v-btn>
+        <v-btn v-if="user" @click="authStore.logout()">
+          로그아웃
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -34,7 +44,20 @@
 <script setup>
 import {ref} from "vue";
 import {api} from "@/common.js";
+import {useAuthStore} from "@/stores/auth.store.js";
+import {storeToRefs} from "pinia";
+import router from "@/router/index.js";
+
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore);
 const loading = ref(false);
+
+const goToMymage = async () =>{
+  await api('api/getUserId','get').then(res => {
+    router.push(`/mypage/userinfo/${res}`);
+  });
+}
+
 const onClick = () => {
   // 검색 중 로딩 표시
   loading.value = true;
@@ -46,8 +69,6 @@ const onClick = () => {
   //       loading.value = false
   //     })
 }
-
-
 </script>
 <style scoped>
 @font-face {
