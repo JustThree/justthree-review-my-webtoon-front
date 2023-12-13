@@ -16,7 +16,7 @@
 </template> 
 <script setup>
 import {ref,  onBeforeMount,onUnmounted, defineProps} from 'vue';
-import { api } from '@/common.js'
+import { api, createdDiff } from '@/common.js'
 const props = defineProps(['masterId']);
 const masterId = props.masterId;
 
@@ -34,7 +34,8 @@ onBeforeMount(() => {
             formatMessage(element);
         });
     })
-  const token = sessionStorage.getItem("token");
+  // const token = sessionStorage.getItem("token");
+  const token = "123";
 
     // Connect WebSocket
     ws = new WebSocket(`ws://localhost:8089/chat?${token}%${masterId}`/*, [token, masterId]*/);
@@ -65,7 +66,7 @@ const formatMessage = (msg) => {
         css = 'style=background:gray;'
     }
     let item = `<div ${css}>
-            <span><b>${msg.senderNickname}</b></span> [ ${msg.created} ]<br/>
+            <span><b>${msg.senderNickname}</b></span> [ ${createdDiff(msg.created)} ]<br/>
             <span>${msg.contents}</span>
             </div>`;
 
