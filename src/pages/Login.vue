@@ -1,48 +1,3 @@
-<script setup>
-    import {useAuthStore} from "@/stores/auth.store.js";
-    import {ref} from "vue";
-
-    const email = ref('')
-    const password = ref('')
-    const authStore = useAuthStore()
-    const submit = () => {
-        if(!email.value || !password.value){
-          alert("아이디와 비밀번호를 입력해주세요");
-        }else {
-          authStore.login(email.value, password.value);
-        }
-    }
-
-    const form = ref()
-
-    function required (v) {
-      return !!v || 'Field is required'
-    }
-
-    const emailRules = [
-      value => !!value || 'Required.',
-      value => (value || '').length <= 20 || 'Max 20 characters',
-      value => {
-        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return pattern.test(value) || 'Invalid e-mail.'
-      },
-    ]
-
-    async function validate () {
-      const { valid } = await form.value.validate()
-
-      if (valid) alert('Form is valid')
-    }
-    function reset () {
-      form.value.reset()
-    }
-    function resetValidation () {
-      form.value.resetValidation()
-    }
-
-    const visible = ref(false)
-</script>
-
 <template>
   <div id="LoginContainer">
     <v-card
@@ -110,16 +65,50 @@
   </div>
 
 </template>
+<script setup>
+import {useAuthStore} from "@/stores/auth.store.js";
+import {ref} from "vue";
 
+const form = ref()
+const email = ref('')
+const password = ref('')
+const visible = ref(false)
+const authStore = useAuthStore()
+const submit = () => {
+  if(!email.value || !password.value){
+    alert("아이디와 비밀번호를 입력해주세요");
+  }else {
+    authStore.login(email.value, password.value);
+  }
+}
+function required (v) {
+  return !!v || 'Field is required'
+}
+
+const emailRules = [
+  value => !!value || 'Required.',
+  value => (value || '').length <= 20 || 'Max 20 characters',
+  value => {
+    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return pattern.test(value) || 'Invalid e-mail.'
+  },
+]
+
+async function validate () {
+  const { valid } = await form.value.validate()
+
+  if (valid) alert('Form is valid')
+}
+function reset () {
+  form.value.reset()
+}
+function resetValidation () {
+  form.value.resetValidation()
+}
+
+
+</script>
 <style scoped>
 @import '@/assets/css/login.css';
-  #LoginTitle{
-    text-align : center;
-    margin-bottom : 20px;
-  }
-  #LoginContainer{
-    margin-top : 150px;
-
-  }
 
 </style>

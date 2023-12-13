@@ -1,3 +1,18 @@
 .basicBtnColor{
     background-color:#DFCCFB;
 }
+#LoginTitle{
+    text-align : center;
+    margin-bottom : 20px;
+}
+#LoginContainer{
+    margin-top : 150px;
+
+}
+.textFieldh{
+    hight:100px;
+}
+
+.flex{
+    display : flex;
+}
