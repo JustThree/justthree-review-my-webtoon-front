@@ -32,7 +32,7 @@
             <v-col class="w-50 mt-auto mb-auto">
               <v-row justify="space-between">
                 <div class="text-h6 font-weight-bold mb-1"> {{ chat.title }} </div>
-                <div class="text-medium-emphasis"> {{ chat.created  }}</div>
+                <div class="text-medium-emphasis"> {{ createdDiff(chat.created)  }}</div>
               </v-row>
               <v-row class="text-medium-emphasis" justify="start"> {{ chat.usersNickname + ": " + chat.contents }} </v-row>
             </v-col>
@@ -58,24 +58,20 @@
         <v-alert class="ma-16" type="warning">
           채팅이 존재하지 않습니다.
         </v-alert>
-
       </div >
-
-
-
     </v-card>
-
 
   </div>
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from 'vue';
-import { api } from '@/common.js';
+import {onMounted, onUnmounted, ref, watch} from 'vue';
+import { api, createdDiff } from '@/common.js';
 import ChatList from "@/pages/chat/ChatList.vue";
 
 const page = ref(1);
 
+let ws;
 const chats = ref([]);
 const load = ({done}) => {
   setTimeout(() => {
@@ -87,22 +83,25 @@ const load = ({done}) => {
 const chatURL = ref("");
 
 watch(page, () => {
-  console.log(page.value)
-  loadChats()
+  loadChats();
 })
-
 onMounted(() => {
   loadChats();
   const token = sessionStorage.getItem("token");
 
-  let ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
+  ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
   ws.onmessage = (resp) => {
     console.log(resp)
-    chats.value = JSON.parse(resp.data);
+    loadChats();
+    // chats.value = JSON.parse(resp.data);
   }
 
 })
-
+onUnmounted(() => {
+  if (ws) {
+    ws.close();
+  }
+});
 const loadChats = ()=> {
   api(`chats/type/${page.value}`, "GET", {})
       .then((resp) => {
@@ -119,11 +118,7 @@ const loadChats = ()=> {
       })
 }
 
-// const createdDiff = (created) => {
-//   console.log(created)
-//   const diff = Date.now() - new Date(created);
-//   console.log(diff)
-// }
+
 
 const search = () => {
 
