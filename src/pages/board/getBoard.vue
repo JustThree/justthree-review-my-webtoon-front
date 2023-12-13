@@ -9,16 +9,23 @@
                   {{board.title}}
               </v-text-field>
           </v-col>
-          <v-col class="frame-title" cols="2">
+          <v-col class="frame-title" cols="1">
               <span>{{board.userNickname}}</span>
           </v-col>
-          <v-col class="frame-title" cols="3">
-              <span>{{board.created}}</span>
+<!--          <v-col  class="frame-title" cols="4">
+              <span> 등록일자 {{board.created}}</span>
+          </v-col>-->
+          <v-col  v-if="board.created === board.updated" class="frame-title" cols="4">
+              <span> 등록일자 {{board.created}}</span>
+          </v-col>
+          <v-col v-else-if="board.created !== board.updated" class="frame-title" cols="8">
+              <span> 등록일자 {{board.created}}</span>
+              <span> 수정일자 {{board.updated}}</span>
           </v-col>
           <v-col class="frame-title" cols="2">
               <span>{{board.viewCount}}</span>
           </v-col>
-          <!--  로그인한 유저(users_id)와 작성자(users_id)가 같을 경우에만   수정/삭제 버튼 조회    -->
+          <!--  로그인한 유저(users_id)와 글 작성자(users_id)가 같을 경우에만   수정/삭제 버튼 조회    -->
           <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
               <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
               <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
@@ -78,7 +85,13 @@
       <v-row v-if="board.boardReplyList.length>0">
           <v-col cols="12">
               <div v-for="(data, idx) in board.boardReplyList" :key="idx">
-                  <BoardReply :boardreply="data" :writer-users-id="board.writerUsersId"></BoardReply>
+                  <BoardReply
+                      :boardreply="data"
+                      :writer-users-id="board.writerUsersId"
+                      :loginUsersId="loginUsersId"
+                      @delBoardReply="handleDeleteReply"
+                      @saveUpdatedReply="handleUpdateReply">
+                  </BoardReply>
               </div>
           </v-col>
       </v-row>
@@ -112,13 +125,9 @@ const route = useRoute();
 //const replyList = ref([]);
 
 //로그인한 유저 확인
-/*const authStore = useAuthStore()
-const { user } = storeToRefs(authStore);
-console.log("user", user);
-console.log(user.value.usersId);*/
 let loginUsersId = ref();
 
-//수정버튼 클릭 시
+//게시글 수정 버튼 클릭 시
 function gotoUpdateBoard(){
     console.log(board.value.boardId);
     //router.push({ name: 'updateBoard', params: boardOne.boardId});
@@ -126,7 +135,7 @@ function gotoUpdateBoard(){
     let bId = board.value.boardId;
     router.push({ name: 'updatedBoard', params: { bId}});
 }
-//삭제버튼 클릭 시
+//게시글 삭제 버튼 클릭 시
 async function delBoard(){
     if(confirm("정말 삭제하시겠습니까?")){
         //let bId = board.value.boardId;
@@ -148,6 +157,12 @@ async function delBoard(){
 //댓글 등록 버튼 클릭
 const txtReply = ref('');
 const submitReply = async () => {
+    console.log(loginUsersId.value);
+    if(!loginUsersId.value){
+        alert("로그인해야 댓글 등록 가능합니다.");
+        router.replace("/user/login");
+        return;
+    }
     if(!txtReply.value.trim()){
         alert('댓글을 입력해주세요');
         return;
@@ -156,7 +171,7 @@ const submitReply = async () => {
     console.log("boardId ", board.value.boardId);
     console.log('댓글 등록 요청', txtReply.value);
    const response = await api("board/reply", "POST", {
-        "users" : {"usersId":4},
+        "users" : {"usersId": loginUsersId.value},
         "boardId": board.value.boardId,
         "boardReplyContent": txtReply.value,
         "parentReplyId" : 0
@@ -167,13 +182,55 @@ const submitReply = async () => {
         if (response) {
             console.log("성공");
             alert("댓글이 성공적으로 등록되었습니다.");
+            txtReply.value="";
             await getData();
         } else {
             alert("등록 실패..");
         }
     }
 }
-
+//댓글 삭제 처리
+const handleDeleteReply = async (delBoardReply) =>{
+    console.log("삭제 예정", delBoardReply);
+    console.log("삭제 예정", delBoardReply.boardReplyId);
+    if(confirm("정말 삭제하시겠습니까?")){
+        const response = await api("board/reply/"+delBoardReply.boardReplyId, "DELETE"); //apiToken으로 변경해야함
+        if (response instanceof Error) {
+            console.log(response.response); //서버에서 예외처리 필요
+        } else {
+            if (response) {
+                console.log("삭제");
+                alert("댓글이 삭제되었습니다.");
+                await getData();
+            } else {
+                alert("삭제 실패..");
+            }
+        }
+    }
+};
+const handleUpdateReply = async (editedReply)=>{
+    //console.log("수정 요청 예정", editedReply);
+    if(!editedReply.updatedReplyContent.trim()){
+        alert('내용을 입력해주세요');
+        return;
+    }
+    const response = await api("board/reply/"+editedReply.boardReplyId, "PUT", {
+        "users" : {"usersId": editedReply.replyUsersId},
+        "boardId": editedReply.boardId,
+        "boardReplyContent": editedReply.updatedReplyContent
+    });
+    if (response instanceof Error) {
+        console.log(response.response);
+    } else {
+        if (response) {
+            console.log("성공");
+            alert("댓글이 성공적으로 수정되었습니다.");
+            await getData();
+        } else {
+            alert("수정 실패..");
+        }
+    }
+}
 const getData = async () =>{
     console.log(route.params.boardId);
     api("board/"+route.params.boardId, "GET")
