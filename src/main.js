@@ -20,6 +20,7 @@ import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
 import "@mdi/font/css/materialdesignicons.css"; // Ensure you are using css-loader
 import "@fortawesome/fontawesome-free/css/all.css"; //
 
+import colors from 'vuetify/lib/util/colors'
 //axois intercepter
 import { useAuthStore } from './stores/auth.store.js'
 import { setupAxiosInterceptors } from './axiosHandler.js';
@@ -30,7 +31,21 @@ const vuetify = createVuetify({
     components,
     directives,
     theme: {
-        defaultTheme: 'light'
+        defaultTheme: 'light',
+        themes: {
+            light: {
+                primary: colors.purple,
+                secondary: colors.grey.darken1,
+                accent: colors.shades.black,
+                error: colors.red.accent3,
+                background: colors.indigo.lighten5 // Not automatically applied
+
+            },
+            dark: {
+                primary: colors.blue.lighten3,
+                background: colors.indigo.base, // If not using lighten/darken, use base to return hex
+            },
+        },
     },
 
     icons: {

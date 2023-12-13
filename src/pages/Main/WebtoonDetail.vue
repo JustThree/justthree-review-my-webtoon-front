@@ -103,6 +103,8 @@ function interestAdd(){
           alert(response)
         }
     )
+  } else{
+    alert("로그인을 먼저 해 주세요!")
   }
 }
 // 리뷰 api => 모달
@@ -121,6 +123,8 @@ function submitReview(){
           router.go(0);
         }
     )
+  } else {
+    alert("로그인을 먼저 해 주세요!")
   }
 }
 
@@ -380,7 +384,7 @@ function submitReview(){
 
         </v-card-item>
         <v-card-item>
-          <router-link :to="'/comment/' + route.params.masterId">
+          <router-link :to="'/reviewlist/' + route.params.masterId">
             <div class="text-h4 flex-row-reverse" style="margin: 20px;
           float: right"
             >

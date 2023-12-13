@@ -7,14 +7,14 @@ import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
 import Main from "@/pages/Main/Main.vue";
-import WebtoonReview from "@/pages/Main/WebtoonDetail.vue";
-
+import WebtoonDetail from "@/pages/Main/WebtoonDetail.vue";
+import WebtoonReviewDetail from "@/pages/Main/WebtoonReviewDetail.vue";
 //board(SY)
 
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
-import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
+import WebtoonReviewList from "@/pages/Main/WebtoonReviewList.vue";
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
 import commBoardList from "@/pages/board/commBoadList.vue"
@@ -30,8 +30,10 @@ const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        {path:'/webtoon/:masterId',component:WebtoonReview},
-        {path:'/comment/:masterId',component:WebtoonCommentList},
+        {path:'/webtoon/:masterId',component:WebtoonDetail},
+        {path:'/reviewlist/:masterId',component:WebtoonReviewList},
+        {path:'/review/:reviewId', component:WebtoonReviewDetail},
+        {path:'/search', component:Search},
         {path:'/webtoon',component:WebtoonList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chatlist',component:ChatListPage},
@@ -39,7 +41,6 @@ const router= createRouter({
         {path:'/user/login',component:Login},
         {path:'/user/register', component:Join},
         {path:'/tui', component: TestUserInfo},
-        {path:'/search', component:Search},
 
         //board
         {path:'/comm', component: commBoardList, name: 'commBoardList'},
