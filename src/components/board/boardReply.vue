@@ -7,16 +7,18 @@
                 <h3 class="title">{{ replyUserNickname }}</h3>
             </div>
             <p class="subtitle">등록일자 {{ replyCreated }}</p>
-            <!--     로그인한 유저(users_id)와 댓글 작성자(users_id)가 같을 경우     -->
             <div v-if="loginUsersId === replyUsersId">
-                <v-btn variant="flat" @click="openUpdateModal">  수정  </v-btn>
+                <v-btn variant="tonal" @click="openUpdateModal">  수정  </v-btn>
                 <v-btn variant="tonal" @click="delBoardReply">  삭제  </v-btn>
             </div>
         </div>
         <div class="card-body">
             <p>{{ boardReplyContent }}</p>
         </div>
-        <div>
+        <div v-if="parentReplyId===0">
+            <v-btn variant="tonal" @click="openReReplyModal"> 대댓글 등록 </v-btn>
+        </div>
+        <div><!--삭제 예정-->
             boardReplyId
             {{boardReplyId}}
         </div>
@@ -26,6 +28,26 @@
             <div> /   부모 댓글 id {{parentReplyId}}</div>
         </div>
     </v-card>
+    <!-- 대댓글 등록 Modal   -->
+    <v-dialog v-model="isReReplyModalOpen" max-width="500px">
+        <v-card>
+            <v-card-title>대댓글 등록</v-card-title>
+            <v-card-text>
+                <v-textarea
+                    no-resize
+                    clearable
+                    clear-icon="mdi-close-circle"
+                    v-model="createdReReplyContent"
+                    label="댓글 내용"
+                    rows="3">
+                </v-textarea>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary" @click="createReReply">저장</v-btn>
+                <v-btn @click="closeReReplyModal">취소</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
     <!-- 댓글 수정 Modal   -->
     <v-dialog v-model="isUpdateModalOpen" max-width="500px">
         <v-card>
@@ -50,7 +72,6 @@
 </template>
 <script setup>
 import {ref, toRef, toRefs, watchEffect} from "vue";
-import {api} from "@/common.js";
 import {useRouter} from "vue-router";
 
 //댓글 수정
@@ -62,7 +83,7 @@ const openUpdateModal = () =>{
     updatedReplyContent.value = boardReplyContent.value;
     isUpdateModalOpen.value = true;
 }
-// modal 닫기
+// 댓글 수정 modal 닫기
 const closeUpdateModal = () =>{
     isUpdateModalOpen.value = false;
 }
@@ -75,11 +96,36 @@ const saveUpdatedReply = () =>{
         boardId: boardId.value,
         updatedReplyContent: updatedReplyContent.value
     };
-    console.log("부모 컴포넌트로 이동", editedReply);
     emit('saveUpdatedReply', editedReply);
     isUpdateModalOpen.value = false;
 }
+//대댓글 등록
+const isReReplyModalOpen = ref(false);
+const createdReReplyContent = ref('');
 
+//대댓 등록 버튼 클릭 시 modal 열기
+const openReReplyModal = () =>{
+    isReReplyModalOpen.value = true;
+}
+//대댓글 modal 취소
+const closeReReplyModal = () =>{
+    createdReReplyContent.value = '';
+    isReReplyModalOpen.value = false;
+}
+//대댓글 modal에서 등록(저장)
+const createReReply = () =>{
+    // 대댓글 내용을 저장하고 부모 컴포넌트로 전달
+    const newReReply = {
+        boardId: boardId.value,
+        boardReplyContent: createdReReplyContent.value,
+        parentReplyId: boardReplyId.value
+    };
+    console.log(newReReply);
+    emit('createReReply', newReReply);
+    isReReplyModalOpen.value = false;
+    createdReReplyContent.value = '';
+
+}
 const router = useRouter();
 const props = defineProps({
     boardreply: Object,
@@ -113,7 +159,6 @@ const delBoardReply=()=>{
     emit('delBoardReply', deletedReply);
 }
 </script>
-
 <style scoped>
 .card-header{
     margin: 2px;

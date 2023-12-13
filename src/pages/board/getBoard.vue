@@ -90,7 +90,8 @@
                       :writer-users-id="board.writerUsersId"
                       :loginUsersId="loginUsersId"
                       @delBoardReply="handleDeleteReply"
-                      @saveUpdatedReply="handleUpdateReply">
+                      @saveUpdatedReply="handleUpdateReply"
+                      @createReReply="handleCreateReReply">
                   </BoardReply>
               </div>
           </v-col>
@@ -208,6 +209,7 @@ const handleDeleteReply = async (delBoardReply) =>{
         }
     }
 };
+//댓글 수정 처리
 const handleUpdateReply = async (editedReply)=>{
     //console.log("수정 요청 예정", editedReply);
     if(!editedReply.updatedReplyContent.trim()){
@@ -231,6 +233,36 @@ const handleUpdateReply = async (editedReply)=>{
         }
     }
 }
+//대댓글 등록 처리
+const handleCreateReReply = async (newReReply)=>{
+    console.log("newReReply", newReReply);
+    if(!loginUsersId.value){
+        alert("로그인해야 댓글 등록 가능합니다.");
+        router.replace("/user/login");
+        return;
+    }
+    if(!newReReply.boardReplyContent.trim()){
+        alert('내용을 입력해주세요');
+        return;
+    }
+    const response = await api("board/reply", "POST", {
+        "users" : {"usersId": loginUsersId.value},
+        "boardId": newReReply.boardId,
+        "boardReplyContent": newReReply.boardReplyContent,
+        "parentReplyId" : newReReply.parentReplyId
+    });
+    if (response instanceof Error) {
+        console.log(response.response.data); //서버에서 예외처리 필요
+    } else {
+        if (response) {
+            console.log("성공");
+            alert("댓글이 성공적으로 등록되었습니다.");
+            await getData();
+        } else {
+            alert("등록 실패..");
+        }
+    }
+}
 const getData = async () =>{
     console.log(route.params.boardId);
     api("board/"+route.params.boardId, "GET")
@@ -245,11 +277,30 @@ const getData = async () =>{
                 console.log(board.value);
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);
                 board.value.reReplyList = board.value.boardReplyList.filter(reply => reply.parentReplyId !== 0);
-                console.log(board.value.replyList);
-                console.log(board.value.reReplyList);
+                console.log("댓글", board.value.replyList);
+                console.log("대댓글", board.value.reReplyList);
                 if(board.value.boardImgMapList.length===0) {
                     board.value.boardFiles = [];
                 }
+               /* const result = [];
+                for (const reply of board.value.reReplyList) {
+                    const parentReplyId = reply.parentReplyId;
+                    const replyMap = new Map();
+                    replyMap.set(parentReplyId, reply);
+                    result.push(replyMap);
+                }
+                console.log("객체", result);*/
+
+                const reReplyList = {};
+                for (const reply of board.value.reReplyList) {
+                    const parentReplyId = reply.parentReplyId;
+                    if (!(parentReplyId in reReplyList)) {
+                        reReplyList[parentReplyId] = [];
+                    }
+                    reReplyList[parentReplyId].push(reply);
+                }
+                console.log("대댓글obj", reReplyList);
+                console.log("대댓글obj크기", Object.keys(reReplyList).length);
             }
         })
 };
