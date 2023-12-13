@@ -4,10 +4,7 @@
 
 <script setup>
 import FollowList from "@/components/mypage/FollowList.vue";
-
-
 </script>
 
 <style>
-
 </style>

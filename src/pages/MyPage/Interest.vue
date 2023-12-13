@@ -9,5 +9,4 @@ import InterestedList from "@/components/mypage/InterestedList.vue";
 </script>
 
 <style>
-
 </style>
