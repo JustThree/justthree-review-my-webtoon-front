@@ -21,15 +21,15 @@
       class="mx-auto"
   >
     <v-container>
-      <v-row dense>
         <v-col v-for="(item,index) in follow.values" cols="12">
           <v-card color="#1F7087" theme="dark">
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title class="text-h5">{{ item.usersNickname }}.</v-card-title>
-                <v-card-subtitle>Foster the People</v-card-subtitle>
+                <v-card-title v-if="item.followingNickname" class="text-h5">{{ item.followingNickname }}.</v-card-title>
+                <v-card-title v-else class="text-h5">{{ item.followerNickname }}.</v-card-title>
+                <v-card-subtitle>하이</v-card-subtitle>
                 <v-card-actions>
-                  <v-btn class="ms-2" variant="outlined" size="small">START RADIO</v-btn>
+                  <v-btn class="ms-2" variant="outlined" size="small" @click="handleFollowButtonClick(item.usersId)">팔로우 버튼</v-btn>
                 </v-card-actions>
               </div>
 
@@ -39,13 +39,14 @@
             </div>
           </v-card>
         </v-col>
-      </v-row>
     </v-container>
   </v-card>
-
-
-
 </template>
+
+
+
+
+
 <script setup>
 import {api} from '@/common.js'
 import {defineProps, onBeforeMount, reactive, ref, watch} from "vue";
@@ -54,6 +55,7 @@ const props = defineProps(['usersId']);
 let usersId=props.usersId;
 const tab = ref(1);
 let follow = reactive([]);
+let resp;
 
 watch(tab,()=>{
   sortBtn();
@@ -64,7 +66,7 @@ onBeforeMount( () => {
 });
 const sortBtn=()=>{
   try {
-    api(`mypage/follower/${usersId}?sortNum=${tab.value}`, "GET", {})
+    api(`mypage/follow/${usersId}?sortNum=${tab.value}`, "GET", {})
         .then((resp) => {
           console.log(resp)
           follow.values=resp;
@@ -78,8 +80,31 @@ const goBack = () => {
   window.history.back();
 };
 
+// 로그인 한 사람 아이디 = followerId
+api(`api/getUserId`, "GET", {
+}).then((response) => {
+      resp = response;
+      console.log(resp);
+    }
+);
+
+////////////////팔로우 버튼////////////////////////
+const handleFollowButtonClick = (followingId) => {
+  try {
+    api(`mypage/follow?followingId=${followingId}&followerId=${resp}`, "POST", {
+    }).then(() => {
+      console.log("Follow button clicked!");
+    });
+  } catch (error) {
+    console.error("API Error:", error);
+  }
+};
 </script>
 
-<style>
-
+<style scoped>
+@media screen and (max-width: 600px) {
+  .responsive-list {
+    flex-direction: column;
+  }
+}
 </style>
