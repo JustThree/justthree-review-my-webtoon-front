@@ -1,12 +1,11 @@
 <template>
   <div id="LoginContainer">
     <v-card
-        class="mx-auto pa-12 pb-8"
+        class="mx-auto pa-16 pb-8 rounded-5"
         elevation="8"
-        max-width="540"
-        rounded="x-lg"
+        max-width="650"
     >
-      <h1 id="LoginTitle">웹타구 로그인</h1>
+      <h1 id="LoginTitle">웹타쿠 로그인</h1>
       <div class="text-subtitle-1 text-medium-emphasis">이메일</div>
 
       <v-text-field
@@ -22,7 +21,7 @@
         비밀번호
         <a
             class="text-caption text-decoration-none text-blue"
-            href="#"
+            href="/forgot-password"
             rel="noopener noreferrer"
             target="_blank"
         >
@@ -62,6 +61,18 @@
         회원가입
       </v-btn>-->
     </v-card>
+    <div class="registerBtnContainer">
+      <v-btn
+          class="mb-8 basicBtnColor registerBtn"
+          color="black"
+          size="large"
+          variant="tonal"
+          href="/user/register"
+      >
+        회원가입
+      </v-btn>
+    </div>
+
   </div>
 
 </template>
