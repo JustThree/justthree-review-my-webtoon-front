@@ -10,7 +10,11 @@ async function setUser(user, response){
     user.value = {
         nickname: response.data.nickname,
         profile: response.data.profileImg,
+        usersId: response.data.usersId,
         token: response.headers.authorization,
+        accessToken: JSON.parse(response.headers.authorization).accessToken,
+        refreshToken: JSON.parse(response.headers.authorization).refreshToken,
+
     };
     localStorage.setItem('user', JSON.stringify(user.value));
 }
@@ -34,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref(JSON.parse(localStorage.getItem('user')));
     // const token = ref(JSON.parse(user.value.token));
     // 로그인 후 이동할 페이지 경로 (없으면 홈) -> 로그인 전에 접근했던 페이지로 이동하기 위함
-    const returnUrl = ref(null); 
+    const returnUrl = ref(null);
 
     async function login(email, password) {
         try {

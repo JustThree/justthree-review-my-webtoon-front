@@ -6,6 +6,8 @@ import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
+import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
 import Main from "@/pages/Main/Main.vue";
 import WebtoonReview from "@/pages/Main/WebtoonDetail.vue";
 
@@ -25,6 +27,9 @@ import Reviewed from "@/pages/MyPage/Reviewed.vue";
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 import Follow from "@/pages/MyPage/Follow.vue";
+import Admin from "@/pages/Admin.vue";
+
+
 
 const router= createRouter({
     history: createWebHistory(),
@@ -38,6 +43,9 @@ const router= createRouter({
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/user/login',component:Login},
         {path:'/user/register', component:Join},
+        {path:'/forgot-password', component:ForgotPassword},
+        {path:'/reset-password', component:ResetPassword},
+        {path:'/admin', component:Admin},
         {path:'/tui', component: TestUserInfo},
         {path:'/search', component:Search},
 
