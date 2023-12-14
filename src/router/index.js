@@ -6,22 +6,19 @@ import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
-import ForgotPassword from "@/pages/ForgotPassword.vue";
-import ResetPassword from "@/pages/ResetPassword.vue";
-import Main from "@/pages/Main/Main.vue";
-import WebtoonReview from "@/pages/Main/WebtoonDetail.vue";
 
-import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
-import WebtoonList from "@/pages/Main/WebtoonList.vue";
-import Search from "@/pages/Main/Search.vue";
+import Main from "@/pages/Main/Main.vue";
 
 
 //board(SY)
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
+
+import WebtoonList from "@/pages/Main/WebtoonList.vue";
+import Search from "@/pages/Main/Search.vue";
 import commBoardList from "@/pages/board/commBoadList.vue"
-import noticeBoardList from  "@/pages/board/noticeBoardList.vue"
+
 
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
@@ -30,7 +27,7 @@ import Reviewed from "@/pages/MyPage/Reviewed.vue";
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 import Follow from "@/pages/MyPage/Follow.vue";
-import Admin from "@/pages/Admin.vue";
+
 
 
 
@@ -38,8 +35,10 @@ const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        {path:'/webtoon/:masterId',component:WebtoonReview},
-        {path:'/comment/:masterId',component:WebtoonCommentList},
+        {path:'/webtoon/:masterId',component:WebtoonDetail},
+        {path:'/reviewlist/:masterId',component:WebtoonReviewList},
+        {path:'/review/:reviewId', component:WebtoonReviewDetail},
+        {path:'/search', component:Search},
         {path:'/webtoon',component:WebtoonList},
         {path:'/userinfo',component:UserInfo},
         {path:'/chatlist',component:ChatListPage},
