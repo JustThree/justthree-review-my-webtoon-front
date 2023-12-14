@@ -24,7 +24,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-<body>
+<body class="mx-8">
         <h5>{{title}}</h5>
         <h6>{{ genre }} / {{ writer }} {{ painter }}</h6>
 
