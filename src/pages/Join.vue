@@ -27,11 +27,14 @@
         >
         </v-text-field>
         <v-btn
-            class="vaildateBtn basicBtnColor"
+            class="vaildateBtn basicBtnColor mt-2"
             @click="emailButton"
         >
           인증
         </v-btn>
+      </div>
+      <div v-show="showLoading" class="text-center">
+        <img src="@/assets/images/loading.gif" class="loadingImg" alt=""/>
       </div>
 
 <!--  인증번호 확인   -->
@@ -45,7 +48,7 @@
           >
           </v-text-field>
           <v-btn
-              class="vaildateBtn basicBtnColor"
+              class="vaildateBtn basicBtnColor mt-2"
               @click="emailCodeButton"
           >
             인증
@@ -64,7 +67,7 @@
           >
           </v-text-field>
           <v-btn
-              class="vaildateBtn basicBtnColor"
+              class="vaildateBtn basicBtnColor mt-2"
               @click="nicknameButton"
           >
             중복확인
@@ -125,6 +128,7 @@ const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_
 
 //반응형 변수
 const showToken = ref(false);
+const showLoading = ref(false);
 const emailRequired = ref(false);
 const emailCodeRequired = ref(false);
 const emailCode = ref();
@@ -229,11 +233,11 @@ const emailButton = async () => {
     var data = new FormData();
     data.append("email", vars.value.usersEmail);
     data.append("type", "join");
-    // showLoading.value = true;
+    showLoading.value = true;
 
     await axios.post(checkEmailUrl, data)
         .then((res) => {
-          // showLoading.value = false;
+          showLoading.value = false;
           // isDisabled.value = true;
           showToken.value = true;
           emailMsg.innerText = "5분 이내로 입력하세요";
