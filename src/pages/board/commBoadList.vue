@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!--  tab    -->
     <v-row>
       <v-col  cols="12">
         <div class="text-h2">커뮤니티</div>
@@ -41,7 +42,7 @@
         </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
-    <v-infinite-scroll height="500"  @load="load"  ref="infiniteScroll">
+    <v-infinite-scroll  class="infinte-frame"  @load="load"  ref="infiniteScroll">
       <template v-for="(data, idx) in commBoardList" :key="idx">
         <Board :boardone="data"></Board>
       </template>
@@ -192,5 +193,11 @@ const load = ({ done }) => {
 </script>
 
 <style scoped>
+.infinte-frame {
+    height: 800px;
+}
+::-webkit-scrollbar {
+    display: none;
+}
 
 </style>

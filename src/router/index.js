@@ -9,15 +9,18 @@ import Join from "@/pages/Join.vue";
 import Main from "@/pages/Main/Main.vue";
 import WebtoonReview from "@/pages/Main/WebtoonDetail.vue";
 
-//board(SY)
-
-import createBoard from "@/pages/board/createBoard.vue"
-import updateBoard from "@/pages/board/updateBoard.vue"
-import getBoard from "@/pages/board/getBoard.vue"
 import WebtoonCommentList from "@/pages/Main/WebtoonCommentList.vue";
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
+
+
+//board(SY)
+import createBoard from "@/pages/board/createBoard.vue"
+import updateBoard from "@/pages/board/updateBoard.vue"
+import getBoard from "@/pages/board/getBoard.vue"
 import commBoardList from "@/pages/board/commBoadList.vue"
+import noticeBoardList from  "@/pages/board/noticeBoardList.vue"
+
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";
@@ -46,6 +49,7 @@ const router= createRouter({
         {path:'/comm/new', component: createBoard, name: 'newBoard'},
         {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
         {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
+        {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
 
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
