@@ -61,40 +61,6 @@
           채팅이 존재하지 않습니다.
         </v-alert>
       </div>
-<!--      <v-infinite-scroll class="chatExist" height="500px" side="end" @load="load"-->
-<!--                             >-->
-<!--        <div v-for="chat in chats" class="mx-16"> &lt;!&ndash;  v- for &ndash;&gt;-->
-<!--          <hr>-->
-<!--          <v-row class="pa-6 gc-14">-->
-<!--            &lt;!&ndash;      img, title, lastMsg(sender, content), lastMsgTime, ChatURL &ndash;&gt;-->
-<!--            <v-avatar calss="v-col" size="80" variant="outlined">-->
-<!--              <img :src="chat.imageUrl" alt="sender" />-->
-<!--            </v-avatar>-->
-<!--            <v-col class="w-50 mt-auto mb-auto">-->
-<!--              <v-row justify="space-between">-->
-<!--                <div class="text-h6 font-weight-bold mb-1"> {{ chat.title }} </div>-->
-<!--                <div class="text-medium-emphasis"> {{ createdDiff(chat.created)  }}</div>-->
-<!--              </v-row>-->
-<!--              <v-row class="text-medium-emphasis" justify="start"> {{ chat.usersNickname + ": " + chat.contents }} </v-row>-->
-<!--            </v-col>-->
-<!--            <v-btn :href="'/chat/' + chat.masterId" calss="v-col" variant="tonal" color="#924AFE" style="align-self: center;">-->
-<!--              참여하기-->
-<!--            </v-btn>-->
-
-<!--          </v-row>-->
-<!--        </div>-->
-<!--        <br>-->
-<!--        <template-->
-<!--               v-slot:empty>-->
-<!--          <v-alert-->
-<!--              class="mx-16"-->
-<!--              width="10"-->
-<!--              color="purple"-->
-<!--              variant="outlined"-->
-<!--              closable="true"-->
-<!--          >No more chat!</v-alert>-->
-<!--        </template>-->
-<!--      </v-infinite-scroll>-->
     </v-card>
 
   </div>
