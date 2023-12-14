@@ -24,7 +24,7 @@ function handleLoginError(error) {
         const status = error.response.status;
         if (status >= 400 && status < 500)
             alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-        else if (status >= 500) 
+        else if (status >= 500)
             alert("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     } else {
         // 네트워크 오류 또는 알 수 없는 오류 처리
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', () => {
             // const response = await api(import.meta.env.VITE_LOGIN_API_PATH,"post",{"usersEmail" : email, "usersPw" : password});
             await setUser(user, response);
 
-            
+
             router.push(returnUrl.value != null ? returnUrl.value : '/');
 
         } catch (error) { handleLoginError(error); }

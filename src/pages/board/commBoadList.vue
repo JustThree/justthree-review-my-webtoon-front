@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!--  tab    -->
     <v-row>
       <v-col  cols="12">
         <div class="text-h2">커뮤니티</div>
@@ -37,11 +38,11 @@
         <v-btn @click="searchBoard">검색</v-btn>
       </v-col>
         <v-col cols="4">
-            <v-btn @click="$router.push(`/comm/new`)" >작성하기</v-btn>
+            <v-btn @click="gotoCreateBoard" >작성하기</v-btn>
         </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
-    <v-infinite-scroll height="500"  @load="load"  ref="infiniteScroll">
+    <v-infinite-scroll  class="infinte-frame"  @load="load"  ref="infiniteScroll">
       <template v-for="(data, idx) in commBoardList" :key="idx">
         <Board :boardone="data"></Board>
       </template>
@@ -57,11 +58,17 @@ import Board from "@/components/board/board.vue";
 import {onMounted, ref, nextTick, watch} from "vue";
 import {api} from "@/common.js";
 import {useRoute} from "vue-router";
+import {useAuthStore} from "@/stores/auth.store.js";
+import {storeToRefs} from "pinia";
+import router from "@/router/index.js";
 
 const route = useRoute();
 const errorMsg = ref("");
 const commBoardList = ref([]);
 const pagingMsg = ref("시간이 조금 걸립니다:)");
+
+//로그인한 유저 확인
+let loginUsersId = ref();
 
 //페이징
 let pageList=ref([1,1,1]); // 초기 조회 / 정렬 / 검색
@@ -70,6 +77,17 @@ const itemPerPage = 10;
 let sortings = ref("sortDesc");
 let shouldResetPage = true;
 const infiniteScrollRef = ref(null);
+
+//글 등록하기 버튼
+function gotoCreateBoard(){
+    console.log(loginUsersId.value);
+    if(!loginUsersId.value){
+        alert("로그인해야 가능한 서비스입니다.");
+        router.replace("/user/login");
+        return;
+    }
+    router.replace('/comm/new');
+}
 
 //검색
 const searchKeyword = ref(""); // 검색어
@@ -124,34 +142,38 @@ const sortList = (sorting) => {
   getData();
 }
 
+const getData = async () => {
+    api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
+        .then((response) => {
+                //console.log(1)
+                if (response instanceof Error) {
+                    let errorRes = response;
+                    console.log(errorRes.response);
+                    errorMsg.value = errorRes.response;
+                    commBoardList.value = [];
+                } else {
+                    //if(response.length ===0){
+                    if(response.length < itemPerPage){
+                        pagingMsg.value = "더 이상 존재하지 않습니다.";
+                        commBoardList.value = [...commBoardList.value, ...response];
+                    }else {
+                        //기존 목록에 이어서 조회
+                        //shouldResetPage = false;
+                        commBoardList.value = [...commBoardList.value, ...response];
+                        console.log(commBoardList.value);
+                    }
+                }
+            }
+        );
+};
 
 onMounted(async  ()=>{
+    const authStore = useAuthStore()
+    const { user } = storeToRefs(authStore);
+    //console.log("user", user);
+    loginUsersId.value = user.value.usersId;
   await getData();
 });
-const getData = async () => {
-  api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
-      .then((response) => {
-        //console.log(1)
-        if (response instanceof Error) {
-          let errorRes = response;
-          console.log(errorRes.response);
-          errorMsg.value = errorRes.response;
-          commBoardList.value = [];
-        } else {
-            //if(response.length ===0){
-          if(response.length < itemPerPage){
-            pagingMsg.value = "더 이상 존재하지 않습니다.";
-            commBoardList.value = [...commBoardList.value, ...response];
-            }else {
-              //기존 목록에 이어서 조회
-              //shouldResetPage = false;
-              commBoardList.value = [...commBoardList.value, ...response];
-              console.log(commBoardList.value);
-            }
-        }
-      }
-  );
-};
 
 //페이징
 const load = ({ done }) => {
@@ -171,5 +193,11 @@ const load = ({ done }) => {
 </script>
 
 <style scoped>
+.infinte-frame {
+    height: 800px;
+}
+::-webkit-scrollbar {
+    display: none;
+}
 
 </style>
