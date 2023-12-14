@@ -19,14 +19,13 @@ import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
 // make sure to also import the coresponding css
 import "@mdi/font/css/materialdesignicons.css"; // Ensure you are using css-loader
 import "@fortawesome/fontawesome-free/css/all.css"; //
-
+import VueClipboard from 'vue-clipboard3'
 import colors from 'vuetify/lib/util/colors'
 //axois intercepter
 import { useAuthStore } from './stores/auth.store.js'
 import { setupAxiosInterceptors } from './axiosHandler.js';
 
 const app = createApp(App);
-
 const vuetify = createVuetify({
     components,
     directives,
@@ -63,7 +62,6 @@ app.use(router);
 app.use(createPinia());
 app.use(VueAwesomePaginate);
 app.use(vuetify);
-
 app.mount('#app');
 
 const authStore = useAuthStore();

@@ -131,6 +131,24 @@ function submitReview(){
 
 </script>
 <template>
+  <v-card
+      class="v-col-md-12"
+  >
+    <v-btn
+        style="margin-left: 2%"
+        icon="mdi-arrow-left"
+        @click="router.go(-1)"
+    >
+    </v-btn>
+    <span
+
+        style="margin: 40%
+      ;font-weight: bolder;
+      font-size: 2em;
+      "
+    >
+  </span>
+  </v-card>
   <v-container
       style="width: 85%;
       display: flex;
@@ -174,7 +192,7 @@ function submitReview(){
           class="mx-auto"
           width="100%"
           min-height="600px"
-          :color="'#F8F8F8  '"
+          color=#F8F8F8
           style="display: flex;
         align-items: center;
 "

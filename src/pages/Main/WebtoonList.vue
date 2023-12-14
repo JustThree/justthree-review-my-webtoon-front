@@ -34,7 +34,6 @@ const genreObj = {
 // 뒤로가기 위한 세션값 저장
 if (sessionStorage.getItem("page")){
   queryString.value.page = sessionStorage.getItem("page");
-
 }
 if (sessionStorage.getItem("order")){
   queryString.value.order = sessionStorage.getItem("order");

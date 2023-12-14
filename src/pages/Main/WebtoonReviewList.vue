@@ -2,10 +2,14 @@
 
 
 import {useRoute} from "vue-router";
-import {api} from "@/common.js";
+import {api, apiToken} from "@/common.js";
 import {ref} from "vue";
+import router from "@/router/index.js";
+import {useAuthStore} from "@/stores/auth.store.js";
+const authStore = useAuthStore()
 const route = useRoute();
 const data = ref([]);
+const reviewContent = ref("");
 
 api("api/webtoon/reviews/" + route.params.masterId,
     "GET"
@@ -14,6 +18,25 @@ api("api/webtoon/reviews/" + route.params.masterId,
     }
 )
 
+function submitReview(){
+  if (authStore.user){
+    apiToken(
+        "api/webtoon/review/" +
+        route.params.masterId,
+        "POST",
+        {
+          "content" : reviewContent.value
+        }
+    ).then(
+        (response) => {
+          alert(response)
+          router.go(0);
+        }
+    )
+  } else {
+    alert("로그인을 먼저 해 주세요!")
+  }
+}
 
 </script>
 
@@ -37,10 +60,54 @@ api("api/webtoon/reviews/" + route.params.masterId,
     >
     리뷰
   </span>
+    <v-dialog width="1000" height="800px">
+      <template v-slot:activator="{ props }">
+        <v-btn
+            style="margin:0;"
+            color="#5302FE"
+            v-bind="props"
+            v-text="'리뷰 쓰기'"
+        ></v-btn>
+      </template>
+
+      <template v-slot:default="{ isActive }">
+        <v-card title="웹툰 리뷰를 써 주세요!">
+          <v-divider></v-divider>
+
+          <v-textarea
+              v-model="reviewContent"
+              class="p-5"
+              bg-color=#F2F2F2
+              placeholder="(글자수 500자 이내)"
+          >
+          </v-textarea>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+                text="Write"
+                @click="submitReview"
+            ></v-btn>
+            <v-btn
+                text="Close"
+                @click="isActive.value = false"
+            ></v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
   </v-card>
+
   <v-container
       class="align-center"
   >
+    <v-row>
+      <v-col
+        class="offset-8 v-col-4 "
+      >
+      </v-col>
+    </v-row>
     <v-row v-if="data.length===0">
       리뷰가 없어요!
     </v-row>
