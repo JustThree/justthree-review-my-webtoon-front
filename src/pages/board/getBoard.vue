@@ -12,20 +12,12 @@
           <v-col class="frame-title" cols="1">
               <span>{{board.userNickname}}</span>
           </v-col>
-<!--          <v-col  class="frame-title" cols="4">
+          <v-col  class="frame-title" cols="4">
               <span> 등록일자 {{board.created}}</span>
-          </v-col>-->
-          <v-col  v-if="board.created === board.updated" class="frame-title" cols="4">
-              <span> 등록일자 {{board.created}}</span>
-          </v-col>
-          <v-col v-else-if="board.created !== board.updated" class="frame-title" cols="8">
-              <span> 등록일자 {{board.created}}</span>
-              <span> 수정일자 {{board.updated}}</span>
           </v-col>
           <v-col class="frame-title" cols="2">
               <span>{{board.viewCount}}</span>
           </v-col>
-          <!--  로그인한 유저(users_id)와 글 작성자(users_id)가 같을 경우에만   수정/삭제 버튼 조회    -->
           <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
               <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
               <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
@@ -40,8 +32,7 @@
                       class="bg-white"
                       width="300"
                       :src=imgMap.accessUrl
-                      cover
-                  ></v-img>
+                      cover></v-img>
               </div>
           </div>
       </v-row>
@@ -63,10 +54,7 @@
       <v-row>
           <v-col cols="12">
               <div class="text-h5">
-                  댓글
-                  <span class="font-weight-bold">{{board.boardReplyList.length}}</span>
-                  개
-              </div>
+                  댓글  <span class="font-weight-bold">{{board.boardReplyList.length}}</span>개 </div>
           </v-col>
       </v-row>
       <v-row no-gutters>
@@ -89,6 +77,7 @@
                       :boardreply="data"
                       :writer-users-id="board.writerUsersId"
                       :loginUsersId="loginUsersId"
+                      :reReplyList = "board.reReplyList"
                       @delBoardReply="handleDeleteReply"
                       @saveUpdatedReply="handleUpdateReply"
                       @createReReply="handleCreateReReply">
@@ -117,6 +106,7 @@ const board = ref({
     //기존 데이터 조회
     boardImgMapList: [new Map([[], []])],
     boardId: 0,
+    boardReplyListObj:{},
     boardReplyList:[],
     replyList: [],
     reReplyList:[],
@@ -127,6 +117,9 @@ const route = useRoute();
 
 //로그인한 유저 확인
 let loginUsersId = ref();
+
+//Rereplylist
+let boardreReplyList = ref([]);
 
 //게시글 수정 버튼 클릭 시
 function gotoUpdateBoard(){
@@ -225,7 +218,7 @@ const handleUpdateReply = async (editedReply)=>{
         console.log(response.response);
     } else {
         if (response) {
-            console.log("성공");
+           // console.log("성공");
             alert("댓글이 성공적으로 수정되었습니다.");
             await getData();
         } else {
@@ -245,22 +238,27 @@ const handleCreateReReply = async (newReReply)=>{
         alert('내용을 입력해주세요');
         return;
     }
-    const response = await api("board/reply", "POST", {
+    if(confirm("대댓글은 수정 및 삭제가 안됩니다. 등록하시겠습니까?")){
+        const response = await api("board/reply", "POST", {
         "users" : {"usersId": loginUsersId.value},
         "boardId": newReReply.boardId,
         "boardReplyContent": newReReply.boardReplyContent,
         "parentReplyId" : newReReply.parentReplyId
-    });
-    if (response instanceof Error) {
-        console.log(response.response.data); //서버에서 예외처리 필요
-    } else {
-        if (response) {
-            console.log("성공");
-            alert("댓글이 성공적으로 등록되었습니다.");
-            await getData();
-        } else {
-            alert("등록 실패..");
+        });
+        if (response instanceof Error) {
+            console.log(response.response.data); //서버에서 예외처리 필요
+             } else {
+            if (response) {
+                console.log("성공");
+                alert("댓글이 성공적으로 등록되었습니다.");
+                await getData();
+            } else {
+                alert("등록 실패..");
+            }
         }
+    }
+    else{
+        return;
     }
 }
 const getData = async () =>{
@@ -272,35 +270,13 @@ const getData = async () =>{
                 console.log(errorRes.response);
                 //not found 글 목록으로 이동
             }else{
-                console.log(response);
                 board.value = response;
-                console.log(board.value);
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);
                 board.value.reReplyList = board.value.boardReplyList.filter(reply => reply.parentReplyId !== 0);
-                console.log("댓글", board.value.replyList);
-                console.log("대댓글", board.value.reReplyList);
+                boardreReplyList = board.value.reReplyList;
                 if(board.value.boardImgMapList.length===0) {
                     board.value.boardFiles = [];
                 }
-               /* const result = [];
-                for (const reply of board.value.reReplyList) {
-                    const parentReplyId = reply.parentReplyId;
-                    const replyMap = new Map();
-                    replyMap.set(parentReplyId, reply);
-                    result.push(replyMap);
-                }
-                console.log("객체", result);*/
-
-                const reReplyList = {};
-                for (const reply of board.value.reReplyList) {
-                    const parentReplyId = reply.parentReplyId;
-                    if (!(parentReplyId in reReplyList)) {
-                        reReplyList[parentReplyId] = [];
-                    }
-                    reReplyList[parentReplyId].push(reply);
-                }
-                console.log("대댓글obj", reReplyList);
-                console.log("대댓글obj크기", Object.keys(reReplyList).length);
             }
         })
 };
