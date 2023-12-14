@@ -3,7 +3,7 @@
 
 import {useRoute} from "vue-router";
 import {api, apiToken} from "@/common.js";
-import {ref} from "vue";
+import {handleError, ref} from "vue";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
 const authStore = useAuthStore()
@@ -18,23 +18,30 @@ api("api/webtoon/reviews/" + route.params.masterId,
     }
 )
 
-function submitReview(){
-  if (authStore.user){
-    apiToken(
-        "api/webtoon/review/" +
-        route.params.masterId,
-        "POST",
-        {
-          "content" : reviewContent.value
-        }
-    ).then(
-        (response) => {
-          alert(response)
-          router.go(0);
-        }
-    )
+function submitReview() {
+  if (authStore.user) {
+    try {
+      apiToken(
+          "api/webtoon/review/" + route.params.masterId,
+          "POST",
+          {
+            "content": reviewContent.value
+          }
+      ).then(
+          (response) => {
+            if (response.response.status === 400){
+              alert("값이 유효 하지 않아요")
+            } else {
+              alert(response);
+              router.go(0);
+            }
+          }
+      );
+    } catch (error) {
+      alert(error);
+    }
   } else {
-    alert("로그인을 먼저 해 주세요!")
+    alert("로그인을 먼저 해 주세요!");
   }
 }
 
@@ -188,7 +195,7 @@ function submitReview(){
           </v-col>
           <v-col
               class="v-col-1"
-              v-text="item.heartCount"
+              v-text="item.replyCount"
           >
           </v-col>
         </v-row>

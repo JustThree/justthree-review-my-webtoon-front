@@ -1,6 +1,7 @@
 <script setup>
 
 import {api, apiToken} from "@/common.js";
+import {copyText} from 'vue3-clipboard'
 import {useRoute} from "vue-router";
 import {ref} from "vue";
 import router from "@/router/index.js";
@@ -33,6 +34,7 @@ function likeReview() {
         "PATCH",
     ).then((response) => {
           alert(response)
+          router.go(0);
         }
     )
   } else {
@@ -48,11 +50,15 @@ function submitReviewReply() {
         "api/webtoon/review/reply/" + route.params.reviewId,
         "POST",
         {
-          content : reviewReplyComment.value
+          content: reviewReplyComment.value
         }
     ).then((response) => {
-          alert(response)
-      router.go(0);
+          if (response.response.status === 400) {
+            alert("값이 유효 하지 않아요")
+          } else {
+            alert(response);
+            router.go(0);
+          }
         }
     )
   } else {
@@ -63,7 +69,7 @@ function submitReviewReply() {
 //공유 함수
 function copyToClipboard() {
   try {
-    useClipboard.toClipboard(window.document.URL)
+    copyText(window.document.URL)
     alert("복사 완료")
   } catch (e) {
     alert("복사 실패")
@@ -109,7 +115,6 @@ function copyToClipboard() {
                 align-items: center;">
               <img
                   :src="reviewData.profileImg"
-
                   style="width:5%">
               <span
                   v-text="reviewData.userNickName"
@@ -160,7 +165,10 @@ function copyToClipboard() {
               <div class="v-col-2"
                    style="margin:0 2%">
                 <img :src="reviewData.webtoonImg"
-                     style="padding: 0 0 5% 0;">
+                     style="
+                     max-height:300px;
+                     max-width:200px;
+                     padding: 0 0 5% 0;">
 
               </div>
             </v-row>
@@ -177,7 +185,7 @@ function copyToClipboard() {
               @click="likeReview"
           >
             <v-icon
-                color="gray "
+                :color="reviewData.checkLike == true ? 'red' : 'gray'"
                 size="24"
                 icon="mdi-thumb-up"
             ></v-icon>
@@ -273,7 +281,7 @@ function copyToClipboard() {
               :title="item.userNickname"
           >
             <div
-              v-text="item.content"
+                v-text="item.content"
             ></div>
           </v-list-item>
         </v-list>
