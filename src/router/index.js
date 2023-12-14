@@ -6,18 +6,20 @@ import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
-import Main from "@/pages/Main/Main.vue";
-import WebtoonDetail from "@/pages/Main/WebtoonDetail.vue";
-import WebtoonReviewDetail from "@/pages/Main/WebtoonReviewDetail.vue";
-//board(SY)
 
+import Main from "@/pages/Main/Main.vue";
+
+
+//board(SY)
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
-import WebtoonReviewList from "@/pages/Main/WebtoonReviewList.vue";
+
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
 import commBoardList from "@/pages/board/commBoadList.vue"
+
+
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
 import Rated from "@/pages/MyPage/Rated.vue";
@@ -25,6 +27,9 @@ import Reviewed from "@/pages/MyPage/Reviewed.vue";
 import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 import Follow from "@/pages/MyPage/Follow.vue";
+
+
+
 
 const router= createRouter({
     history: createWebHistory(),
@@ -40,13 +45,18 @@ const router= createRouter({
         {path:'/chat/:masterId',component:ChatDetailPage},
         {path:'/user/login',component:Login},
         {path:'/user/register', component:Join},
+        {path:'/forgot-password', component:ForgotPassword},
+        {path:'/reset-password', component:ResetPassword},
+        {path:'/admin', component:Admin},
         {path:'/tui', component: TestUserInfo},
+        {path:'/search', component:Search},
 
         //board
         {path:'/comm', component: commBoardList, name: 'commBoardList'},
         {path:'/comm/new', component: createBoard, name: 'newBoard'},
         {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
         {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
+        {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
 
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},

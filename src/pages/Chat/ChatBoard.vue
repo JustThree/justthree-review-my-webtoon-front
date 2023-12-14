@@ -9,7 +9,6 @@ import ChatInfo  from "@/components/chat/ChatInfo.vue";
     <body style="text-align: -webkit-center; height: 100%;">
         <div class="chat">
             <ChatInfo :masterId="$route.params.masterId"></ChatInfo>
-            <hr>
             <ChatDetail :masterId="$route.params.masterId"></ChatDetail>
         </div>
 
