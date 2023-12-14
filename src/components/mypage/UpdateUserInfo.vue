@@ -43,6 +43,8 @@
 
 <script setup>
 import axios from "axios";
+import {onMounted} from "vue";
+import {api} from "@/common.js";
 const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_CHECK_NICKNAME_API_PATH;
 
 

@@ -6,19 +6,24 @@ import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
-
 import Main from "@/pages/Main/Main.vue";
-
+import ForgotPassword from "@/pages/ForgotPassword.vue"
+import Admin from "@/pages/Admin.vue";
+import ResetPassword from "@/pages/ResetPassword.vue"
 
 //board(SY)
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
+import commBoardList from "@/pages/board/commBoadList.vue"
+import noticeBoardList from "@/pages/board/noticeBoardList.vue"
 
+//Main
+import WebtoonDetail from "@/pages/Main/WebtoonDetail.vue"
 import WebtoonList from "@/pages/Main/WebtoonList.vue";
 import Search from "@/pages/Main/Search.vue";
-import commBoardList from "@/pages/board/commBoadList.vue"
-
+import WebtoonReviewList from "@/pages/Main/WebtoonReviewList.vue"
+import WebtoonReviewDetail from "@/pages/Main/WebtoonReviewDetail.vue"
 
 //mypage
 import Interest from "@/pages/MyPage/Interest.vue";
