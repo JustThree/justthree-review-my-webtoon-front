@@ -69,7 +69,7 @@ function moveWebtoon(){
   sessionStorage.removeItem("page")
   sessionStorage.removeItem("order")
   sessionStorage.removeItem("genre")
-  router.go("/webtoon");
+  router.push("/webtoon");
 }
 
 </script>
