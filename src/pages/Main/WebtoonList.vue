@@ -34,7 +34,6 @@ const genreObj = {
 // 뒤로가기 위한 세션값 저장
 if (sessionStorage.getItem("page")){
   queryString.value.page = sessionStorage.getItem("page");
-
 }
 if (sessionStorage.getItem("order")){
   queryString.value.order = sessionStorage.getItem("order");
@@ -71,7 +70,6 @@ watch(
 
 // 페이지네이션
 const fetchData = async () => {
-
   try {
     const response = await api("api/webtoon?page="
     + (queryString.value.page -1)
@@ -97,7 +95,6 @@ const changeOrder = function (a){
 fetchData()
 
 </script>
-
 <template>
   <v-card
       class="v-col-md-12"
@@ -122,7 +119,8 @@ fetchData()
   <v-container
       style="width:60%;
         display:flex;
-        justify-content: center;"
+        justify-content: center;
+        height:1000px"
   >
     <v-container
     >
@@ -152,7 +150,8 @@ fetchData()
           </v-select>
         </v-col>
       </v-row>
-        <v-row class="justify-center">
+        <v-row class="justify-center"
+        style="height:800px">
         <v-col v-for=" (item, idx) in pageContents"
                cols="2"
                style="min-height:150px
@@ -188,8 +187,6 @@ fetchData()
             <!-- totalPages 0부터 시작-->
           </v-pagination>
     </v-container>
-
-
   </v-container>
 </template>
 
