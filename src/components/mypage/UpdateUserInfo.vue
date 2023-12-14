@@ -45,7 +45,6 @@
 import axios from "axios";
 import {onMounted} from "vue";
 import {api} from "@/common.js";
-import {watch as vars} from "primevue/carousel";
 const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_CHECK_NICKNAME_API_PATH;
 
 
