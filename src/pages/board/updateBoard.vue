@@ -8,7 +8,14 @@
 import {onMounted, ref} from 'vue';
 import {api} from "@/common.js";
 import BoardForm from "@/components/board/boardForm.vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/auth.store.js";
+import {storeToRefs} from "pinia";
+
+const router = useRouter();
+
+//로그인한 유저 확인
+let loginUsersId = ref();
 
 const board = ref({
   title: '',
@@ -24,6 +31,11 @@ const route = useRoute();
 
 //기존 데이터 파싱
 onMounted(async () =>{
+    const authStore = useAuthStore()
+    const { user } = storeToRefs(authStore);
+    loginUsersId.value = user.value.usersId;
+    console.log("로그인한 usersId", loginUsersId.value );
+
   const response = await api("board/"+route.params.boardId, "GET");
   if (response instanceof Error) {
     console.log(response.response.data); // 서버에서 예외처리 필요
@@ -52,7 +64,7 @@ const updateBoard = async (board) => {
       formData.append('imageFiles', board.boardFiles[i]);
     }
     formData.append("noticeYn", 0);// 0: 자유 1: 공지
-    formData.append("users", 1); // users_id
+    formData.append("users", loginUsersId.value); // users_id
 
     const response = await api("board/"+route.params.boardId, "PUT", formData); //apiToken으로 변경해야함
     if (response instanceof Error) {
@@ -73,18 +85,20 @@ const updateBoard = async (board) => {
 const deleteBoard = async (board) => {
   console.log(board);
   if(confirm("정말 삭제하시겠습니까?")){
-    const response = await api("board/"+board.boardId, "DELETE"); //apiToken으로 변경해야함
-    if (response instanceof Error) {
-      console.log(response.response.data); //서버에서 예외처리 필요
-    } else {
-      if (response) {
-        console.log("삭제");
-        alert("글이 삭제되었습니다.");
-        //router.replace("/boardlist"); //글 목록으로 이동
+      const response = await api("board/"+board.boardId, "DELETE"); //apiToken으로 변경해야함
+      if (response instanceof Error) {
+          console.log(response.response.data); //서버에서 예외처리 필요
       } else {
-        alert("삭제 실패..");
+          if (response) {
+              console.log("삭제");
+              alert("글이 삭제되었습니다.");
+              router.push("/comm"); //왜 이동안됨
+               } else {
+              alert("삭제 실패..");
+          }
       }
-    }
+  }else{
+      return;
   }
 }
 </script>

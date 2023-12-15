@@ -72,7 +72,7 @@ async function paginate(page) {
     await getData(); // 페이지 변경 시 데이터 다시 조회
 }
 
-//검색
+//검색`22
 const searchKeyword = ref("");
 
 //데이터 조회
