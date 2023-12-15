@@ -3,29 +3,58 @@
 import {api, apiToken} from "@/common.js";
 import {copyText} from 'vue3-clipboard'
 import {useRoute} from "vue-router";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
 
 const authStore = useAuthStore()
 const route = useRoute();
-const reviewData = ref([])
-const reviewReplyData = ref([])
-const reviewReplyComment = ref()
+const reviewData = ref([]);
+const reviewPageContents = ref();
+const reviewTotalPages = ref();
+const reviewTotalCount = ref();
+const reviewReplyComment = ref([])
+// api query String 정의
 
+const reviewQueryString = ref({
+      page: 0
+    }
+)
+
+
+
+
+// 리뷰 데이터 한번 불러옴
 api("api/webtoon/review/" + route.params.reviewId,
     "GET",
 ).then((response) => {
       reviewData.value = response;
+      console.log(reviewData)
     }
 );
-api("api/webtoon/review/reply/" + route.params.reviewId,
-    "GET",
-).then((response) => {
-      reviewReplyData.value = response
+
+// 갑이 바끼면 변경
+watch(
+    () => reviewQueryString.value.page,
+    (nowPage, lastPage) => {
+      fetchData()
     }
 )
-
+const fetchData = async () => {
+  try {
+    const response = await api("api/webtoon/review/reply/"
+      + route.params.reviewId
+      + "?page=" + (reviewQueryString.value.page - 1)
+      , "GET");
+        reviewPageContents.value = response.content;
+        reviewTotalPages.value = response.totalPages;
+    reviewTotalCount.value = response.totalElements;
+      console.log(response)
+      } catch (error){
+      console.error("Error fetching data:", error);
+  }
+};
+fetchData();
 
 // 좋아요
 function likeReview() {
@@ -44,6 +73,8 @@ function likeReview() {
 }
 
 // 댓글 등록
+
+
 function submitReviewReply() {
   if (authStore.user) {
     apiToken(
@@ -53,7 +84,7 @@ function submitReviewReply() {
           content: reviewReplyComment.value
         }
     ).then((response) => {
-          if (response.response.status === 400) {
+          if (response.status === 400) {
             alert("값이 유효 하지 않아요")
           } else {
             alert(response);
@@ -270,13 +301,13 @@ function copyToClipboard() {
             댓글
           </span>
           <span
-              v-text="reviewReplyData.content ?reviewReplyData.content.length : 0"
+              v-text="reviewTotalCount"
           ></span></div>
         <v-list lines="one"
         >
 
           <v-list-item
-              v-for="(item, key) in reviewReplyData.content"
+              v-for="(item, key) in reviewPageContents"
               :key="key"
               :title="item.userNickname"
           >
@@ -285,6 +316,18 @@ function copyToClipboard() {
             ></div>
           </v-list-item>
         </v-list>
+        <v-row>
+
+          <v-pagination
+              class="v-row v-md-12"
+              v-model="reviewQueryString.page"
+              :length="reviewTotalPages"
+              total-visible="8"
+              active-color=#5302FE
+          >
+            <!-- totalPages 0부터 시작-->
+          </v-pagination>
+        </v-row>
       </v-card>
     </v-card>
 
