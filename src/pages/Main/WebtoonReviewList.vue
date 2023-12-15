@@ -3,41 +3,68 @@
 
 import {useRoute} from "vue-router";
 import {api, apiToken} from "@/common.js";
-import {ref} from "vue";
+import {handleError, ref, watch} from "vue";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
 const authStore = useAuthStore()
 const route = useRoute();
-const data = ref([]);
-const reviewContent = ref("");
 
-api("api/webtoon/reviews/" + route.params.masterId,
-    "GET"
-).then((response) =>{
-      data.value = response.content
+// 페이징 관련
+const pageContents = ref();
+const totalPages = ref();
+const reviewContent = ref("");
+const totalCount = ref();
+const queryString =  ref({
+  page:0
     }
 )
 
-function submitReview(){
-  if (authStore.user){
-    apiToken(
-        "api/webtoon/review/" +
-        route.params.masterId,
-        "POST",
-        {
-          "content" : reviewContent.value
-        }
-    ).then(
-        (response) => {
-          alert(response)
-          router.go(0);
-        }
-    )
+
+// 페이지네이션
+const fetchData = async () => {
+  try {
+    const response = await api("api/webtoon/reviews/"
+        + route.params.masterId
+        +"?page=" + (queryString.value.page-1)
+        , "GET");
+    pageContents.value = response.content;
+    totalPages.value = response.totalPages;
+    totalCount.value = response.totalElements;
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+watch(
+    () => queryString.value.page,
+    (nowPage, lastPage) => {
+      fetchData()
+    }
+)
+
+function submitReview() {
+  if (authStore.user) {
+      apiToken(
+          "api/webtoon/review/" + route.params.masterId,
+          "POST",
+          {
+            "content": reviewContent.value
+          }
+      ).then(
+          (response) => {
+            if (response.status === 400){
+              alert("값이 유효 하지 않아요")
+            } else {
+              alert(response);
+              router.go(0);
+            }
+          })
   } else {
-    alert("로그인을 먼저 해 주세요!")
+    alert("로그인을 먼저 해 주세요!");
   }
 }
 
+fetchData()
 </script>
 
 <template>
@@ -108,10 +135,13 @@ function submitReview(){
       >
       </v-col>
     </v-row>
-    <v-row v-if="data.length===0">
+    <v-row v-if="totalCount === 0">
       리뷰가 없어요!
     </v-row>
-    <v-row v-for="(item,idx) in data"
+    <div
+      v-text=""
+    ></div>
+    <v-row v-for="(item,idx) in pageContents"
             class="justify-center"
     >
 
@@ -188,13 +218,24 @@ function submitReview(){
           </v-col>
           <v-col
               class="v-col-1"
-              v-text="item.heartCount"
+              v-text="item.replyCount"
           >
           </v-col>
         </v-row>
 
       </router-link>
       </v-card>
+    </v-row>
+    <v-row>
+      <v-pagination
+          class="v-row v-md-12"
+          v-model="queryString.page"
+          :length="totalPages-1"
+          total-visible="8"
+          active-color=#5302FE
+      >
+        <!-- totalPages 0부터 시작-->
+      </v-pagination>
     </v-row>
   </v-container>
 </template>

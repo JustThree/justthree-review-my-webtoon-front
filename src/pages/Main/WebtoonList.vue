@@ -181,7 +181,6 @@ fetchData()
               v-model="queryString.page"
               :length="totalPages-1"
               total-visible="8"
-              @input="handlePage"
               active-color=#5302FE
           >
             <!-- totalPages 0부터 시작-->

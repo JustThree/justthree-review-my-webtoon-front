@@ -5,7 +5,6 @@ import {api, apiToken} from "@/common.js";
 import {useRoute} from "vue-router";
 import {useAuthStore} from "@/stores/auth.store.js";
 import router from "@/router/index.js";
-
 const authStore = useAuthStore()
 const route = useRoute();
 const color = ref('#BEADFA')
@@ -83,9 +82,11 @@ function ratingSend() {
         "masterId=" + route.params.masterId +
         "&star=" + rating.value * 2,
         "PUT",
-    ).then(
-      alert("별점 등록!")
-        )
+    ).then(() => {
+    alert("별점 등록!")
+    router.go(0)
+  }
+  )
   } else {
     alert("로그인을 먼저 해 주세요!")
   }
@@ -101,6 +102,7 @@ function interestAdd(){
     ).then(
         (response) => {
           alert(response)
+          router.go(0);
         }
     )
   } else{
@@ -221,9 +223,9 @@ function submitReview(){
                 hover="true"
                 active-color="red"
                 style="width: 40%;
-            display: flex;
-            align-items: center;
-            justify-content: center;"
+                display: flex;
+                align-items: center;
+                justify-content: center;"
                 v-model="rating"
                 @click="ratingSend"
             >
@@ -261,10 +263,10 @@ function submitReview(){
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
                     <v-icon
-                        color="gray "
                         size="64"
                         icon="mdi-plus-box"
                         @click="interestAdd"
+                        :color="data.isAddInterest==false ? 'gray' : 'red'"
                     ></v-icon>
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
@@ -440,6 +442,9 @@ function submitReview(){
                    cols="4"
                    style="min-width:300px"
             >
+              <router-link :to="'/review/' +itemCol.reviewId"
+                           class="no-color-line"
+              >
               <v-sheet class=""
               >
                 <v-card style="
@@ -516,6 +521,7 @@ function submitReview(){
                 </v-card>
               </v-sheet>
 
+            </router-link>
             </v-col>
           </v-row>
         </v-container>
@@ -539,9 +545,11 @@ function submitReview(){
   background-repeat: no-repeat;
   background-size: 100%;
   background-position-y: 50%;
-
   z-index: 1;
-
+}
+.no-color-line{
+  color:black;
+  text-decoration:none;
 }
 
 
