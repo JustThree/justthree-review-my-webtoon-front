@@ -60,7 +60,8 @@ const router= createRouter({
         {path:'/comm', component: commBoardList, name: 'commBoardList'},
         {path:'/comm/new', component: createBoard, name: 'newBoard'},
         {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
-        {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
+        { path: '/boards/:boardId', component: getBoard, name: 'boardOne', props: route => ({ boardId: route.params.boardId, noticeYn: route.query.noticeYn }) },
+        //{path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
         {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
 
         {path:'/mypage/userinfo',component:UserInfo},

@@ -25,48 +25,70 @@
             <div><span>{{noticeCount}}</span>건</div>
         </v-row>
         <v-row>
+            <!-- 글 목록     -->
             <v-col cols="12">
-                <!-- 글 목록 -->
-                <v-list>
-                    <v-list-item v-for="(data, idx) in noticeList" :key="idx">
-                        <NoticeBoard :noticeone="data"></NoticeBoard>
-                    </v-list-item>
-                </v-list>
+                <div class="notice-table-container">
+                    <v-simple-table>
+                        <template v-slot:default>
+                            <table class="notice-table">
+                                <thead>
+                                <tr>
+                                    <th>제목</th>
+                                    <th>작성자 </th>
+                                    <th>작성일 </th>
+                                    <th>조회수 </th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="noticeCount>0">
+                            <tr v-for="(data, idx) in noticeList" :key="idx"
+                                @click="$router.push({path: `/boards/${data.boardId}`, query:{noticeYn: data.noticeYn}})">
+                                <td>{{ data.title }}</td>
+                                <td>{{ data.userNickname }}</td>
+                                <td>{{ data.created}}</td>
+                                <td>{{ data.viewCount}}</td>
+                            </tr>
+                            </tbody>
+                                <tbody v-else-if="noticeCount===0">
+                                <tr>
+                                    <td colspan="4">조회된 결과가 없습니다.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                    </v-simple-table>
+                </div>
             </v-col>
             <v-col cols="12">
                 <!-- 페이지네이션 -->
-                <ul class="pagination-list">
-                    <li>
-                        <button :disabled="currentPage === 1" @click="goToPage(1)">
-                            <v-icon>mdi-chevron-double-left</v-icon>
-                        </button>
-                    </li>
-                    <li>
-                        <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
-                            <v-icon>mdi-chevron-left</v-icon>
-                        </button>
-                    </li>
-                    <li v-for="pageNumber in visiblePageNumbers" :key="pageNumber">
-                        <button :class="{ active: pageNumber === currentPage }" @click="goToPage(pageNumber)">
-                            {{ pageNumber }}
-                        </button>
-                    </li>
-                    <li>
-                        <button :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">
-                            <v-icon>mdi-chevron-right</v-icon>
-                        </button>
-                    </li>
-                    <li>
-                        <button :disabled="currentPage === 1" @click="goToPage(totalPages)">
-                            <v-icon>mdi-chevron-double-right</v-icon>
-                        </button>
-                    </li>
-                </ul>
-<!--                <ul class="pagination-list">
-                    <li v-for="pageNumber in totalPages" :key="pageNumber">
-                        <button @click="goToPage(pageNumber)">{{ pageNumber }}</button>
-                    </li>
-                </ul>-->
+                <div class="pagination-frame"  v-if="noticeList.length>0">
+                    <ul class="pagination-list" >
+                        <li>
+                            <button :disabled="currentPage === 1" @click="goToPage(1)">
+                                <v-icon>mdi-chevron-double-left</v-icon>
+                            </button>
+                        </li>
+                        <li>
+                            <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+                                <v-icon>mdi-chevron-left</v-icon>
+                            </button>
+                        </li>
+                        <li v-for="pageNumber in visiblePageNumbers" :key="pageNumber">
+                            <button :class="{ active: pageNumber === currentPage }" @click="goToPage(pageNumber)">
+                                {{ pageNumber }}
+                            </button>
+                        </li>
+                        <li>
+                            <button :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">
+                                <v-icon>mdi-chevron-right</v-icon>
+                            </button>
+                        </li>
+                        <li>
+                            <button :disabled="currentPage === totalPages" @click="goToPage(totalPages)">
+                                <v-icon>mdi-chevron-double-right</v-icon>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </v-col>
         </v-row>
     </v-container>
@@ -75,6 +97,7 @@
 import {api} from "@/common.js";
 import {computed, onMounted, ref, watch} from "vue";
 import NoticeBoard from "@/components/board/noticeBoard.vue";
+
 //검색
 const searchKeyword = ref("");
 
@@ -84,13 +107,11 @@ const noticePerPage = 10; //페이지당  글 수
 const noticeList = ref([]); // 공지사항 목록
 const totalPages = ref(0);//전체 페이지 수
 const noticeCount = ref(0); //전체 글 수
-
 //페이지 5개만 보이게
 const visiblePageNumbers = computed(() => {
     const currentPageNumber = currentPage.value;
     const totalPageNumber = totalPages.value;
     const visiblePages = [];
-
     let startPage = currentPageNumber - 2;
     let endPage = currentPageNumber + 2;
 
@@ -113,7 +134,7 @@ async function goToPage(pageNumber) {
     currentPage.value = pageNumber;
     await getData();
 }
-// watch를 사용하여 currentPage, noticePerPage, searchKeyword 값이 변경될 때마다 getData 함수 호출
+// currentPage, noticePerPage, searchKeyword 값이 변경될 때마다 getData 함수 호출
 watch([currentPage, noticePerPage, searchKeyword], async () => {
     await getData();
 });
@@ -132,7 +153,7 @@ const getData = async () => {
                     noticeCount.value = response.totalElements;
                     noticeList.value = response.content;
                     totalPages.value = response.totalPages;
-                    console.log("notice.value", noticeList.value);
+                    //console.log("notice.value", noticeList.value);
                 }
             }
         );
@@ -143,25 +164,63 @@ onMounted(async () =>{
 </script>
 
 <style scoped>
+.notice-table-container{
+    position: relative;
+    display: block;
+    overflow: auto;
+}
+.notice-table {
+    width: 100%;
+    height: 500px;
+    border-collapse: collapse;
+    text-align: center;
+}
+.notice-table thead{
+    height: 25px;
+    position: sticky;
+    top: 0;
+}
+.notice-table th, .notice-table td {
+    height: 20px;
+    padding: 8px;
+}
+.notice-table th {
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}
+ .notice-table td {
+     height: 25px;
+     padding: 10px;
+ }
+.notice-table tbody :hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+.notice-table tbody tr:first-child {
+    position: sticky;
+    top: 0;
+}
+/* 페이징 */
 .pagination-list {
     list-style-type: none;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .pagination-list li {
     margin: 0 5px;
 }
-
 .pagination-list button {
     padding: 5px 10px;
-    background-color: #e0e0e0;
+    background-color: #ffffff;
     border: none;
     cursor: pointer;
 }
-
 .pagination-list button:hover {
     background-color: #bdbdbd;
+}
+.pagination-list button.active {
+    background-color: #BEADFA;
+    color: #ffffff;
 }
 </style>

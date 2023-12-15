@@ -51,13 +51,13 @@
           </v-col>
       </v-row>
       <!--  댓글 Div     -->
-      <v-row>
+      <v-row v-if="$route.query.noticeYn !== '1'">
           <v-col cols="12">
               <div class="text-h5">
                   댓글  <span class="font-weight-bold">{{board.boardReplyList.length}}</span>개 </div>
           </v-col>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters v-if="$route.query.noticeYn !== '1'">
           <v-col cols="10" sm="6" md="4" align-self="stretch" >
               <v-text-field
                   v-model="txtReply"

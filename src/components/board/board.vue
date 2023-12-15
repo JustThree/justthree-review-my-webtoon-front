@@ -7,7 +7,7 @@
       :title="title"
       :subtitle="userNickname"
       :text="content"
-      @click="$router.push(`/comm/${boardId}`)"  >
+      @click="$router.push({path: `/boards/${boardId}`, query:{noticeYn: noticeYn}})"  >
     <div>
         {{boardId}}
       {{created}}
@@ -20,14 +20,6 @@
         /조회수 {{viewCount}}
       </div>
     </div>
-<!--    <div style="display: flex; justify-content: space-between;">
-      <div>
-        {{boardone.created}}
-      </div>
-      <div>
-        {{boardone.viewCount}}
-      </div>
-    </div>-->
   </v-card>
 
 </div>
