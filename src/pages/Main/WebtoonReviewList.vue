@@ -6,6 +6,7 @@ import {api, apiToken} from "@/common.js";
 import {handleError, ref, watch} from "vue";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
+
 const authStore = useAuthStore()
 const route = useRoute();
 
@@ -14,8 +15,8 @@ const pageContents = ref();
 const totalPages = ref();
 const reviewContent = ref("");
 const totalCount = ref();
-const queryString =  ref({
-  page:0
+const queryString = ref({
+      page: 0
     }
 )
 
@@ -25,7 +26,7 @@ const fetchData = async () => {
   try {
     const response = await api("api/webtoon/reviews/"
         + route.params.masterId
-        +"?page=" + (queryString.value.page-1)
+        + "?page=" + (queryString.value.page - 1)
         , "GET");
     pageContents.value = response.content;
     totalPages.value = response.totalPages;
@@ -44,21 +45,21 @@ watch(
 
 function submitReview() {
   if (authStore.user) {
-      apiToken(
-          "api/webtoon/review/" + route.params.masterId,
-          "POST",
-          {
-            "content": reviewContent.value
+    apiToken(
+        "api/webtoon/review/" + route.params.masterId,
+        "POST",
+        {
+          "content": reviewContent.value
+        }
+    ).then(
+        (response) => {
+          if (response.status === 400) {
+            alert("값이 유효 하지 않아요")
+          } else {
+            alert(response);
+            router.go(0);
           }
-      ).then(
-          (response) => {
-            if (response.status === 400){
-              alert("값이 유효 하지 않아요")
-            } else {
-              alert(response);
-              router.go(0);
-            }
-          })
+        })
   } else {
     alert("로그인을 먼저 해 주세요!");
   }
@@ -70,27 +71,26 @@ fetchData()
 <template>
   <v-card
       class="v-col-md-12"
+      style="
+      position: relative;
+      height: 100px;"
   >
     <router-link :to="'/webtoon/'+ route.params.masterId">
       <v-btn
-          style="margin-left: 2%"
+          class="back-move-btn"
           icon="mdi-arrow-left">
 
       </v-btn>
     </router-link>
     <span
-
-        style="margin: 40%
-      ;font-weight: bolder;
-      font-size: 2em;
-      "
+        class="top-header-text"
     >
     리뷰
   </span>
     <v-dialog width="1000" height="800px">
       <template v-slot:activator="{ props }">
         <v-btn
-            style="margin:0;"
+            class="review-btn"
             color="#5302FE"
             v-bind="props"
             v-text="'리뷰 쓰기'"
@@ -105,7 +105,7 @@ fetchData()
               v-model="reviewContent"
               class="p-5"
               bg-color=#F2F2F2
-              placeholder="(글자수 500자 이내)"
+              placeholder="(글자수 5~200자)"
           >
           </v-textarea>
           <v-divider></v-divider>
@@ -131,7 +131,7 @@ fetchData()
   >
     <v-row>
       <v-col
-        class="offset-8 v-col-4 "
+          class="offset-8 v-col-4 "
       >
       </v-col>
     </v-row>
@@ -139,91 +139,97 @@ fetchData()
       리뷰가 없어요!
     </v-row>
     <div
-      v-text=""
+        v-text=""
     ></div>
     <v-row v-for="(item,idx) in pageContents"
-            class="justify-center"
+           class="justify-center"
     >
-
       <v-card
           class="ma-10 justify-center"
           style="background: #F7F2FA"
           width="60%"
           min-height="200px"
       >
-        <router-link :to="'/review/'+item.reviewId"
-                     style="color:black;text-decoration:none;"
-        >
-        <v-row
-          class="align-center"
-        >
-          <v-col
-          class="v-col-2 m-2"
+          <v-row
+              class="align-center"
           >
-            <v-img
-                class="v"
-              :src="item.imgUrl"
-              width="40"
-              height="40"
-            ></v-img>
-          </v-col>
-          <v-col
-              style="color:black"
-            v-text="item.userNickName"
-          >
-          </v-col>
-        </v-row>
-        <v-divider></v-divider>
-        <v-row>
-        <v-col
-          class="m-2"
-        >
-          <div v-text="item.content"
-            style="color:black;
+
+            <v-col
+                class="v-col-2 m-2"
+            >
+
+              <v-img
+                  class="v"
+                  :src="item.imgUrl"
+                  width="40"
+                  height="40"
+              ></v-img>
+            </v-col>
+            <router-link :to="'/mypage/userinfo/' + item.replyUserId"
+                         class="no-color-line"
+
+            >
+            <v-col
+                style="color:black"
+                v-text="item.userNickName"
+            >
+
+            </v-col>
+            </router-link>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row>
+            <v-col
+                class="m-2"
+            >
+              <router-link :to="'/review/'+item.reviewId"
+                           class="no-color-line"
+              >
+              <div v-text="item.content"
+                   style="
             min-height:150px
-            "
-          >
+            ">
 
-           </div>
-        </v-col>
-        </v-row>
-        <v-divider></v-divider>
-        <v-row
-            class="m-2"
-        >
-          <v-col
-          class="v-col-1"
+              </div>
+              </router-link>
+            </v-col>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row
+              class="m-2"
           >
-            <v-icon
-                color="gray "
-                size="24"
-                icon="mdi-thumb-up"
-            ></v-icon>
-          </v-col>
-          <v-col
-              class="v-col-1"
-              v-text="item.heartCount"
-          >
+            <v-col
+                class="v-col-1"
+            >
+              <v-icon
+                  color="gray "
+                  size="24"
+                  icon="mdi-thumb-up"
+              ></v-icon>
+            </v-col>
+            <v-col
+                class="v-col-1"
+                v-text="item.heartCount"
+            >
 
-          </v-col
-          >
-          <v-col
-              class="v-col-1"
-          >
-            <v-icon
-                color="gray "
-                size="24"
-                icon="mdi-chat-outline"
-            ></v-icon>
-          </v-col>
-          <v-col
-              class="v-col-1"
-              v-text="item.replyCount"
-          >
-          </v-col>
-        </v-row>
+            </v-col
+            >
+            <v-col
+                class="v-col-1"
+            >
+              <v-icon
+                  color="gray "
+                  size="24"
+                  icon="mdi-chat-outline"
+              ></v-icon>
+            </v-col>
+            <v-col
+                class="v-col-1"
+                v-text="item.replyCount"
+            >
+            </v-col>
+          </v-row>
 
-      </router-link>
       </v-card>
     </v-row>
     <v-row>
@@ -242,4 +248,5 @@ fetchData()
 
 <style scoped>
 
+@import "@/assets/css/webtoonReviewList.css";
 </style>
