@@ -61,7 +61,7 @@ const router= createRouter({
         {path:'/comm/new', component: createBoard, name: 'newBoard'},
         {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
         {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
-        // {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
+        {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
 
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},

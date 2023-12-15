@@ -145,13 +145,13 @@ const sortList = (sorting) => {
 const getData = async () => {
     api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
         .then((response) => {
-                //console.log(1)
                 if (response instanceof Error) {
                     let errorRes = response;
                     console.log(errorRes.response);
                     errorMsg.value = errorRes.response;
                     commBoardList.value = [];
                 } else {
+                    console.log(commBoardList.value);
                     //if(response.length ===0){
                     if(response.length < itemPerPage){
                         pagingMsg.value = "더 이상 존재하지 않습니다.";

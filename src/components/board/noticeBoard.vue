@@ -1,24 +1,13 @@
 <template>
 <div class="d-flex align-center flex-column">
 
-  <v-card
-      variant="outlined"
-      width="90%"
-      :title="title"
-      subtitle=":subtitle "
-      @click="$router.push(`/comm/${boardId}`)"  >
-    <div>
-        {{boardId}}
-      {{created}}
-    </div>
-    <div style="display: flex; justify-content: flex-end;">
-      <div>
-        댓글수
+  <v-card variant="outlined"  width="90%"  @click="$router.push(`/comm/${boardId}`)"  >
+      <div class="card-body" style="display: flex; justify-content: flex-start;">
+          <div>번호</div>
+          <div>{{title}}</div>
+          <div>{{userNickname}}</div>
+          <div>{{created}} 조회수 {{viewCount}}</div>
       </div>
-      <div>
-        /조회수 {{viewCount}}
-      </div>
-    </div>
   </v-card>
 
 </div>
@@ -30,7 +19,7 @@ const props = defineProps({
   noticeone: Object
 });
 
-const {boardId, title, created, noticeYn, updated, viewCount} = toRefs(props.noticeone);
+const {boardId, title, userNickname, created, noticeYn, updated, viewCount} = toRefs(props.noticeone);
 
 const pprops = toRef(props, "noticeone");
 
