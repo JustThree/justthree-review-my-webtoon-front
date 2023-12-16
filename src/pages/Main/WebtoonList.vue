@@ -97,8 +97,7 @@ fetchData()
 </script>
 <template>
   <v-card
-      class="v-col-md-12"
-  >
+      class="v-col-md-12">
     <router-link :to="'/'">
       <v-btn
           style="margin-left: 2%"
@@ -107,25 +106,17 @@ fetchData()
       </v-btn>
     </router-link>
     <span
-
-        style="margin: 40%
-      ;font-weight: bolder;
-      font-size: 2em;
-      "
+        class="top-header-text"
     >
     웹툰
   </span>
   </v-card>
   <v-container
-      style="width:60%;
-        display:flex;
-        justify-content: center;
-        height:1000px"
+      class="main-container"
   >
     <v-container
     >
       <v-row
-          class=""
       >
         <v-col
             class="v-col-3"
@@ -158,13 +149,13 @@ fetchData()
                       ;min-width:150px"
         >
           <router-link :to="'/webtoon/' + item.masterId"
-            style="  color : black;
-            text-decoration: none;"
+            class="no-color-line"
           >
             <div>
+<!--              이미지 텍스트 위치 맞추기-->
               <v-img
                   :src="item.imgUrl"
-                  width="100%"
+                  width="100px"
                   height="100px"
                   alt="https://vuetifyjs.com/en/"
               >
@@ -190,5 +181,6 @@ fetchData()
 </template>
 
 <style scoped>
+@import "@/assets/css/webtoonList.css";
 
 </style>

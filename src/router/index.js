@@ -41,9 +41,9 @@ const router= createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/',component:Main},
-        // {path:'/webtoon/:masterId',component:WebtoonDetail},
-        // {path:'/reviewlist/:masterId',component:WebtoonReviewList},
-        // {path:'/review/:reviewId', component:WebtoonReviewDetail},
+        {path:'/webtoon/:masterId',component:WebtoonDetail},
+        {path:'/reviewlist/:masterId',component:WebtoonReviewList},
+        {path:'/review/:reviewId', component:WebtoonReviewDetail},
         {path:'/search', component:Search},
         {path:'/webtoon',component:WebtoonList},
         {path:'/userinfo',component:UserInfo},

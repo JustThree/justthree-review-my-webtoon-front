@@ -22,6 +22,11 @@ if (authStore.user) {
   apiToken("api/webtoon/" + route.params.masterId,
       "GET",
   ).then((response) => {
+    if (response.ageCheck){
+        alert("성인 웹툰입니다. 메인으로 이동합니다.")
+        router.push("/")
+    }
+
         data.value = response;
         rating.value = response.userStar / 2
         if (response.links) {
@@ -142,26 +147,13 @@ function submitReview(){
         @click="router.go(-1)"
     >
     </v-btn>
-    <span
-
-        style="margin: 40%
-      ;font-weight: bolder;
-      font-size: 2em;
-      "
-    >
-  </span>
   </v-card>
   <v-container
-      style="width: 85%;
-      display: flex;
-    flex-direction: column;
-    align-items: center;"
+    class="main-container"
   >
 
     <v-row align="center" justify="center"
-           style="height: 500px;
-           width: 100%;"
-           class="m-lg-2"
+           class="top-row m-lg-2"
     >
       <v-card
           class="mx-auto card-all image-header"
@@ -174,11 +166,11 @@ function submitReview(){
             ">
         <v-card-item>
           <div>
-            <div class="text-h2 mb-1" style="margin: 0 0 10px 20px; z-index:1;color:white"
+            <div class="top-row-title text-h2 mb-1"
                  v-text="data.title"
             >
             </div>
-            <div class="text-h4" style="margin: 20px 0 10px 20px; z-index:1;color:white"
+            <div class="top-row-writer text-h4"
                  v-text="data.writer"
             ></div>
           </div>
@@ -186,19 +178,14 @@ function submitReview(){
       </v-card>
     </v-row>
     <v-row align="center" justify="center"
-           style="min-height: 600px;
-           width: 90%;"
-           class="m-lg-2"
+           class="flex mid-row m-lg-2"
     >
       <v-card
-          class="mx-auto"
+          class="flex align-items-center mx-auto"
           width="100%"
           min-height="600px"
           color=#F8F8F8
-          style="display: flex;
-        align-items: center;
-"
-      >
+          style="display:flex">
         <div
             style="width:30%"
         >
@@ -222,40 +209,23 @@ function submitReview(){
                 size="x-large"
                 hover="true"
                 active-color="red"
-                style="width: 40%;
-                display: flex;
-                align-items: center;
-                justify-content: center;"
+                class="rating"
                 v-model="rating"
                 @click="ratingSend"
             >
             </v-rating>
             <v-card
-                style="width: 60%;
-            float: right;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10%;
-            "
+                class="mid-info-card"
             >
               <v-container
-                  style="
-                align-items: center;
-            justify-content: center;"
+                  class="align-items-center justify-content-center"
               >
-                <v-row style="
-              align-items: center;
-            justify-content: center;">
+                <v-row
+                 class="align-items-center justify-content-center">
                   <v-col>
                     <div>
                       <div
-                          style="
-                font-weight: bold;
-                font-size: 2em;
-                color: red;
-                text-align: center;
-                justify-content: center"
+                          class="mid-row-rating-num"
                           v-text="data.avgRating/2"
                       >
                       </div>
@@ -288,7 +258,7 @@ function submitReview(){
                                     v-model="reviewContent"
                                     class="p-5"
                                     bg-color=#F2F2F2
-                                    placeholder="(글자수 500자 이내)"
+                                    placeholder="(글자수 5~200자)"
                         >
                         </v-textarea>
                         <v-divider></v-divider>
@@ -298,6 +268,7 @@ function submitReview(){
                           <v-btn
                               text="Write"
                               @click="submitReview"
+                              @keyup.enter="submitReview"
                           ></v-btn>
                           <v-btn
                               text="Close"
@@ -310,8 +281,7 @@ function submitReview(){
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
                     <router-link :to="'/chat/'+route.params.masterId"
-                                 style="color:black;
-                                 text-decoration:none"
+                                 class="no-color-line"
                     >
                       <v-icon
                           color="gray"
@@ -322,10 +292,8 @@ function submitReview(){
                     </router-link>
                   </v-col>
                 </v-row>
-                <v-row style="
-              align-items: center;
-            justify-content: center;
-                ">
+                <v-row
+                    class="align-items-center justify-content-center">
                   <v-col class="v-col-3" style="text-align: center"><span
                       style="color:red"
                       v-text="data.countStar"></span>명투표
@@ -344,16 +312,13 @@ function submitReview(){
               style="
             min-height: 500px;"
           >
-            <div id="outline" style="padding: 20px 20px 20px 20px;
-        margin: 20px 20px 20px 20px;
-        font-size: 1.2em;
-        min-height: 400px;
-           "
+            <div id="outline"
+                 class="outline"
                  v-text="data.outline"
             >
             </div>
-            <div style="display:flex;
-            flex-direction: row-reverse;"
+            <div
+                class="flex-row-reverse"
             >
               <div
                   v-for="(linkEle,linkIdx) in links.platform" :key="linkIdx"
@@ -442,18 +407,14 @@ function submitReview(){
                    cols="4"
                    style="min-width:300px"
             >
-              <router-link :to="'/review/' +itemCol.reviewId"
-                           class="no-color-line"
-              >
-              <v-sheet class=""
+
+              <v-sheet
               >
                 <v-card style="
                    background: #F2F2F2;"
                 >
                   <v-container>
-                    <v-row
-                        style="
-                    align-items: center;">
+                    <v-row class="align-items-center">
                       <v-col class="v-col-12">
                         <v-avatar color="surface-variant"
                         >
@@ -464,14 +425,23 @@ function submitReview(){
                           >
                           </v-img>
                         </v-avatar>
+
+                        <router-link :to="'/mypage/userinfo/' + itemCol.replyUserId"
+                                     class="no-color-line"
+                        >
                         <span style="margin-left:15px"
                             v-text="itemCol.userNickName"></span>
+                        </router-link>
                         <v-divider></v-divider>
+                        <router-link :to="'/review/' +itemCol.reviewId"
+                                     class="no-color-line"
+                        >
                         <v-col class="v-col-12"
                               v-text="itemCol.content.length > 100 ?itemCol.content.substring(0,100)+ '...' : itemCol.content"
                               style="font-size: 14px;
                                      height:150px">
                         </v-col>
+                        </router-link>
                       </v-col>
 
                     </v-row>
@@ -483,10 +453,9 @@ function submitReview(){
                           color="red "
                           icon="mdi-star"
                       ></v-icon>
-                      <span style="color: red;
-                      margin-left: 5px;
-                      font-size:0.8em;
-                      " v-text="itemCol.rating ? itemCol.rating/2 : '평가 안함'"
+                      <span
+                          class="review-rating"
+                        v-text="itemCol.rating ? itemCol.rating/2 : '평가 안함'"
                       ></span>
                     </v-col>
                     </v-row>
@@ -521,7 +490,6 @@ function submitReview(){
                 </v-card>
               </v-sheet>
 
-            </router-link>
             </v-col>
           </v-row>
         </v-container>
@@ -537,20 +505,7 @@ function submitReview(){
 </script>
 
 <style scoped>
-
-
-.image-header {
-  display: flex;
-  flex-direction: column-reverse;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position-y: 50%;
-  z-index: 1;
-}
-.no-color-line{
-  color:black;
-  text-decoration:none;
-}
+@import "@/assets/css/webtoonDetail.css";
 
 
 </style>

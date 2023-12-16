@@ -14,7 +14,10 @@ const reviewPageContents = ref();
 const reviewTotalPages = ref();
 const reviewTotalCount = ref();
 const reviewReplyComment = ref([])
+const fixContent = ref();
+const fixReplyContent = ref();
 // api query String 정의
+
 
 const reviewQueryString = ref({
       page: 0
@@ -22,14 +25,18 @@ const reviewQueryString = ref({
 )
 
 
-
-
 // 리뷰 데이터 한번 불러옴
 api("api/webtoon/review/" + route.params.reviewId,
     "GET",
 ).then((response) => {
+  if (response.deleted){
+    alert("삭제된 게시글 입니다.")
+    router.go(-1)
+  }
       reviewData.value = response;
-      console.log(reviewData)
+      fixContent.value = response.content;
+
+      console.log(fixContent)
     }
 );
 
@@ -43,15 +50,15 @@ watch(
 const fetchData = async () => {
   try {
     const response = await api("api/webtoon/review/reply/"
-      + route.params.reviewId
-      + "?page=" + (reviewQueryString.value.page - 1)
-      , "GET");
-        reviewPageContents.value = response.content;
-        reviewTotalPages.value = response.totalPages;
+        + route.params.reviewId
+        + "?page=" + (reviewQueryString.value.page - 1)
+        , "GET");
+    reviewPageContents.value = response.content;
+    reviewTotalPages.value = response.totalPages;
     reviewTotalCount.value = response.totalElements;
-      console.log(response)
-      } catch (error){
-      console.error("Error fetching data:", error);
+    console.log(response)
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 };
 fetchData();
@@ -73,8 +80,6 @@ function likeReview() {
 }
 
 // 댓글 등록
-
-
 function submitReviewReply() {
   if (authStore.user) {
     apiToken(
@@ -82,6 +87,98 @@ function submitReviewReply() {
         "POST",
         {
           content: reviewReplyComment.value
+        }
+    ).then((response) => {
+          if (response.status === 400) {
+            alert("값이 유효 하지 않아요")
+          } else {
+            alert(response);
+            router.go(0);
+          }
+        }
+    )
+  } else {
+    alert("로그인을 먼저 해 주세요.")
+  }
+}
+
+// 수정
+function fixReview() {
+  if (authStore.user) {
+    apiToken(
+        "api/webtoon/review/" + route.params.reviewId,
+        "PATCH",
+        {
+          content: fixContent.value
+        }
+    ).then((response) => {
+          if (response.status === 400) {
+            alert("값이 유효 하지 않아요")
+          } else {
+            alert(response);
+            router.go(0);
+          }
+        }
+    )
+  } else {
+    alert("로그인을 먼저 해 주세요.")
+  }
+}
+
+
+// 삭제
+function removeReview() {
+  if (confirm("삭제 하시겠습니까?")) {
+    if (authStore.user) {
+      apiToken(
+          "api/webtoon/review/" + route.params.reviewId,
+          "DELETE"
+      ).then((response) => {
+            if (response.status === 400) {
+              alert("값이 유효 하지 않아요")
+            } else {
+              alert(response);
+              router.go(-1);
+            }
+          }
+      )
+    } else {
+      alert("로그인을 먼저 해 주세요.")
+    }
+  }
+}
+
+// 댓글 삭제
+function removeReviewReply(replyId) {
+  if (confirm("삭제 하시겠습니까?")) {
+    if (authStore.user) {
+      apiToken(
+          "api/webtoon/review/reply/" + replyId,
+          "DELETE"
+      ).then((response) => {
+            if (response.status === 400) {
+              alert("값이 유효 하지 않아요")
+            } else {
+              alert(response);
+              router.go(0);
+            }
+          }
+      )
+    } else {
+      alert("로그인을 먼저 해 주세요.")
+    }
+  }
+}
+
+// 댓글 수정
+function fixReviewReply(replyId, content) {
+  console.log(content)
+  if (authStore.user) {
+    apiToken(
+        "api/webtoon/review/reply/" + replyId,
+        "PATCH",
+        {
+          content: content
         }
     ).then((response) => {
           if (response.status === 400) {
@@ -120,12 +217,7 @@ function copyToClipboard() {
     >
     </v-btn>
     <span
-
-        style="margin: 40%
-      ;font-weight: bolder;
-      font-size: 2em;
-      "
-    >
+        class="top-header-info">
     리뷰
   </span>
   </v-card>
@@ -139,50 +231,96 @@ function copyToClipboard() {
               class="align-items-center"
           >
             <div
-                class="accent-font  "
-                style="
-                display:flex;
-                padding-left: 15px;
-                align-items: center;">
-              <img
-                  :src="reviewData.profileImg"
-                  style="width:5%">
+                class="accent-font top-user-info">
+              <div
+                  class="v-col 3"
+              >
+                <img
+                    :src="reviewData.profileImg"
+                    style="width:24px; height:24px">
+                <router-link :to="'/mypage/userinfo/' + reviewData.writerId"
+                             class="no-color-line"
+                >
+                <span
+                    v-text="reviewData.userNickName"
+                    style="padding-left:10px">
+                </span>
+                </router-link>
+              </div>
+
               <span
-                  v-text="reviewData.userNickName"
-                  style="padding-left:10px">
-        </span>
+                  class="offset-9 v-col 3"
+              >
+                <v-dialog width="1000" height="800px">
+            <template v-slot:activator="{ props }">
+                <v-btn
+                    v-if="authStore.user.usersId === reviewData.writerId"
+                    class="m-2"
+                    color="#5302F2"
+                    v-bind="props"
+                >
+                  수정
+                </v-btn>
+            </template>
+
+            <template v-slot:default="{ isActive }">
+              <v-card title="글 수정">
+                <v-divider></v-divider>
+                <v-textarea
+                    v-model="fixContent"
+                    class="p-5"
+                    bg-color=#F2F2F2
+                    placeholder="(글자수 5~200자)"
+                >
+                </v-textarea>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                      text="Write"
+                      @click="fixReview"
+                  ></v-btn>
+                  <v-btn
+                      text="Close"
+                      @click="isActive.value = false"
+                  ></v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+
+
+
+                <v-btn
+                    v-if="authStore.user.usersId === reviewData.writerId"
+                    class="m-2"
+                    color="#5302F2"
+                    @click="removeReview"
+                >
+                  삭제
+                </v-btn>
+              </span>
             </div>
           </div>
           <v-container>
             <v-row>
               <div
-                  class="v-col-9"
+                  class="v-col-10"
               >
                 <div v-text="reviewData.webtoonTitle"
-                     style="
-                 font-size:1.8em;
-                 margin-left:10px;
-                   padding-top:0;
-                   padding-bottom:0;
-                ">
+                     class="webtoon-title"
+                 >
                 </div>
                 <div
-                    class="accent-font"
+                    class="accent-font genre"
                     v-text="'장르 : ' + reviewData.genre"
-                    style="
-                  margin-left:10px;
-                   padding-top:0;
-                   padding-bottom:0;
-                ">
+                 >
                 </div>
                 <div
-                    class="accent-font"
+                    class="accent-font rating"
                     v-text="reviewData.rating ? '평가 : ' + reviewData.rating/2 : '평가 없음' "
-                    style="
-                margin-left:10px;
-                   padding-top:0;
-                   padding-bottom:0;
-                ">
+                 >
                 </div>
                 <div
                     v-text="reviewData.content"
@@ -193,13 +331,9 @@ function copyToClipboard() {
                 </div>
 
               </div>
-              <div class="v-col-2"
-                   style="margin:0 2%">
+              <div class="v-col-2 img-center-div">
                 <img :src="reviewData.webtoonImg"
-                     style="
-                     max-height:300px;
-                     max-width:200px;
-                     padding: 0 0 5% 0;">
+                class="webtoonImg">
 
               </div>
             </v-row>
@@ -251,7 +385,7 @@ function copyToClipboard() {
                     v-model="reviewReplyComment"
                     class="p-5"
                     bg-color=#F2F2F2
-                    placeholder="(글자수 500자 이내)"
+                    placeholder="(글자수 5~200자)"
                 >
                 </v-textarea>
                 <v-divider></v-divider>
@@ -296,7 +430,6 @@ function copyToClipboard() {
             class="m-2 accent-font"
         >
           <span
-
           >
             댓글
           </span>
@@ -309,15 +442,81 @@ function copyToClipboard() {
           <v-list-item
               v-for="(item, key) in reviewPageContents"
               :key="key"
-              :title="item.userNickname"
           >
-            <div
-                v-text="item.content"
-            ></div>
+            <v-row>
+              <v-col>
+                <span>
+                <img
+                    style="width:24px;
+                            height:24px"
+                    :src="item.imgUrl">
+                </span>
+                <router-link :to="'/mypage/userinfo/' + item.replyUserId"
+                             class="no-color-line"
+                >
+                  <span
+                      class="m-2"
+                    v-text="item.userNickname">
+                </span>
+                </router-link>
+              </v-col>
+            </v-row>
+            <v-row
+                class="align-items-center"
+            >
+              <div
+                  class="v-col-10"
+                  v-text="item.content"
+              ></div>
+              <v-dialog width="1000" height="800px">
+                <template v-slot:activator="{ props }">
+                  <div
+                      v-bind="props"
+                      v-if="authStore.user.usersId === item.replyUserId"
+                      class="m-2 v-col"
+                  >
+                    수정
+                  </div>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card title="웹툰 리뷰 댓글 수정">
+                    <v-divider></v-divider>
+                    <v-textarea
+                        v-model="item.content"
+                        class="p-5"
+                        bg-color=#F2F2F2
+                        placeholder="(글자수 5~200자)"
+                    >
+                    </v-textarea>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                          text="Write"
+                          @click="fixReviewReply(item.replyId,item.content)"
+                      ></v-btn>
+                      <v-btn
+                          text="Close"
+                          @click="isActive.value = false"
+                      ></v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </template>
+              </v-dialog>
+              <div
+                  v-if="authStore.user.usersId === item.replyUserId"
+                  class="m-2 v-col"
+                  @click="removeReviewReply(item.replyId)"
+              >
+                삭제
+              </div>
+            </v-row>
+
           </v-list-item>
         </v-list>
         <v-row>
-
           <v-pagination
               class="v-row v-md-12"
               v-model="reviewQueryString.page"
@@ -338,12 +537,5 @@ function copyToClipboard() {
 </template>
 
 <style scoped>
-.accent-font {
-  font-weight: 1000;
-  font-size: 0.8em;
-}
-
-.de-accent-font {
-
-}
+@import "@/assets/css/webtoonReviewDetail.css";
 </style>

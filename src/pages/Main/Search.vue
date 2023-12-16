@@ -84,15 +84,10 @@ type = 1
   <v-infinite-scroll :height="800" :items="content[type]"
                      :onLoad="load"
                      empty-text="만화가 더 없어요"
-                      aria-hidden="true"
-
-
-  >
+                      aria-hidden="true">
   <div>
   <v-card
-    style="width:70%
-    ;margin:auto"
-  >
+      class="main-card">
     <v-tabs
         v-model="tab"
         color="deep-purple-accent-4"
@@ -123,8 +118,7 @@ type = 1
                 cols="12"
                 md="4"
             ><router-link :to="/webtoon/ + item.masterId"
-              style="color:black;
-              text-decoration:none"
+                          class="no-color-line"
             >
               <v-img
                   :src="item.imgUrl"
@@ -146,14 +140,7 @@ type = 1
 </template>
 
 <style scoped>
-body{
-  -ms-overflow-style: none;
-}
-::-webkit-scrollbar {
-  display: none;
-}
-
-
+@import "@/assets/css/search.css";
 
 
 </style>

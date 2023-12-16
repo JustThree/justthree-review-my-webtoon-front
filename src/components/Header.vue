@@ -10,7 +10,7 @@
         <v-btn href="/chatlist"> 채팅 </v-btn>
       </v-toolbar-title >
 
-      <v-toolbar-items class="w-25">
+      <v-toolbar-items class="w-50">
         <v-card-text class="mt-1">
           <v-text-field
               v-model="searchText"
@@ -21,6 +21,7 @@
               append-inner-icon="mdi-magnify"
               single-line
               hide-details
+              @keyup.enter="onClick"
               @click:append-inner="onClick"
           ></v-text-field>
         </v-card-text>
