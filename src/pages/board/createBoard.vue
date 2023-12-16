@@ -46,7 +46,7 @@ const createBoard = async (board) => {
       if (response) {
         console.log("성공");
         alert("글이 성공적으로 등록되었습니다.");
-        router.push("/comm");
+        router.push("/boardslist/comm");
       } else {
         alert("등록 실패..");
       }

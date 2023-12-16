@@ -92,7 +92,7 @@ const deleteBoard = async (board) => {
           if (response) {
               console.log("삭제");
               alert("글이 삭제되었습니다.");
-              router.push("/comm"); //왜 이동안됨
+              router.push("/boardslist/comm");
                } else {
               alert("삭제 실패..");
           }

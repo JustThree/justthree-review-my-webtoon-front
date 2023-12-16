@@ -1,11 +1,5 @@
 <template>
   <v-container>
-    <!--  tab    -->
-    <v-row>
-      <v-col  cols="12">
-        <div class="text-h2">커뮤니티</div>
-      </v-col>
-    </v-row>
     <!-- 검색 Frame -->
     <v-row>
       <!--  정렬    -->
@@ -171,7 +165,11 @@ onMounted(async  ()=>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
     //console.log("user", user);
-    loginUsersId.value = user.value.usersId;
+    if(user.value!==null){
+        loginUsersId.value = user.value.usersId;
+    }else {
+        loginUsersId.value =-1;
+    }
   await getData();
 });
 

@@ -2,21 +2,32 @@
   <v-container>
       <v-row class="frame-top">
           <v-col class="frame-title" cols="12">
-              <v-text-field
+              <div class="title-text">{{board.title}}</div>
+<!--              <v-text-field
                   class="input-title"
                   variant="standard"
                   :style="{ 'font-weight': 700 }">
                   {{board.title}}
-              </v-text-field>
-          </v-col>
-          <v-col class="frame-title" cols="1">
-              <span>{{board.userNickname}}</span>
-          </v-col>
-          <v-col  class="frame-title" cols="4">
-              <span> 등록일자 {{board.created}}</span>
+              </v-text-field>-->
           </v-col>
           <v-col class="frame-title" cols="2">
+              <span>{{board.userNickname}}</span>
+          </v-col>
+          <v-col  class="frame-title" cols="3">
+              <span> 등록일자 {{board.created}}</span>
+          </v-col>
+          <v-col class="frame-title" cols="1">
               <span>{{board.viewCount}}</span>
+          </v-col>
+          <v-col class="frame-title" cols="3">
+              <v-btn
+                  v-if="loginUsersId !== -1"
+                  :variant="board.boardLikeYn ? 'outlined' : 'text'"
+                  @click="toggleLike">
+                  <v-icon left>{{ board.boardLikeYn ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                  {{ board.boardLikeYn ? '좋아요 취소' : '좋아요' }}
+              </v-btn>
+              <span>좋아요 수 {{ board.boardLikeCount }}</span>
           </v-col>
           <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
               <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
@@ -102,7 +113,7 @@ const board = ref({
     content: '',
     boardFiles: [],
     noticeYn: 0,
-   writerUsersId: 0,
+    writerUsersId: 0,
     //기존 데이터 조회
     boardImgMapList: [new Map([[], []])],
     boardId: 0,
@@ -110,6 +121,8 @@ const board = ref({
     boardReplyList:[],
     replyList: [],
     reReplyList:[],
+    boardLikeYn: false,
+    boardLikeCount: 0,
 });
 
 const route = useRoute();
@@ -120,6 +133,39 @@ let loginUsersId = ref();
 
 //Rereplylist
 let boardreReplyList = ref([]);
+
+//게시글 좋아요 버튼 관련
+async function toggleLike() {
+    console.log(board.value.boardLikeYn);
+    if(!board.value.boardLikeYn) {  //좋아요 등록
+        const response = await api("board/likes", "POST", {
+            "users": {"usersId": loginUsersId.value},
+            "boardId": board.value.boardId
+        });
+        if (response instanceof Error) {
+            console.log(response.response.data); //서버에서 예외처리 필요
+        } else {
+            if (response) {
+                console.log("좋아요 등록");
+                await getData();
+            } else {
+                alert("등록 실패..");
+            }
+        }
+    }else{ //좋아요 취소
+        const response = await api("board/likes/"+board.value.boardId, "DELETE"); //apiToken으로 변경해야함
+        if (response instanceof Error) {
+            console.log(response.response.data); //서버에서 예외처리 필요
+        } else {
+            if (response) {
+                console.log("좋아요 취소");
+                await getData();
+            } else {
+                alert("삭제 실패..");
+            }
+        }
+    }
+}
 
 //게시글 수정 버튼 클릭 시
 function gotoUpdateBoard(){
@@ -161,9 +207,6 @@ const submitReply = async () => {
         alert('댓글을 입력해주세요');
         return;
     }
-    console.log("댓글 작성자 id(로그인한 user의 usersId");
-    console.log("boardId ", board.value.boardId);
-    console.log('댓글 등록 요청', txtReply.value);
    const response = await api("board/reply", "POST", {
         "users" : {"usersId": loginUsersId.value},
         "boardId": board.value.boardId,
@@ -261,6 +304,7 @@ const handleCreateReReply = async (newReReply)=>{
         return;
     }
 }
+//데이터 조회
 const getData = async () =>{
     console.log(route.params.boardId);
     api("board/"+route.params.boardId, "GET")
@@ -270,7 +314,9 @@ const getData = async () =>{
                 console.log(errorRes.response);
                 //not found 글 목록으로 이동
             }else{
+                console.log(response);
                 board.value = response;
+                // 댓글, 대댓글
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);
                 board.value.reReplyList = board.value.boardReplyList.filter(reply => reply.parentReplyId !== 0);
                 boardreReplyList = board.value.reReplyList;
@@ -280,12 +326,17 @@ const getData = async () =>{
             }
         })
 };
-//기존 데이터 파싱
 onMounted(async () =>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
-    //console.log("user", user);
-    loginUsersId.value = user.value.usersId;
+    console.log("user", user);
+    if(user.value!==null){
+        loginUsersId.value = user.value.usersId;
+    }else {
+        loginUsersId.value =-1;
+    }
+    console.log('loginUsersId', loginUsersId.value);
+    console.log(loginUsersId.value);
     await getData();
 });
 

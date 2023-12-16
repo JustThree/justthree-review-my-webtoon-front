@@ -1,11 +1,5 @@
 <template>
     <v-container>
-        <!--  tab    -->
-        <v-row>
-            <v-col  cols="12">
-                <div class="text-h2">공지사항</div>
-            </v-col>
-        </v-row>
         <!-- 검색 Frame -->
         <v-row>
             <v-col  cols="5">
