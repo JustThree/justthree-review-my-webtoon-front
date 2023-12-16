@@ -1,11 +1,5 @@
 <template>
   <v-container>
-    <!--  tab    -->
-    <v-row>
-      <v-col  cols="12">
-        <div class="text-h2">커뮤니티</div>
-      </v-col>
-    </v-row>
     <!-- 검색 Frame -->
     <v-row>
       <!--  정렬    -->
@@ -145,13 +139,13 @@ const sortList = (sorting) => {
 const getData = async () => {
     api("board?page="+page+"&size="+itemPerPage+"&sortings="+sortings.value+"&keyword="+searchKeyword.value, "GET")
         .then((response) => {
-                //console.log(1)
                 if (response instanceof Error) {
                     let errorRes = response;
                     console.log(errorRes.response);
                     errorMsg.value = errorRes.response;
                     commBoardList.value = [];
                 } else {
+                    console.log(commBoardList.value);
                     //if(response.length ===0){
                     if(response.length < itemPerPage){
                         pagingMsg.value = "더 이상 존재하지 않습니다.";
@@ -171,7 +165,11 @@ onMounted(async  ()=>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
     //console.log("user", user);
-    loginUsersId.value = user.value.usersId;
+    if(user.value!==null){
+        loginUsersId.value = user.value.usersId;
+    }else {
+        loginUsersId.value =-1;
+    }
   await getData();
 });
 

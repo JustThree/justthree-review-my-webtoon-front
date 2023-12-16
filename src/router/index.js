@@ -11,6 +11,7 @@ import ForgotPassword from "@/pages/ForgotPassword.vue"
 import ResetPassword from "@/pages/ResetPassword.vue"
 
 //board(SY)
+import boadsList  from "@/pages/board/boardsList.vue"
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
@@ -60,12 +61,36 @@ const router= createRouter({
         {path:'/search', component:Search},
 
         //board
-        {path:'/comm', component: commBoardList, name: 'commBoardList'},
+        {
+            path: '/boardslist',
+            component: boadsList,
+            name: 'boardsList',
+            children: [
+                { path: 'comm', component: commBoardList, name: 'commBoardList' },
+                { path: 'notice', component: noticeBoardList, name: 'noticeBoardList' },
+            ]
+        },
+        { path: '/comm/new', component: createBoard, name: 'newBoard' },
+        { path: '/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard' },
+        {
+            path: '/boards/:boardId',
+            component: getBoard,
+            name: 'boardOne',
+            props: route => ({ boardId: route.params.boardId, noticeYn: route.query.noticeYn })
+        },
+        /*//board
+        {path:'/boardslist', component:boadsList, name: 'boardsList',
+        children:[
+            {path:'/comm', component: commBoardList, name: 'commBoardList'},
+            {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
+        ]},
+        //{path:'/comm', component: commBoardList, name: 'commBoardList'},
         {path:'/comm/new', component: createBoard, name: 'newBoard'},
         {path:'/comm/edit/:boardId', component: updateBoard, name: 'updatedBoard'},
-        {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
-        {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
-
+        { path: '/boards/:boardId', component: getBoard, name: 'boardOne', props: route => ({ boardId: route.params.boardId, noticeYn: route.query.noticeYn }) },
+        //{path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
+        //{path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
+*/
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
