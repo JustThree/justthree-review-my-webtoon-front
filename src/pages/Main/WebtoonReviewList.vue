@@ -247,6 +247,5 @@ fetchData()
 </template>
 
 <style scoped>
-
 @import "@/assets/css/webtoonReviewList.css";
 </style>

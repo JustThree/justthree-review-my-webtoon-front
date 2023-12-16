@@ -245,11 +245,11 @@ function copyToClipboard() {
                     v-text="reviewData.userNickName"
                     style="padding-left:10px">
                 </span>
-                </router-link>.
+                </router-link>
               </div>
 
               <span
-                  class="offset-6 v-col 3"
+                  class="offset-9 v-col 3"
               >
                 <v-dialog width="1000" height="800px">
             <template v-slot:activator="{ props }">
@@ -306,7 +306,7 @@ function copyToClipboard() {
           <v-container>
             <v-row>
               <div
-                  class="v-col-9"
+                  class="v-col-10"
               >
                 <div v-text="reviewData.webtoonTitle"
                      class="webtoon-title"
@@ -331,8 +331,7 @@ function copyToClipboard() {
                 </div>
 
               </div>
-              <div class="v-col-2"
-                   style="margin:0 2%">
+              <div class="v-col-2 img-center-div">
                 <img :src="reviewData.webtoonImg"
                 class="webtoonImg">
 

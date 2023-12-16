@@ -152,9 +152,10 @@ fetchData()
             class="no-color-line"
           >
             <div>
+<!--              이미지 텍스트 위치 맞추기-->
               <v-img
                   :src="item.imgUrl"
-                  width="100%"
+                  width="100px"
                   height="100px"
                   alt="https://vuetifyjs.com/en/"
               >

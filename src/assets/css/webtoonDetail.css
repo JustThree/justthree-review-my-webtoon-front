@@ -49,7 +49,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10%
 }
 .mid-row-rating-num{
     font-weight: bold;
