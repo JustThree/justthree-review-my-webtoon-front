@@ -303,30 +303,37 @@ function copyToClipboard() {
               </span>
             </div>
           </div>
-          <v-container>
             <v-row>
               <div
                   class="v-col-10"
               >
                 <div v-text="reviewData.webtoonTitle"
-                     class="webtoon-title"
+                     class="webtoon-title ml-4"
                  >
                 </div>
                 <div
-                    class="accent-font genre"
-                    v-text="'장르 : ' + reviewData.genre"
-                 >
+                    style="font-size:0.8em; color:#74747b"
+                    class="genre ml-4">
+                  <span
+                  >장르 </span>
+                  <span
+                      class="font-weight-bold"
+                      v-text="reviewData.genre"
+                  >
+                  </span>
                 </div>
                 <div
-                    class="accent-font rating"
-                    v-text="reviewData.rating ? '평가 : ' + reviewData.rating/2 : '평가 없음' "
-                 >
+                    style="font-size:0.8em; color:#74747b"
+                    class="rating ml-4">
+                  <span
+                  >평가 </span>
+                  <span
+                      class="font-weight-bold"
+                      v-text="reviewData.rating ? reviewData.rating/2 + '점' : '평가 없음'"></span>
                 </div>
                 <div
-                    v-text="reviewData.content"
-                    style="margin-left:10px;
-                   padding-top:50px;
-                  ">
+                    class="ml-4 mt-15 content"
+                    v-text="reviewData.content">
 
                 </div>
 
@@ -337,7 +344,6 @@ function copyToClipboard() {
 
               </div>
             </v-row>
-          </v-container>
         </div>
       </div>
       <v-divider></v-divider>
@@ -354,7 +360,8 @@ function copyToClipboard() {
                 size="24"
                 icon="mdi-thumb-up"
             ></v-icon>
-            <span>
+            <span
+              class="ml-2">
             좋아요
               </span>
           </v-btn>
@@ -372,7 +379,8 @@ function copyToClipboard() {
                     size="24"
                     icon="mdi-chat-outline"
                 ></v-icon>
-                <span>
+                <span
+                    class="ml-2">
               댓글 쓰기
               </span>
               </v-btn>
@@ -416,7 +424,8 @@ function copyToClipboard() {
                 size="24"
                 icon="mdi-share-variant-outline"
             ></v-icon>
-            <span>
+            <span
+                class="ml-2">
               공유
               </span>
           </v-btn>
@@ -430,10 +439,13 @@ function copyToClipboard() {
             class="m-2 accent-font"
         >
           <span
+              class="ml-4"
+              style="font-size:0.9em; color:#74747b"
           >
             댓글
           </span>
           <span
+              class="font-weight-bold ml-1"
               v-text="reviewTotalCount"
           ></span></div>
         <v-list lines="one"
@@ -470,13 +482,22 @@ function copyToClipboard() {
               ></div>
               <v-dialog width="1000" height="800px">
                 <template v-slot:activator="{ props }">
+                  <v-col>
                   <div
                       v-bind="props"
                       v-if="authStore.user.usersId === item.replyUserId"
-                      class="m-2 v-col"
+                      class="m-2"
                   >
                     수정
                   </div>
+                  <div
+                      v-if="authStore.user.usersId === item.replyUserId"
+                      class="m-2"
+                      @click="removeReviewReply(item.replyId)"
+                  >
+                    삭제
+                  </div>
+                  </v-col>
                 </template>
 
                 <template v-slot:default="{ isActive }">
@@ -505,13 +526,7 @@ function copyToClipboard() {
                   </v-card>
                 </template>
               </v-dialog>
-              <div
-                  v-if="authStore.user.usersId === item.replyUserId"
-                  class="m-2 v-col"
-                  @click="removeReviewReply(item.replyId)"
-              >
-                삭제
-              </div>
+
             </v-row>
 
           </v-list-item>

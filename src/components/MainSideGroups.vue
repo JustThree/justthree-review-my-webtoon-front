@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['title','webtoons'])
+const props = defineProps(['title','webtoons','color'])
 const title = props.title;
 
 </script>
@@ -8,10 +8,12 @@ const title = props.title;
   <v-sheet
       class="mx-auto"
       max-width="1300"
+      :color="color"
   >
-    <h2 v-text="title"></h2>
+    <h2 class="ml-5 pt-5  pl-15"
+        v-text="title"></h2>
     <v-slide-group
-        class="pa-4 slide-fade"
+        class="pl-5 slide-fade"
         selected-class="bg-success"
         show-arrows
     >
