@@ -37,10 +37,9 @@
                 </v-row>
                 <v-row class="text-medium-emphasis" justify="start"> {{ chat.usersNickname + ": " + chat.contents }} </v-row>
               </v-col>
-              <v-btn :href="'/chat/' + chat.masterId" calss="v-col" variant="tonal" color="#924AFE" style="align-self: center;">
+              <v-btn v-if="token" :href="'/chat/' + chat.masterId" calss="v-col" variant="tonal" color="#924AFE" style="align-self: center;">
                 참여하기
               </v-btn>
-
             </v-row>
           </div>
         </template>
@@ -58,7 +57,7 @@
 
       <div v-else>
         <v-alert class="ma-16" type="warning">
-          채팅이 존재하지 않습니다.
+          {{ alertMsg}}
         </v-alert>
       </div>
     </v-card>
@@ -67,29 +66,28 @@
 </template>
 
 <script setup>
-import {onBeforeMount, onUnmounted, ref, watch} from 'vue';
+import { onBeforeMount, onUnmounted, ref, watch} from 'vue';
 import { api, createdDiff } from '@/common.js';
 import {useAuthStore} from "@/stores/auth.store.js";
 
 const page = ref(1);
 const chats = ref([]);
+const alertMsg = ref("")
+let token = null;
 
-const token = JSON.parse(useAuthStore().user.token).accessToken;
-let ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
-ws.onmessage = (resp) => {
+if(useAuthStore().user != undefined){
+  token = JSON.parse(useAuthStore().user.token).accessToken;
+}
+const ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
+ws.onmessage = () => {
   loadChats();
 }
-
 const load = async ({ done }) => {
   done('empty')
 }
 
 watch(page, () => {
-  loadChats();
-})
-onBeforeMount(() => {
-  loadChats();
-
+    loadChats();
 })
 onUnmounted(() => {
   if (ws) {
@@ -98,10 +96,23 @@ onUnmounted(() => {
 });
 
 const loadChats = ()=> {
-  api(`chats/type/${page.value}`, "GET", {})
-      .then((resp) => {
-          chats.value = resp;
-      })
+  chats.value = [];
+
+  if(page.value===4 && token ===null){
+    alertMsg.value ="로그인 후 이용가능한 서비스입니다. ";
+  }else{
+    alertMsg.value = "잠시만 기다려 주세요...";
+
+    api(`chats/type/${page.value}`, "GET", {})
+        .then((resp) => {
+          // 응답이 늦을 시 page == 4에서 실행됨
+          console.log(resp)
+          if(page.value !== 4 || token !==null){
+            alertMsg.value = "채팅이 존재하지 않습니다. "
+            chats.value = resp;
+          }
+        })
+  }
 }
 const search = () => {
 
