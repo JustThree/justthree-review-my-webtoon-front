@@ -59,8 +59,6 @@ const router= createRouter({
         {path:'/comm/:boardId', component: getBoard, name: 'boardOne'},
         {path:'/notice', component: noticeBoardList, name: 'noticeBoardList'},
 
-        {path:'/mypage/userinfo',component:UserInfo},
-        {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
         ///////////////////마이페이지/////////////////
         //유저 정보 페이지
