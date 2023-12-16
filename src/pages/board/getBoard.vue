@@ -19,9 +19,12 @@
                   :variant="board.boardLikeYn ? 'outlined' : 'text'"
                   @click="toggleLike">
                   <v-icon left>{{ board.boardLikeYn ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-                  {{ board.boardLikeYn ? '좋아요 취소' : '좋아요' }}
+<!--                  {{ board.boardLikeYn ? '좋아요 취소' : '좋아요' }}-->
               </v-btn>
-              <span>좋아요 수 {{ board.boardLikeCount }}</span>
+              <span>
+                  <v-icon left>mdi-heart</v-icon>
+                  {{ board.boardLikeCount }}
+              </span>
           </v-col>
           <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
               <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
