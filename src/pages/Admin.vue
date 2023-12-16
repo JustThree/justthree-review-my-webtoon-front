@@ -7,9 +7,11 @@
             density="compact"
             nav
         >
-          <v-list-item prepend-icon="mdi-home" title="홈" value="home"></v-list-item>
-          <v-list-item prepend-icon="mdi-account" title="회원관리" value="회원관리"></v-list-item>
-          <v-list-item prepend-icon="mdi-forum" title="About" value="about"></v-list-item>
+          <router-link to="/home"><v-list-item prepend-icon="mdi-home" title="홈" value="home"></v-list-item></router-link>
+          <router-link to="/userAdmin"><v-list-item prepend-icon="mdi-account-group" title="회원관리" value="User"></v-list-item></router-link>
+          <router-link to="/notice"><v-list-item prepend-icon="mdi-cube" title="공지글 관리" value="Notice"></v-list-item></router-link>
+          <router-link to="/board"><v-list-item prepend-icon="mdi-widgets" title="게시글 관리" value="Board"></v-list-item></router-link>
+          <router-link to="/totalStatistics"><v-list-item prepend-icon="mdi-chart-bar" title="전체 통계" value="statistic"></v-list-item></router-link>
         </v-list>
     </aside>
     <section class="section1">
@@ -63,5 +65,9 @@
 .text3 {
   position: relative;
 
+}
+a{
+  text-decoration:none;
+  color : black;
 }
 </style>

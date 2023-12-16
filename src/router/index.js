@@ -8,7 +8,6 @@ import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
 import Main from "@/pages/Main/Main.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue"
-import Admin from "@/pages/Admin.vue";
 import ResetPassword from "@/pages/ResetPassword.vue"
 
 //board(SY)
@@ -33,8 +32,13 @@ import UserInfo from "@/pages/MyPage/UserInfo.vue";
 import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
 import Follow from "@/pages/MyPage/Follow.vue";
 
-
-
+//Admin
+import Admin from "@/pages/Admin.vue";
+import AdminHome from "@/components/admin/AdminHome.vue";
+import BoardAdmin from "@/components/admin/BoardAdmin.vue";
+import NoticeAdmis from "@/components/admin/NoticeAdmis.vue";
+import TotalStatistics from "@/components/admin/TotalStatistics.vue";
+import UserAdmin from "@/components/admin/UserAdmin.vue";
 
 const router= createRouter({
     history: createWebHistory(),
@@ -52,7 +56,6 @@ const router= createRouter({
         {path:'/user/register', component:Join},
         {path:'/forgot-password', component:ForgotPassword},
         {path:'/reset-password', component:ResetPassword},
-        {path:'/admin', component:Admin},
         {path:'/tui', component: TestUserInfo},
         {path:'/search', component:Search},
 
@@ -79,6 +82,32 @@ const router= createRouter({
         {path:'/mypage/interested/:usersId',component:Interest},
         //팔로우
         {path:'/mypage/follow/:usersId',component:Follow},
+
+        //////////////////관리자페이지//////////////////////
+        {path:'/admin/',
+            component:Admin,
+            children: [
+                {
+                    path : "/home",
+                    component : AdminHome
+                },
+                {
+                    path : "/board",
+                    component : BoardAdmin
+                },
+                {
+                    path : "/notice",
+                    component : NoticeAdmis
+                },
+                {
+                    path : "/totalStatistics",
+                    component : TotalStatistics
+                },
+                {
+                    path : "/userAdmin",
+                    component : UserAdmin
+                }
+            ]},
     ]
 })
 
