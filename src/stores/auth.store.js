@@ -36,7 +36,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     // 로그인한 유저 정보 (토큰, 닉네임, 프로필) : 없으면 null
     const user = ref(JSON.parse(localStorage.getItem('user')));
-    // const token = ref(JSON.parse(user.value.token));
     // 로그인 후 이동할 페이지 경로 (없으면 홈) -> 로그인 전에 접근했던 페이지로 이동하기 위함
     const returnUrl = ref(null);
 
@@ -46,7 +45,6 @@ export const useAuthStore = defineStore('auth', () => {
                 headers: {'X-Requested-With': 'XMLHttpRequest'}});
             // const response = await api(import.meta.env.VITE_LOGIN_API_PATH,"post",{"usersEmail" : email, "usersPw" : password});
             await setUser(user, response);
-
 
             router.push(returnUrl.value != null ? returnUrl.value : '/');
 
