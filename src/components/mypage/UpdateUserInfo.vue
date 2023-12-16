@@ -46,6 +46,9 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import {api} from "@/common.js";
 
+const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_CHECK_NICKNAME_API_PATH;
+
+
 const userProfileImageUrl = "@/assets/images/blackDUK.png";
 const selectedFile = ref(null);
 const newNickname = ref("");

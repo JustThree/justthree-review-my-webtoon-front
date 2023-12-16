@@ -5,7 +5,7 @@
       <img alt="logo" src="@/assets/images/blackDUK.png" @click="$router.push('/')">
 
       <v-toolbar-title class="ml-2">
-        <v-btn href="/webtoon"> 웹툰 </v-btn>
+        <v-btn @click="moveWebtoon"> 웹툰 </v-btn>
         <v-btn href="/comm"> 커뮤니티 </v-btn>
         <v-btn href="/chatlist"> 채팅 </v-btn>
       </v-toolbar-title >
@@ -13,6 +13,7 @@
       <v-toolbar-items class="w-25">
         <v-card-text class="mt-1">
           <v-text-field
+              v-model="searchText"
               :loading = "loading"
               density="compact"
               variant="outlined"
@@ -51,7 +52,7 @@ import router from "@/router/index.js";
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore);
 const loading = ref(false);
-
+const searchText = ref("");
 const goToMymage = async () =>{
   await api('api/getUserId','get').then(res => {
     router.push(`/mypage/userinfo/${res}`);
@@ -61,14 +62,15 @@ const goToMymage = async () =>{
 const onClick = () => {
   // 검색 중 로딩 표시
   loading.value = true;
-
-  // api("/webtoon/search", "GET", {})
-  //     .then((resp) => {
-  //       // 검색이 끝나면 로딩표시 해제
-  //       loading.value = false
-  //     })
+  router.push(`/search?searchword=`+searchText.value);
+  loading.value = false;
 }
-
+function moveWebtoon(){
+  sessionStorage.removeItem("page")
+  sessionStorage.removeItem("order")
+  sessionStorage.removeItem("genre")
+  router.push("/webtoon");
+}
 
 </script>
 <style scoped>
