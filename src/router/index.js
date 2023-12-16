@@ -91,6 +91,7 @@ const router= createRouter({
         {path:'/mypage/userinfo',component:UserInfo},
         {path:'/mypage/userinfo/updateuserinfo',component:UpdateUserInfo},
 
+
         ///////////////////마이페이지/////////////////
         //유저 정보 페이지
         {path:'/mypage/userinfo/:usersId',component:UserInfo},
