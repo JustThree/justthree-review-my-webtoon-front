@@ -3,12 +3,6 @@
       <v-row class="frame-top">
           <v-col class="frame-title" cols="12">
               <div class="title-text">{{board.title}}</div>
-<!--              <v-text-field
-                  class="input-title"
-                  variant="standard"
-                  :style="{ 'font-weight': 700 }">
-                  {{board.title}}
-              </v-text-field>-->
           </v-col>
           <v-col class="frame-title" cols="2">
               <span>{{board.userNickname}}</span>
@@ -126,40 +120,39 @@ const board = ref({
 });
 
 const route = useRoute();
-//const replyList = ref([]);
 
 //로그인한 유저 확인
 let loginUsersId = ref();
 
-//Rereplylist
+//rereplylist
 let boardreReplyList = ref([]);
 
-//게시글 좋아요 버튼 관련
+//게시글 좋아요 등록 및 취소
 async function toggleLike() {
-    console.log(board.value.boardLikeYn);
+    //console.log(board.value.boardLikeYn);
     if(!board.value.boardLikeYn) {  //좋아요 등록
         const response = await api("board/likes", "POST", {
             "users": {"usersId": loginUsersId.value},
             "boardId": board.value.boardId
         });
         if (response instanceof Error) {
-            console.log(response.response.data); //서버에서 예외처리 필요
+            console.log(response.response.data);
         } else {
             if (response) {
-                console.log("좋아요 등록");
-                await getData();
+                board.value.boardLikeYn= true;
+                board.value.boardLikeCount++;
             } else {
                 alert("등록 실패..");
             }
         }
     }else{ //좋아요 취소
-        const response = await api("board/likes/"+board.value.boardId, "DELETE"); //apiToken으로 변경해야함
+        const response = await api("board/likes/"+board.value.boardId, "DELETE");
         if (response instanceof Error) {
-            console.log(response.response.data); //서버에서 예외처리 필요
+            console.log(response.response.data);
         } else {
             if (response) {
-                console.log("좋아요 취소");
-                await getData();
+                board.value.boardLikeYn= false;
+                board.value.boardLikeCount--;
             } else {
                 alert("삭제 실패..");
             }
@@ -167,21 +160,19 @@ async function toggleLike() {
     }
 }
 
-//게시글 수정 버튼 클릭 시
+//게시글 수정
 function gotoUpdateBoard(){
-    console.log(board.value.boardId);
-    //router.push({ name: 'updateBoard', params: boardOne.boardId});
-    //console.log(board.boardId);
+    //console.log(board.value.boardId);
     let bId = board.value.boardId;
     router.push({ name: 'updatedBoard', params: { bId}});
 }
-//게시글 삭제 버튼 클릭 시
+//게시글 삭제
 async function delBoard(){
     if(confirm("정말 삭제하시겠습니까?")){
         //let bId = board.value.boardId;
-        const response = await api("board/"+board.value.boardId, "DELETE"); //apiToken으로 변경해야함
+        const response = await api("board/"+board.value.boardId, "DELETE");
         if (response instanceof Error) {
-            console.log(response.response.data); //서버에서 예외처리 필요
+            console.log(response.response.data);
         } else {
             if (response) {
                 console.log("삭제");
@@ -194,46 +185,46 @@ async function delBoard(){
     }
 }
 
-//댓글 등록 버튼 클릭
+//댓글 등록
 const txtReply = ref('');
 const submitReply = async () => {
     console.log(loginUsersId.value);
     if(!loginUsersId.value){
-        alert("로그인해야 댓글 등록 가능합니다.");
-        router.replace("/user/login");
-        return;
+            alert("로그인해야 댓글 등록 가능합니다.");
+            router.replace("/user/login");
+            return;
     }
     if(!txtReply.value.trim()){
-        alert('댓글을 입력해주세요');
-        return;
+            alert('댓글을 입력해주세요');
+            return;
     }
-   const response = await api("board/reply", "POST", {
-        "users" : {"usersId": loginUsersId.value},
-        "boardId": board.value.boardId,
-        "boardReplyContent": txtReply.value,
-        "parentReplyId" : 0
-    });
-    if (response instanceof Error) {
-        console.log(response.response.data); //서버에서 예외처리 필요
-    } else {
+   const response = await api("boardreply", "POST", {
+            "users" : {"usersId": loginUsersId.value},
+            "boardId": board.value.boardId,
+            "boardReplyContent": txtReply.value,
+            "parentReplyId" : 0
+   });
+   if (response instanceof Error) {
+            console.log(response.response.data); //서버에서 예외처리 필요
+   } else {
         if (response) {
-            console.log("성공");
-            alert("댓글이 성공적으로 등록되었습니다.");
-            txtReply.value="";
-            await getData();
+                console.log("성공");
+                alert("댓글이 성공적으로 등록되었습니다.");
+                txtReply.value="";
+                router.go();
         } else {
-            alert("등록 실패..");
+              alert("등록 실패..");
         }
-    }
+   }
 }
-//댓글 삭제 처리
+//댓글 삭제 처리[Component(BoardReply) 관련]
 const handleDeleteReply = async (delBoardReply) =>{
     console.log("삭제 예정", delBoardReply);
     console.log("삭제 예정", delBoardReply.boardReplyId);
     if(confirm("정말 삭제하시겠습니까?")){
-        const response = await api("board/reply/"+delBoardReply.boardReplyId, "DELETE"); //apiToken으로 변경해야함
+        const response = await api("boardreply/"+delBoardReply.boardReplyId, "DELETE");
         if (response instanceof Error) {
-            console.log(response.response); //서버에서 예외처리 필요
+            console.log(response.response);
         } else {
             if (response) {
                 console.log("삭제");
@@ -245,14 +236,14 @@ const handleDeleteReply = async (delBoardReply) =>{
         }
     }
 };
-//댓글 수정 처리
+//댓글 수정 처리[Component(BoardReply) 관련]
 const handleUpdateReply = async (editedReply)=>{
     //console.log("수정 요청 예정", editedReply);
     if(!editedReply.updatedReplyContent.trim()){
         alert('내용을 입력해주세요');
         return;
     }
-    const response = await api("board/reply/"+editedReply.boardReplyId, "PUT", {
+    const response = await api("boardreply/"+editedReply.boardReplyId, "PUT", {
         "users" : {"usersId": editedReply.replyUsersId},
         "boardId": editedReply.boardId,
         "boardReplyContent": editedReply.updatedReplyContent
@@ -269,7 +260,7 @@ const handleUpdateReply = async (editedReply)=>{
         }
     }
 }
-//대댓글 등록 처리
+//대댓글 등록 처리[Component(BoardReply) 관련]
 const handleCreateReReply = async (newReReply)=>{
     console.log("newReReply", newReReply);
     if(!loginUsersId.value){
@@ -289,10 +280,9 @@ const handleCreateReReply = async (newReReply)=>{
         "parentReplyId" : newReReply.parentReplyId
         });
         if (response instanceof Error) {
-            console.log(response.response.data); //서버에서 예외처리 필요
+            console.log(response.response.data);
              } else {
             if (response) {
-                console.log("성공");
                 alert("댓글이 성공적으로 등록되었습니다.");
                 await getData();
             } else {
@@ -314,7 +304,7 @@ const getData = async () =>{
                 console.log(errorRes.response);
                 //not found 글 목록으로 이동
             }else{
-                console.log(response);
+                //console.log(response);
                 board.value = response;
                 // 댓글, 대댓글
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);

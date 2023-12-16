@@ -26,6 +26,7 @@ const board = ref({
   boardImgMapList: [],
 });
 
+//글 등록 처리[Component(BoardForm) 관련]
 const createBoard = async (board) => {
   //console.log(board.boardFiles);
   if(board.title.trim() === '' || board.content.trim() === '') {
@@ -39,7 +40,7 @@ const createBoard = async (board) => {
     }
     formData.append("noticeYn", 0);// 0: 자유 1: 공지
     formData.append("users", loginUsersId.value ); // users_id
-    const response = await api("board", "POST", formData); //apiToken으로 변경해야함
+    const response = await api("board", "POST", formData);
     if (response instanceof Error) {
       console.log(response.response.data); //서버에서 예외처리 필요
     } else {
