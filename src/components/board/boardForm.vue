@@ -2,37 +2,41 @@
   <v-container>
     <v-row class="frame-title">
       <v-col cols="12">
-        <v-text-field
-            counter
-            class="input-title"
-            variant="standard"
-            v-model="board.title"
-            maxlength="30"
-            bg-color="#EDE7F6"
-            :style="{ 'font-weight': 700 }"
-            placeholder="글 제목을 입력해주세요(30자 이내)">
-        </v-text-field>
+          <div>
+            <v-text-field
+                counter
+                class="input-title"
+                variant="standard"
+                v-model="board.title"
+                maxlength="30"
+                bg-color="#EDE7F6"
+                :style="{ 'font-weight': 700 }"
+                placeholder="글 제목을 입력해주세요(30자 이내)">
+            </v-text-field>
+          </div>
       </v-col>
     </v-row>
     <v-row class="frame-content">
       <v-col cols="12">
-        <v-textarea
-            counter
-            clearable
-            no-resize
-            variant="outlined"
-            clear-icon="mdi-close-circle"
-            bg-color="white"
-            v-model="board.content"
-            placeholder="작성 규칙 &#13;&#10; - 존댓말(높임말) 사용 &#13;&#10; - 광고 및 홍보성 게시글은 사전고지 없이 삭제 처리되며 내용에 따라 강퇴 조치">
-        </v-textarea>
+          <div>
+            <v-textarea
+                counter
+                clearable
+                no-resize
+                variant="outlined"
+                clear-icon="mdi-close-circle"
+                bg-color="white"
+                v-model="board.content"
+                placeholder="작성 규칙 &#13;&#10; - 존댓말(높임말) 사용 &#13;&#10; - 광고 및 홍보성 게시글은 사전고지 없이 삭제 처리되며 내용에 따라 강퇴 조치">
+            </v-textarea>
+              </div>
       </v-col>
       <v-file-input
           multiple
           v-model="board.boardFiles"
       ></v-file-input>
     </v-row>
-    <!-- 이미지 첨부파일   -->
+    <!-- [게시글 수정 시]이미지 첨부파일   -->
     <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
       <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
         <div class="text-subtitle-2">{{imgMap.originName}}</div>

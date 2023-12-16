@@ -29,7 +29,7 @@ const board = ref({
 });
 const route = useRoute();
 
-//기존 데이터 파싱
+//데이터 조회
 onMounted(async () =>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
@@ -51,7 +51,7 @@ onMounted(async () =>{
     }
   }
 });
-//글 수정
+//글 수정 처리[Component(BoardForm) 관련]
 const updateBoard = async (board) => {
   console.log(board);
   if(board.title.trim() === '' || board.content.trim() === '') {
@@ -66,33 +66,30 @@ const updateBoard = async (board) => {
     formData.append("noticeYn", 0);// 0: 자유 1: 공지
     formData.append("users", loginUsersId.value); // users_id
 
-    const response = await api("board/"+route.params.boardId, "PUT", formData); //apiToken으로 변경해야함
+    const response = await api("board/"+route.params.boardId, "PUT", formData);
     if (response instanceof Error) {
-      console.log(response.response.data); //서버에서 예외처리 필요
+      console.log(response.response.data);
     } else {
       if (response) {
-        console.log("성공");
         alert("글이 성공적으로 수정되었습니다.");
-        window.location.reload();
-        //router.replace("/boardlist"); //글 상세조회 페이지로 이동
+        router.go(-1);
       } else {
         alert("수정 실패..");
       }
     }
   }
 };
-//글 삭제
+//글 삭제 처리[Component(BoardForm) 관련]
 const deleteBoard = async (board) => {
   console.log(board);
   if(confirm("정말 삭제하시겠습니까?")){
-      const response = await api("board/"+board.boardId, "DELETE"); //apiToken으로 변경해야함
+      const response = await api("board/"+board.boardId, "DELETE");
       if (response instanceof Error) {
-          console.log(response.response.data); //서버에서 예외처리 필요
+          console.log(response.response.data);
       } else {
           if (response) {
-              console.log("삭제");
               alert("글이 삭제되었습니다.");
-              router.push("/comm"); //왜 이동안됨
+              router.push("/boardslist/comm");
                } else {
               alert("삭제 실패..");
           }
