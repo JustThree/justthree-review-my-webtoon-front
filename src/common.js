@@ -28,23 +28,6 @@ const api = async (urn, method, data) => {
         url,
         data
     }).catch(e => {
-        /*const errResStatus = e.response.status;
-        if (errResStatus === 401 || errResStatus === 403) {
-            alert("권한이 없습니다. 로그아웃 되었습니다. 다시 로그인해주세요.");
-            store.logout();
-        }else if(errResStatus === 409){
-            if(e.response.data.refresh === "true"){
-                api("api/auth/accessoken", 'get', '').then(r  => {
-                    user.value.accessToken = "Bearer " + r.toString();
-                    alert("권한이 갱신되었습니다. 다시 시도 해주세요");
-
-                }).catch(e => {
-                    alert("권한이 만료되었습니다. 다시 로그인 해주세요.");
-                    store.logout();
-                });
-            }
-        }*/
-        console.log(e);
         return { data: e}; //error 발생 시 e 반환
     })).data;
 }

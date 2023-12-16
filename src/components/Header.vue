@@ -6,7 +6,7 @@
 
       <v-toolbar-title class="ml-2">
         <v-btn @click="moveWebtoon"> 웹툰 </v-btn>
-        <v-btn href="/boardslist/comm"> 커뮤니티 </v-btn>
+        <v-btn herf="/comm"> 커뮤니티 </v-btn>
         <v-btn href="/chatlist"> 채팅 </v-btn>
       </v-toolbar-title >
 

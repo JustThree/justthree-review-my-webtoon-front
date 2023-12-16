@@ -60,18 +60,19 @@
       >
         회원가입
       </v-btn>-->
+      <div class="registerBtnContainer">
+        <v-btn
+            class="mb-8 basicBtnColor registerBtn"
+            color="black"
+            size="large"
+            variant="tonal"
+            href="/user/register"
+        >
+          회원가입
+        </v-btn>
+      </div>
     </v-card>
-    <div class="registerBtnContainer">
-      <v-btn
-          class="mb-8 basicBtnColor registerBtn"
-          color="black"
-          size="large"
-          variant="tonal"
-          href="/user/register"
-      >
-        회원가입
-      </v-btn>
-    </div>
+
 
   </div>
 
