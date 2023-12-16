@@ -11,8 +11,7 @@ const title = props.title;
   >
     <h2 v-text="title"></h2>
     <v-slide-group
-        v-model="model"
-        class="pa-4"
+        class="pa-4 slide-fade"
         selected-class="bg-success"
         show-arrows
     >
@@ -38,6 +37,7 @@ const title = props.title;
               height="100%"
               width="100%"
               style="object-fit: cover"
+              cover="true"
               :src="itemWebtoon.imgUrl"
               @click="toggle"
           >
@@ -53,7 +53,9 @@ const title = props.title;
               v-text="itemWebtoon.writer"
           ></div>
           <div class="d-flex fill-height align-center justify-center">
-            <v-scale-transition>
+            <v-scale-transition
+
+            >
               <v-icon
                   v-if="isSelected"
                   color="white"
@@ -81,5 +83,8 @@ h2 {
 }
 .no-underline{
   text-decoration: none;
+}
+.slide-fade-enter-active {
+  transition: all 2s ease;
 }
 </style>

@@ -155,27 +155,22 @@ fetchData()
           >
 
             <v-col
-                class="v-col-2 m-2"
+                class="v-col-5 ml-2 mt-2"
             >
 
-              <v-img
-                  class="v"
-                  :src="item.imgUrl"
-                  width="40"
-                  height="40"
-              ></v-img>
+              <img
+                  style="width:40px;height:40px"
+                  :src="item.imgUrl">
+              <router-link :to="'/mypage/userinfo/' + item.replyUserId"
+                           class="no-color-line">
+                <span
+                    class="ml-4 font-weight-bold"
+                    style="color:black"
+                    v-text="item.userNickName">
+                </span>
+              </router-link>
             </v-col>
-            <router-link :to="'/mypage/userinfo/' + item.replyUserId"
-                         class="no-color-line"
 
-            >
-            <v-col
-                style="color:black"
-                v-text="item.userNickName"
-            >
-
-            </v-col>
-            </router-link>
           </v-row>
           <v-divider></v-divider>
           <v-row>
@@ -186,9 +181,8 @@ fetchData()
                            class="no-color-line"
               >
               <div v-text="item.content"
-                   style="
-            min-height:150px
-            ">
+                   class="ml-2"
+                   style="min-height:150px">
 
               </div>
               </router-link>
@@ -196,37 +190,34 @@ fetchData()
           </v-row>
           <v-divider></v-divider>
           <v-row
-              class="m-2"
+              class="ml-2 mb-2"
           >
             <v-col
                 class="v-col-1"
             >
               <v-icon
                   color="gray "
-                  size="24"
+                  size="16"
                   icon="mdi-thumb-up"
               ></v-icon>
+              <span
+                  class="ml-2"
+              v-text="item.heartCount">
+              </span>
             </v-col>
-            <v-col
-                class="v-col-1"
-                v-text="item.heartCount"
-            >
-
-            </v-col
-            >
             <v-col
                 class="v-col-1"
             >
               <v-icon
                   color="gray "
-                  size="24"
+                  size="16"
                   icon="mdi-chat-outline"
               ></v-icon>
-            </v-col>
-            <v-col
-                class="v-col-1"
-                v-text="item.replyCount"
-            >
+              <span
+                  class="ml-2"
+                  v-text="item.replyCount"
+              >
+            </span>
             </v-col>
           </v-row>
 

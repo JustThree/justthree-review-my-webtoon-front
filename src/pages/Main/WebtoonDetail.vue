@@ -192,6 +192,7 @@ function submitReview(){
           <v-img
               :src="data.imgUrl"
               height="300px"
+              cover="true"
           >
           </v-img>
         </div>

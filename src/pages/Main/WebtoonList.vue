@@ -29,7 +29,13 @@ const genreObj = {
   "코믹" : "comic",
   "무협" : "martialarts"
 }
+// 페이지네이션 딜레이
+const loadContent = ref(false);
 
+function sleep(ms){
+  const wakeUpTime = Date.now() + ms;
+  while (Date.now() < wakeUpTime) {}
+}
 
 // 뒤로가기 위한 세션값 저장
 if (sessionStorage.getItem("page")){
@@ -70,6 +76,7 @@ watch(
 
 // 페이지네이션
 const fetchData = async () => {
+  loadContent.value = true
   try {
     const response = await api("api/webtoon?page="
     + (queryString.value.page -1)
@@ -81,6 +88,8 @@ const fetchData = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+  sleep(500)
+  loadContent.value = false
 };
 
 
@@ -142,7 +151,7 @@ fetchData()
         </v-col>
       </v-row>
         <v-row class="justify-center"
-        style="height:800px">
+        style="height:1000px">
         <v-col v-for=" (item, idx) in pageContents"
                cols="2"
                style="min-height:150px
@@ -155,28 +164,37 @@ fetchData()
 <!--              이미지 텍스트 위치 맞추기-->
               <v-img
                   :src="item.imgUrl"
-                  width="100px"
-                  height="100px"
+                  width="150px"
+                  height="150px"
                   alt="https://vuetifyjs.com/en/"
+                  cover="true"
               >
               </v-img>
-              <div v-text="(item.title.length > 10)? item.title.substring(0,10) + '...' : item.title">
+              <div
+                  style="font-weight:1000; transition: 2s"
+                  v-text="(item.title.length > 15)? item.title.substring(0,15) + '...' : item.title">
               </div>
             </div>
           </router-link>
         </v-col>
 
       </v-row>
+      <v-container>
+      <v-row>
+      <v-col>
           <v-pagination
               class="v-row v-md-12"
               v-model="queryString.page"
               :length="totalPages-1"
+              :disabled="loadContent"
               total-visible="8"
-              active-color=#5302FE
-          >
+              active-color=#5302FE>
             <!-- totalPages 0부터 시작-->
           </v-pagination>
+      </v-col>
+      </v-row>
     </v-container>
+  </v-container>
   </v-container>
 </template>
 
