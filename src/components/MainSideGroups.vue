@@ -66,6 +66,19 @@ const title = props.title;
               ></v-icon>
             </v-scale-transition>
           </div>
+          <div
+              style="color:#555765"
+          >
+            <span>평균</span>
+            <v-icon
+                size="15"
+                icon="mdi-star"
+                color=#555765
+            ></v-icon>
+            <span
+                v-text="itemWebtoon.starAvg ? (itemWebtoon.starAvg/2).toFixed(1) : '0.0'"
+            ></span>
+          </div>
         </v-card>
 
         </router-link>

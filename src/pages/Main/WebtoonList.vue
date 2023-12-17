@@ -174,6 +174,19 @@ fetchData()
                   style="font-weight:1000; transition: 2s"
                   v-text="(item.title.length > 15)? item.title.substring(0,15) + '...' : item.title">
               </div>
+              <div
+                style="color:#555765"
+              >
+                <span>평균</span>
+                <v-icon
+                    size="15"
+                    icon="mdi-star"
+                  color=#555765
+                ></v-icon>
+                <span
+                    v-text="item.starAvg ? (item.starAvg/2).toFixed(1) : '0.0'"
+                ></span>
+              </div>
             </div>
           </router-link>
         </v-col>

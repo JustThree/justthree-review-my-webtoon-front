@@ -7,7 +7,6 @@ const route = useRoute();
 let type = 1;
 let content = ref([[],[],[],[]]);
 let pages = ref([0,0,0,0]);
-let ends = ref(true,true,true,true)
 let size = 24;
 const typeJson = {
   1:"title",
@@ -123,6 +122,7 @@ type = 1
               <v-img
                   :src="item.imgUrl"
                   aspect-ratio="1"
+                  cover="true"
               ></v-img>
               <div
               v-text="item.title + '/' + item.writer">
