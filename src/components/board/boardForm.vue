@@ -39,13 +39,11 @@
     <!-- [게시글 수정 시]이미지 첨부파일   -->
     <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
       <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
-        <div class="text-subtitle-2">{{imgMap.originName}}</div>
-        <v-img
-            class="bg-white"
-            width="300"
-            :src=imgMap.accessUrl
-            cover
-        ></v-img>
+          <div class="image-container">
+              <v-img class="bg-white" width="300" :src="imgMap.accessUrl" cover></v-img>
+              <v-btn class="delete-button" @click="removeImage(imgMap.imgId)">삭제</v-btn>
+          </div>
+          <div class="text-subtitle-2">{{imgMap.originName}}</div>
       </div>
     </div>
     <v-row class="frame-bottom">
@@ -69,8 +67,6 @@ const props = defineProps({
     required: true
   },
 })
-
-
 /*const board = ref({
   title: '',
   content: '',
@@ -78,8 +74,15 @@ const props = defineProps({
   noticeYn: 0,
   users: ''
 });*/
-
-
+// [이미지 수정] 삭제 기능 추가
+const removeImage = (imgId) => {
+    console.log("imgId", imgId);
+    const idx = props.board.boardImgMapList.findIndex(imgMap => imgMap.imgId === imgId); // imgId를 사용하여 인덱스 찾기
+    if (idx !== -1) {
+        props.board.boardImgMapList.splice(idx, 1); // 해당 인덱스의 이미지 데이터를 배열에서 제거
+    }
+    console.log(props.board.boardImgMapList);
+};
 const emit = defineEmits(['submit']);
 const submitBoard = () => {
   //emit('submit', board.value); //등록
@@ -90,9 +93,16 @@ const submitBoard = () => {
 const deleteBoard = () => {
   emit('deleteBoard', props.board); // delete 이벤트 emit
 }
-
 </script>
-
 <style>
+.image-container {
+    position: relative; /* 부모 요소에 대해 상대적인 위치 설정 */
+}
 
+.delete-button {
+    position: absolute;
+    top: 5px; /* 삭제 버튼의 상단 위치 조정 */
+    right: 5px; /* 삭제 버튼의 우측 위치 조정 */
+    z-index: 1; /* 다른 요소 위에 겹쳐지도록 설정 */
+}
 </style>
