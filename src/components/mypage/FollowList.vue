@@ -28,13 +28,13 @@
                 <v-card-title v-if="item.followingNickname" class="text-h5">{{ item.followingNickname }}.</v-card-title>
                 <v-card-title v-else class="text-h5">{{ item.followerNickname }}.</v-card-title>
                 <v-card-subtitle>하이</v-card-subtitle>
-                <v-card-actions>
-                  <v-btn class="ms-2" variant="outlined" size="small" @click="handleFollowButtonClick(item.usersId)">팔로우 버튼</v-btn>
-                </v-card-actions>
+                <div @click="handleFollowButtonClick(item.followId)" >
+                  <v-btn variant="text" :class="fav ? 'text-red' : ''" icon="mdi-heart" @click="toggleFav(item.fav)"></v-btn>
+                </div>
               </div>
 
               <v-avatar class="ma-3" size="125" rounded="0">
-                <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"></v-img>
+                <img src="../../assets/images/blackDUK.png" alt="">
               </v-avatar>
             </div>
           </v-card>
@@ -50,7 +50,7 @@
 <script setup>
 import {api} from '@/common.js'
 import {defineProps, onBeforeMount, reactive, ref, watch} from "vue";
-
+const fav = ref(true);
 const props = defineProps(['usersId']);
 let usersId=props.usersId;
 const tab = ref(1);
@@ -76,6 +76,9 @@ const sortBtn=()=>{
     console.error("API Error:", error);
   }
 }
+const toggleFav = (item) => {
+  item.fav = !item.fav;
+};
 const goBack = () => {
   window.history.back();
 };
