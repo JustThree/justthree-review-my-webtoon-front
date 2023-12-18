@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['title','webtoons'])
+const props = defineProps(['title','webtoons','color'])
 const title = props.title;
 
 </script>
@@ -8,11 +8,12 @@ const title = props.title;
   <v-sheet
       class="mx-auto"
       max-width="1300"
+      :color="color"
   >
-    <h2 v-text="title"></h2>
+    <h2 class="ml-5 pt-5  pl-15"
+        v-text="title"></h2>
     <v-slide-group
-        v-model="model"
-        class="pa-4"
+        class="pl-5 slide-fade"
         selected-class="bg-success"
         show-arrows
     >
@@ -38,6 +39,7 @@ const title = props.title;
               height="100%"
               width="100%"
               style="object-fit: cover"
+              cover="true"
               :src="itemWebtoon.imgUrl"
               @click="toggle"
           >
@@ -53,7 +55,9 @@ const title = props.title;
               v-text="itemWebtoon.writer"
           ></div>
           <div class="d-flex fill-height align-center justify-center">
-            <v-scale-transition>
+            <v-scale-transition
+
+            >
               <v-icon
                   v-if="isSelected"
                   color="white"
@@ -61,6 +65,19 @@ const title = props.title;
                   icon="mdi-close-circle-outline"
               ></v-icon>
             </v-scale-transition>
+          </div>
+          <div
+              style="color:#555765"
+          >
+            <span>평균</span>
+            <v-icon
+                size="15"
+                icon="mdi-star"
+                color=#555765
+            ></v-icon>
+            <span
+                v-text="itemWebtoon.starAvg ? (itemWebtoon.starAvg/2).toFixed(1) : '0.0'"
+            ></span>
           </div>
         </v-card>
 
@@ -81,5 +98,8 @@ h2 {
 }
 .no-underline{
   text-decoration: none;
+}
+.slide-fade-enter-active {
+  transition: all 2s ease;
 }
 </style>
