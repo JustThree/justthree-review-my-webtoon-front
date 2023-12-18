@@ -9,7 +9,6 @@ import {useAuthStore} from "@/stores/auth.store.js";
 
 const authStore = useAuthStore()
 const route = useRoute();
-
 // 페이징 관련
 const pageContents = ref();
 const totalPages = ref();
@@ -50,7 +49,8 @@ function submitReview() {
         "POST",
         {
           "content": reviewContent.value
-        }
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
           if (response.status === 400) {
@@ -87,7 +87,9 @@ fetchData()
     >
     리뷰
   </span>
-    <v-dialog width="1000" height="800px">
+    <v-dialog width="1000" height="800px"
+              transition="false"
+    >
       <template v-slot:activator="{ props }">
         <v-btn
             class="review-btn"
@@ -147,7 +149,7 @@ fetchData()
       <v-card
           class="ma-10 justify-center"
           style="background: #F7F2FA"
-          width="60%"
+          width="40%"
           min-height="200px"
       >
           <v-row

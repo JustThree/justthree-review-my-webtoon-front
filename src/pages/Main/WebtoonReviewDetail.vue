@@ -68,6 +68,8 @@ function likeReview() {
   if (authStore.user) {
     apiToken("api/webtoon/review/reply/like/" + route.params.reviewId,
         "PATCH",
+        {},
+        JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
           alert(response)
           router.go(0);
@@ -87,7 +89,8 @@ function submitReviewReply() {
         "POST",
         {
           content: reviewReplyComment.value
-        }
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
           if (response.status === 400) {
             alert("값이 유효 하지 않아요")
@@ -110,7 +113,8 @@ function fixReview() {
         "PATCH",
         {
           content: fixContent.value
-        }
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
           if (response.status === 400) {
             alert("값이 유효 하지 않아요")
@@ -132,7 +136,9 @@ function removeReview() {
     if (authStore.user) {
       apiToken(
           "api/webtoon/review/" + route.params.reviewId,
-          "DELETE"
+          "DELETE",
+          {},
+          JSON.parse(authStore.user.token).accessToken
       ).then((response) => {
             if (response.status === 400) {
               alert("값이 유효 하지 않아요")
@@ -154,7 +160,9 @@ function removeReviewReply(replyId) {
     if (authStore.user) {
       apiToken(
           "api/webtoon/review/reply/" + replyId,
-          "DELETE"
+          "DELETE",
+          {},
+          JSON.parse(authStore.user.token).accessToken
       ).then((response) => {
             if (response.status === 400) {
               alert("값이 유효 하지 않아요")
@@ -179,7 +187,8 @@ function fixReviewReply(replyId, content) {
         "PATCH",
         {
           content: content
-        }
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
           if (response.status === 400) {
             alert("값이 유효 하지 않아요")

@@ -5,21 +5,20 @@ import {useRoute} from "vue-router";
 
 const route = useRoute();
 let type = 1;
-let content = ref([[],[],[],[]]);
-let pages = ref([0,0,0,0]);
+let content = ref([[],[],[],[],[]]);
+let pages = ref([0,0,0,0,0]);
 let size = 24;
 const typeJson = {
   1:"title",
   2:"outline",
-  3:"writer"
+  3:"writer",
+  4:"user"
 }
 
 
-
-
-const changeType = function (type) {
-  pages = ref([0,0,0,0]);
-  this.type = type;
+const changeType = function (newType) {
+  pages = ref([0,0,0,0,0]);
+  type = newType;
 }
 
 
@@ -63,26 +62,28 @@ const load = (
 //
 watch(
     () =>route.query.searchword,
-    (nowword,lastword) => {
-      content = ref([[],[],[],[]]);
-      pages = ref([0,0,0,0]);
+    () => {
+      content = ref([[],[],[],[],[]]);
+      pages = ref([0,0,0,0,0]);
       type = 1;
       size = 24
       fetchData(1)
       fetchData(2)
       fetchData(3)
+      fetchData(4)
     }
 )
 fetchData(1);
 fetchData(2);
 fetchData(3);
+fetchData(4);
 type = 1
 </script>
 
 <template>
   <v-infinite-scroll :height="800" :items="content[type]"
                      :onLoad="load"
-                     empty-text="만화가 더 없어요"
+                     empty-text="검색하신 결과가 더 없어요"
                       aria-hidden="true">
   <div>
   <v-card
@@ -101,11 +102,14 @@ type = 1
       <v-tab :value="3"
      @click="changeType(3)"
       >작가</v-tab>
+      <v-tab :value="4"
+             @click="changeType(4)"
+      >유저</v-tab>
     </v-tabs>
     <v-window v-model="tab"
     >
       <v-window-item
-          v-for="n in 3"
+          v-for="n in 4"
           :key="n"
           :value="n"
       >

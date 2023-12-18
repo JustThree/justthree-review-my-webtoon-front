@@ -150,8 +150,7 @@ fetchData()
           </v-select>
         </v-col>
       </v-row>
-        <v-row class="justify-center"
-        style="height:1000px">
+        <v-row class="justify-center">
         <v-col v-for=" (item, idx) in pageContents"
                cols="2"
                style="min-height:150px
@@ -171,7 +170,7 @@ fetchData()
               >
               </v-img>
               <div
-                  style="font-weight:1000; transition: 2s"
+                  style="font-weight:1000"
                   v-text="(item.title.length > 15)? item.title.substring(0,15) + '...' : item.title">
               </div>
               <div
