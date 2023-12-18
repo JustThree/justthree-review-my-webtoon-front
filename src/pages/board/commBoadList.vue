@@ -36,7 +36,7 @@
         </v-col>
     </v-row>
     <!-- 글 목록   Frame-->
-    <v-infinite-scroll  class="infinte-frame"  @load="load"  ref="infiniteScroll">
+    <v-infinite-scroll  class="infinte-frame"    :onLoad="load" ref="infiniteScroll">
       <template v-for="(data, idx) in commBoardList" :key="idx">
         <Board :boardone="data"></Board>
       </template>
@@ -65,7 +65,8 @@ const pagingMsg = ref("시간이 조금 걸립니다:)");
 let loginUsersId = ref();
 
 //페이징
-let pageList=ref([1,1,1]); // 초기 조회 / 정렬 / 검색
+let type=2 ;
+let pageList=ref([1, 1, 1, 1]); // 오래된순 정렬 / 조회순 정렬 /최신순 정렬/ 검색
 let page = 1;
 const itemPerPage = 10;
 let sortings = ref("sortDesc");
@@ -89,13 +90,13 @@ const searchKeyword = ref(""); // 검색어
 //검색 함수
 const searchBoard = async () => {
     // 검색어가 비어 있는 경우 아무 작업도 수행하지 않음
+    //page = 1;
     if (!searchKeyword.value.trim()) {
         return;
     }
     console.log(searchKeyword.value);
     // 페이지 리셋 및 검색 결과 초기화
-   pageList[2] = 1;
-    //page[3] = 1;
+    pageList[2] = 1;
     commBoardList.value = [];
     pagingMsg.value = "시간이 조금 걸립니다:)";
     // 검색에 필요한 작업 수행
@@ -109,30 +110,33 @@ const menuitems = ref([
   { title: "최신순" },
 ]);
 const sortList = (sorting) => {
-  console.log(shouldResetPage);
-  if (sorting === "오래된 순") {
-    sorting = "sortAsc";
-  } else if (sorting === "조회수 순") {
-    sorting = "sortViewCntDesc";
-  } else if (sorting === "최신순") {
-    sorting = "sortDesc";
-  }
-  console.log(sorting);
-  console.log(sortings.value); //기존 정렬값
-  if (sorting === sortings.value) {
-    shouldResetPage = false;
-    //return; // 이미 선택된 정렬 조건일 경우 함수 종료
-  }else{ //기존 정렬(sortings)과  선택한 값(sorting)이 다르면 리셋
-    shouldResetPage = true;
-  }
+    page = 1;
+    console.log(shouldResetPage);
+    if (sorting === "오래된 순") {
+        sorting = "sortAsc";
+    } else if (sorting === "조회수 순") {
+        sorting = "sortViewCntDesc";
+    } else if (sorting === "최신순") {
+        sorting = "sortDesc";
+    }
+    console.log(sorting);
+    console.log(sortings.value); //기존 정렬값
+    if (sorting === sortings.value) {
+        shouldResetPage = false;
+        //return; // 이미 선택된 정렬 조건일 경우 함수 종료
+    }else{ //기존 정렬(sortings)과  선택한 값(sorting)이 다르면 리셋
+        shouldResetPage = true;
+    }
 
   if(shouldResetPage){
     page = 1; // 페이지 리셋
     commBoardList.value = []; // 목록 초기화
     pagingMsg .value= "시간이 조금 걸립니다:)"; //메시지 초기화
   }
+
   sortings.value = sorting;
   //shouldResetPage = true; // 페이지 리셋 플래그 설정
+    pagingMsg .value= ""
   getData();
 }
 
@@ -175,7 +179,8 @@ onMounted(async  ()=>{
 
 //페이징
 const load = ({ done }) => {
-    //console.log(done);
+    console.log(pagingMsg.value);
+
     if(pagingMsg.value !== "더 이상 존재하지 않습니다.") { //존재할 경우
         shouldResetPage = false; // 페이지 리셋 방지
         setTimeout(async () => {
