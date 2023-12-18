@@ -14,7 +14,7 @@
     </div>
     <div style="display: flex; justify-content: flex-end;">
       <div>
-        댓글수
+        댓글수 {{boardReplyCount}}
       </div>
       <div>
         /조회수 {{viewCount}}
@@ -31,7 +31,7 @@ const props = defineProps({
   boardone: Object
 });
 
-const {boardId, title, content, created, noticeYn, updated, userEmail, userNickname, viewCount} = toRefs(props.boardone);
+const {boardId, title, content, created, noticeYn, updated, userEmail, userNickname, viewCount, boardReplyCount} = toRefs(props.boardone);
 
 const pprops = toRef(props, "boardone");
 
@@ -43,6 +43,7 @@ watchEffect(()=>{
   userEmail.value = pprops.value.userEmail;
   userNickname.value = pprops.value.userNickname;
   viewCount.value = pprops.value.viewCount;
+    boardReplyCount.value = pprops.value.boardReplyCount;
 });
 </script>
 

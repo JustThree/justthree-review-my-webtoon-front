@@ -136,7 +136,7 @@ const sortList = (sorting) => {
 
   sortings.value = sorting;
   //shouldResetPage = true; // 페이지 리셋 플래그 설정
-    pagingMsg .value= ""
+    //pagingMsg .value= ""
   getData();
 }
 
