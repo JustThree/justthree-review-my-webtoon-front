@@ -104,7 +104,7 @@ function ratingSend() {
 
 // 관심 등록 api
 function interestAdd(){
-  if (authStore.user.token !== null){
+  if (authStore.user && authStore.user.token !== null){
     apiToken(
         "api/webtoon/interest/" +
         route.params.masterId,

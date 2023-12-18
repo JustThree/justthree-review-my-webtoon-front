@@ -26,20 +26,37 @@ const reviewQueryString = ref({
 
 
 // 리뷰 데이터 한번 불러옴
-api("api/webtoon/review/" + route.params.reviewId,
-    "GET",
-).then((response) => {
-  if (response.deleted){
-    alert("삭제된 게시글 입니다.")
-    router.go(-1)
-  }
-      reviewData.value = response;
-      fixContent.value = response.content;
-
-      console.log(fixContent)
+if (authStore.user && authStore.user.token !== null){
+  apiToken("api/webtoon/review/" + route.params.reviewId,
+      "GET",
+      {},
+      JSON.parse(authStore.user.token).accessToken
+  ).then((response) => {
+    if (response.deleted) {
+      alert("삭제된 게시글 입니다.")
+      router.go(-1)
     }
-);
+    reviewData.value = response;
+    fixContent.value = response.content;
 
+    console.log(fixContent)
+  }
+  )}else {
+    api("api/webtoon/review/" + route.params.reviewId,
+        "GET",
+    ).then((response) => {
+          if (response.deleted) {
+            alert("삭제된 게시글 입니다.")
+            router.go(-1)
+          }
+          reviewData.value = response;
+          fixContent.value = response.content;
+
+          console.log(fixContent)
+        }
+    )
+
+}
 // 갑이 바끼면 변경
 watch(
     () => reviewQueryString.value.page,
@@ -262,8 +279,9 @@ function copyToClipboard() {
               >
                 <v-dialog width="1000" height="800px">
             <template v-slot:activator="{ props }">
+
                 <v-btn
-                    v-if="authStore.user.usersId === reviewData.writerId"
+                    v-if="authStore.user && authStore.user.usersId === reviewData.writerId"
                     class="m-2"
                     color="#5302F2"
                     v-bind="props"
@@ -300,15 +318,14 @@ function copyToClipboard() {
           </v-dialog>
 
 
-
-                <v-btn
-                    v-if="authStore.user.usersId === reviewData.writerId"
-                    class="m-2"
-                    color="#5302F2"
-                    @click="removeReview"
-                >
-                  삭제
-                </v-btn>
+                  <v-btn
+                      v-if="authStore.user && authStore.user.usersId === reviewData.writerId"
+                      class="m-2"
+                      color="#5302F2"
+                      @click="removeReview"
+                  >
+                    삭제
+                  </v-btn>
               </span>
             </div>
           </div>
