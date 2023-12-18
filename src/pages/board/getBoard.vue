@@ -276,7 +276,7 @@ const handleCreateReReply = async (newReReply)=>{
         return;
     }
     if(confirm("대댓글은 수정 및 삭제가 안됩니다. 등록하시겠습니까?")){
-        const response = await api("board/reply", "POST", {
+        const response = await api("boardreply", "POST", {
         "users" : {"usersId": loginUsersId.value},
         "boardId": newReReply.boardId,
         "boardReplyContent": newReReply.boardReplyContent,
