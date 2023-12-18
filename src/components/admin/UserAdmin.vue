@@ -66,7 +66,7 @@
       v-model="page"
       :length="totalPages"
       total-visible="8"
-      @input="handlePage"
+      @click="onClick"
       active-color=#5302FE
   >
     <!-- totalPages 0부터 시작-->
@@ -103,7 +103,7 @@ const select = ref(null);
 
 
 onMounted(() => {
-  getUserList();
+  fetchData();
   console.log(userList);
 });
 
