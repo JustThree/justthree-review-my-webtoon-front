@@ -338,7 +338,7 @@ function copyToClipboard() {
                   >평가 </span>
                   <span
                       class="font-weight-bold"
-                      v-text="reviewData.rating ? reviewData.rating/2 + '점' : '평가 없음'"></span>
+                      v-text="reviewData.rating ? (reviewData.rating/2).toFixed(1) + '점' : '평가 없음'"></span>
                 </div>
                 <div
                     class="ml-4 mt-15 content"

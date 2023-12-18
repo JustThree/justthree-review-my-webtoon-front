@@ -236,7 +236,7 @@ function submitReview(){
                     <div>
                       <div
                           class="mid-row-rating-num"
-                          v-text="data.avgRating/2"
+                          v-text="(data.avgRating/2).toFixed(1)"
                       >
                       </div>
                     </div>
@@ -467,7 +467,7 @@ function submitReview(){
                       ></v-icon>
                       <span
                           class="review-rating"
-                        v-text="itemCol.rating ? itemCol.rating/2 : '평가 안함'"
+                        v-text="itemCol.rating ? (itemCol.rating/2).toFixed(1) : '평가 안함'"
                       ></span>
                     </v-col>
                     </v-row>
