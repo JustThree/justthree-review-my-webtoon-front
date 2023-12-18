@@ -21,6 +21,9 @@ const links = ref({
 if (authStore.user) {
   apiToken("api/webtoon/" + route.params.masterId,
       "GET",
+      {}
+      ,
+      JSON.parse(authStore.user.token).accessToken
   ).then((response) => {
     if (response.ageCheck){
         alert("성인 웹툰입니다. 메인으로 이동합니다.")
@@ -87,6 +90,8 @@ function ratingSend() {
         "masterId=" + route.params.masterId +
         "&star=" + rating.value * 2,
         "PUT",
+        {},
+        JSON.parse(authStore.user.token).accessToken
     ).then(() => {
     alert("별점 등록!")
     router.go(0)
@@ -99,11 +104,14 @@ function ratingSend() {
 
 // 관심 등록 api
 function interestAdd(){
-  if (authStore.user){
+  if (authStore.user.token !== null){
     apiToken(
         "api/webtoon/interest/" +
         route.params.masterId,
         "PUT",
+        {
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
           alert(response)
@@ -122,8 +130,9 @@ function submitReview(){
         route.params.masterId,
         "POST",
         {
-          "content" : reviewContent.value
-        }
+          content:reviewContent.value
+        },
+        JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
           alert(response)
@@ -161,7 +170,7 @@ function submitReview(){
           width="90%"
           :style="
             {
-              backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),' +'url(' + data.imgUrl +')'
+              backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 1.0)),' +'url(' + data.imgUrl +')'
               }
             ">
         <v-card-item>
@@ -192,6 +201,7 @@ function submitReview(){
           <v-img
               :src="data.imgUrl"
               height="300px"
+              cover="true"
           >
           </v-img>
         </div>
@@ -226,7 +236,7 @@ function submitReview(){
                     <div>
                       <div
                           class="mid-row-rating-num"
-                          v-text="data.avgRating/2"
+                          v-text="(data.avgRating/2).toFixed(1)"
                       >
                       </div>
                     </div>
@@ -240,7 +250,9 @@ function submitReview(){
                     ></v-icon>
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
-                  <v-dialog width="1000" height="800px">
+                  <v-dialog width="1000" height="800px"
+                            scrollable
+                  >
                     <template v-slot:activator="{ props }">
                       <v-icon
                             v-bind="props"
@@ -455,7 +467,7 @@ function submitReview(){
                       ></v-icon>
                       <span
                           class="review-rating"
-                        v-text="itemCol.rating ? itemCol.rating/2 : '평가 안함'"
+                        v-text="itemCol.rating ? (itemCol.rating/2).toFixed(1) : '평가 안함'"
                       ></span>
                     </v-col>
                     </v-row>

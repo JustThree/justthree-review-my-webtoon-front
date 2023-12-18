@@ -45,6 +45,8 @@
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import {api} from "@/common.js";
+import router from "@/router/index.js";
+import {useAuthStore} from "@/stores/auth.store.js";
 
 const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_CHECK_NICKNAME_API_PATH;
 
@@ -54,35 +56,83 @@ const selectedFile = ref(null);
 const newNickname = ref("");
 const nicknameAvailabilityMsg = ref("");
 
+const check = ref(
+  {
+    nickCheck:false,
+  }
+)
+
 const goBack = () => {
   window.history.back();
 };
-//////////////////////////////////////////////////////////////
-const checkNickname=()=>{
-  api(`api/check-nickname?nickname=${newNickname.value}`,"GET",{
-  }).then((resp)=>{
-    console.log(resp)
-    nicknameAvailabilityMsg.value = "사용 가능한 닉네임입니다."
-  }).catch((error) => {
-    console.log(error)
-    nicknameAvailabilityMsg.value = "중복된 닉네임입니다."
-  })
+function checkAlg(msg, value){
+  if (isEmptyString(value)){
+    msg.innerText = "값을 입력해주세요";
+    return true;
+  } else if (isSpaceCharacter(value)){
+    msg.innerText = "공백은 입력할 수 없습니다";
+    return true;
+  } else {
+    return false;
+  }
 }
 
+function isEmptyString(value){
+  if (value.trim() == "")
+    return true;
+  else
+    return false;
+}
+function isSpaceCharacter(value){
+  if (value.includes(' '))
+    return true;
+  else
+    return false;
+}
+const checkNickname = async () => {
+  if (!checkAlg(nicknameMsg, newNickname.value)) {
+
+    await axios.get(`http://localhost:8089/api/check-nickname?nickname=${newNickname.value}`)
+        .then((res) => {
+          console.log(res)
+          nicknameAvailabilityMsg.value = "사용 가능한 닉네임입니다"
+          check.value.nickCheck = true;
+        })
+        .catch((err) => {
+          console.log(err)
+          nicknameAvailabilityMsg.value = err.response.data;
+          check.value.nickCheck = false;
+        });
+  }
+}
 const updateUserInfo = () => {
   const formData = new FormData();
   formData.append("file", selectedFile.value);
   formData.append("newNickname", newNickname.value);
-  axios.put("/update", formData)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      });
+  if(!(check.value.nickCheck)){
+    alert("닉네임 중복체크를 완료해주세요")
+  }else {
+    axios.put("http://localhost:8089/mypage/update", formData,{
+      headers:{
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+        .then((response) => {
+          console.log(response.data);
+          router.push(`/mypage/userinfo/${ useAuthStore().user.usersId}`)//////////////////////////////
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error(error.response.data);
+            console.error("Status Code:", error.response.status);
+          } else if (error.request) {
+            console.error("The request was made but no response was received");
+          } else {
+            console.error("An unexpected error occurred:", error.message);
+          }
+        });
+  }
 };
-
-
 
 </script>
 <style scoped>

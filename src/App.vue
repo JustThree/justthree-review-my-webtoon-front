@@ -14,3 +14,9 @@ import Header from '@/components/Header.vue';
 
 <style scoped>
 </style>
+<style>
+@import "assets/css/body.css";
+*{
+  font-family: Pretendard-Regular
+}
+</style>

@@ -117,11 +117,11 @@ const router= createRouter({
                     component : AdminHome
                 },
                 {
-                    path : "/board",
+                    path : "/boardAdmin",
                     component : BoardAdmin
                 },
                 {
-                    path : "/notice",
+                    path : "/noticeAdmin",
                     component : NoticeAdmis
                 },
                 {
