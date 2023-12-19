@@ -137,7 +137,7 @@ const searchBoard = async () => {
 //글 삭제 처리[Component(BoardForm) 관련]
 const deleteBoard = async (boardId) => {
   console.log(boardId);
-  if(confirm("정말 삭제하시겠습니까?")){
+  if(confirm("공지를 삭제하시겠습니까?")){
     await api("board/"+boardId, "DELETE").then(() => {
       alert("글이 삭제되었습니다.");
       getData();
