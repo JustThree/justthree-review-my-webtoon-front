@@ -53,11 +53,12 @@ function submitReview() {
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= reviewContent.value.length && reviewContent.value.length <= 200) {
+
             alert(response);
             router.go(0);
+          } else {
+            alert("5 ~ 200자 이내로 작성해 주세요")
           }
         })
   } else {

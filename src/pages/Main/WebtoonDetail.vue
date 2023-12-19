@@ -130,16 +130,19 @@ function submitReview(){
         route.params.masterId,
         "POST",
         {
-          content:reviewContent.value
+          content: reviewContent.value
         },
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
-          alert(response)
-          router.go(0);
-        }
-    )
-  } else {
+          if (5 <= reviewContent.value.length && reviewContent.value.length<= 200) {
+            alert(response)
+            router.go(0)
+          } else{
+            alert("5~ 200자 값을 입력해 주세요")
+          }
+        })
+  }else {
     alert("로그인을 먼저 해 주세요!")
   }
 }
