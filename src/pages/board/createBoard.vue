@@ -38,7 +38,7 @@ const createBoard = async (board) => {
     for (let i = 0; i < board.boardFiles.length; i++) {
       formData.append('imageFiles', board.boardFiles[i]);
     }
-    formData.append("noticeYn", 0);// 0: 자유 1: 공지
+    formData.append("noticeYn", useAuthStore().user.usersRole === "ADMIN" ? 1 : 0);// 0: 자유 1: 공지
     formData.append("users", loginUsersId.value ); // users_id
     const response = await api("board", "POST", formData);
     if (response instanceof Error) {
