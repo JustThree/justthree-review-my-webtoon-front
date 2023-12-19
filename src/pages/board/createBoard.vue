@@ -1,5 +1,6 @@
 <template>
   <v-container>
+      <div class="text-h6 text-md-h5 text-lg-h4 font-weight-black" style="margin: 15px;"> 글 작성하기</div>
     <board-form :board="board" :buttonText="'등록하기'" @submit="createBoard"></board-form>
   </v-container>
 </template>
