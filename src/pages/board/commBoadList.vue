@@ -1,52 +1,3 @@
-<template>
-  <v-container>
-    <!-- 검색 Frame -->
-    <v-row>
-      <!--  정렬    -->
-        <v-col  cols="1">
-      <div class="text-center">
-        <v-menu   open-on-hover>
-          <template v-slot:activator="{ props }">
-            <v-btn color="#DFCCFB" v-bind="props" >  정렬  </v-btn>
-          </template>
-          <v-list>
-            <v-list-item  v-for="(menuitem, index) in menuitems"  :key="index" @click="sortList(menuitem.title)">
-              <v-list-item-title>{{ menuitem.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-        </v-col>
-      <v-col  cols="5">
-        <v-text-field
-            class="input-keyword"
-            variant="standard"
-            maxlength="20"
-            bg-color="#EDE7F6"
-            :style="{ 'font-weight': 700 }"
-            v-model="searchKeyword"
-            placeholder="검색 키워드를 작성해주세요">
-        </v-text-field>
-      </v-col>
-      <v-col cols="2">
-        <v-btn @click="searchBoard">검색</v-btn>
-      </v-col>
-        <v-col cols="4">
-            <v-btn @click="gotoCreateBoard" >작성하기</v-btn>
-        </v-col>
-    </v-row>
-    <!-- 글 목록   Frame-->
-    <v-infinite-scroll  class="infinte-frame"    :onLoad="load" ref="infiniteScroll">
-      <template v-for="(data, idx) in commBoardList" :key="idx">
-        <Board :boardone="data"></Board>
-      </template>
-      <template v-slot:loading>
-      {{pagingMsg}}
-      </template>
-    </v-infinite-scroll>
-    </v-container>
-</template>
-
 <script setup>
 import Board from "@/components/board/board.vue";
 import {onMounted, ref, nextTick, watch} from "vue";
@@ -76,7 +27,7 @@ const infiniteScrollRef = ref(null);
 //글 등록하기 버튼
 function gotoCreateBoard(){
     console.log(loginUsersId.value);
-    if(!loginUsersId.value){
+    if(loginUsersId.value===-1){
         alert("로그인해야 가능한 서비스입니다.");
         router.replace("/user/login");
         return;
@@ -136,7 +87,7 @@ const sortList = (sorting) => {
 
   sortings.value = sorting;
   //shouldResetPage = true; // 페이지 리셋 플래그 설정
-    pagingMsg .value= ""
+    //pagingMsg .value= ""
   getData();
 }
 
@@ -168,7 +119,7 @@ const getData = async () => {
 onMounted(async  ()=>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
-    //console.log("user", user);
+    console.log("user", user);
     if(user.value!==null){
         loginUsersId.value = user.value.usersId;
     }else {
@@ -180,7 +131,6 @@ onMounted(async  ()=>{
 //페이징
 const load = ({ done }) => {
     console.log(pagingMsg.value);
-
     if(pagingMsg.value !== "더 이상 존재하지 않습니다.") { //존재할 경우
         shouldResetPage = false; // 페이지 리셋 방지
         setTimeout(async () => {
@@ -194,10 +144,117 @@ const load = ({ done }) => {
     }
 }
 </script>
-
+<template>
+    <v-container>
+        <!-- 검색 Frame -->
+        <v-row>
+            <div class="menu-frame">
+                <!--  정렬    -->
+                <div class="sort-menu-frame">
+                    <v-menu   open-on-hover>
+                        <template v-slot:activator="{ props }">
+                            <v-btn class="sort-btn" variant="tonal" v-bind="props" >  정렬  </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item  v-for="(menuitem, index) in menuitems"  :key="index" @click="sortList(menuitem.title)">
+                                <v-list-item-title>{{ menuitem.title }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </div>
+                <div class="search-create-frame">
+                    <div class="search-input-frame">
+                        <div class="search-input">
+                            <v-text-field
+                                variant="standard"
+                                maxlength="20"
+                                bg-color="#EDE7F6"
+                                v-model="searchKeyword"
+                                placeholder="검색 키워드를 작성해주세요(20자 이내)">
+                            </v-text-field>
+                        </div>
+                        <v-btn class="search-btn"  variant="text" @click="searchBoard">검색</v-btn>
+                    </div>
+                    <div class="create-btn-frame">
+                        <v-btn class="create-btn" variant="tonal" @click="gotoCreateBoard" >
+                            <v-icon left>mdi-pencil</v-icon> 글쓰기
+                        </v-btn>
+                    </div>
+                </div>
+            </div>
+        </v-row>
+        <!-- 글 목록   Frame-->
+        <v-infinite-scroll  class="infinte-frame"  :onLoad="load" ref="infiniteScroll">
+            <template v-for="(data, idx) in commBoardList" :key="idx">
+                <Board :boardone="data"></Board>
+            </template>
+            <template v-slot:loading>
+                {{pagingMsg}}
+            </template>
+        </v-infinite-scroll>
+    </v-container>
+</template>
 <style scoped>
+.menu-frame{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: flex-start;
+    /*justify-content: flex-end;*/
+    align-items: center;
+    gap: 10px;
+    line-height: 100px;
+    margin: 5px;
+    padding: 15px;
+}
+/*  정렬 */
+.sort-menu-frame{
+    width: 12%;
+    margin-right: 130px;
+}
+.sort-btn{
+    width: 100%;
+}
+.search-create-frame{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
+}
+/*  검색 */
+.search-input-frame{
+    width: 45%;
+    height: 55px;
+    line-height: 100px;
+    display: flex;
+    gap: 3px;
+    margin-left: 130px;
+}
+.search-input{
+    width: 90%;
+}
+.search-btn {
+    color: #8F7CEE;
+    font-weight: bold;
+}
+.v-btn--size-default {
+    --v-btn-size: 0.875rem;
+    --v-btn-height: 50px;
+}
+/*  작성 버튼 */
+.create-btn-frame{
+    width: 10%;
+}
+.create-btn {
+    width: 100%;
+    background-color: #8F7CEE;
+    color: white;
+}
+/*스크롤 CSS*/
 .infinte-frame {
     height: 800px;
+    margin: 5px;
 }
 ::-webkit-scrollbar {
     display: none;

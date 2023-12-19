@@ -1,100 +1,3 @@
-<template>
-<div class="d-flex align-center flex-column">
-    <v-card v-if="parentReplyId === 0" variant="outlined"  class="card-reply">
-        <div class="card-header">
-            <div class="title-wrapper">
-                <span class="icon" v-if="replyUsersId === writerId">  글 작성자</span>
-                <h3 class="title">{{ replyUserNickname }}</h3>
-            </div>
-            <p class="subtitle">등록일자 {{ replyCreated }}</p>
-            <div v-if="loginUsersId === replyUsersId">
-                <v-btn variant="tonal" @click="openUpdateModal">  수정  </v-btn>
-                <v-btn variant="tonal" @click="delBoardReply">  삭제  </v-btn>
-            </div>
-        </div>
-        <div class="card-body">
-            <p>{{ boardReplyContent }}</p>
-        </div>
-        <div v-if="parentReplyId===0">
-            <v-btn variant="tonal" @click="openReReplyModal"> 대댓글 등록 </v-btn>
-        </div>
-        <div><!--삭제 예정-->
-            boardReplyId
-            {{boardReplyId}}
-        </div>
-        <div style="display: flex; justify-content: flex-end;">
-            <div>        댓글 작성자 id {{replyUsersId}}      </div>
-            <div> /   게시글 id {{boardId}}      </div>
-            <div> /   부모 댓글 id {{parentReplyId}}</div>
-        </div>
-    </v-card>
-    <!-- 대댓글 목록 -->
-    <div v-for="reReply in reReplyList" :key="reReply.boardReplyId"  class="frame-card-rereply" >
-        <template v-if="reReply.parentReplyId === boardReplyId">
-            <v-card variant="outlined"  style="margin-top: 10px; background-color: #DFCCFB; ">
-                <div class="card-header">
-                    <div class="title-wrapper">
-                        <span class="icon" v-if="reReply.replyUsersId === writerId">글 작성자</span>
-                        <h3 class="title">{{ reReply.replyUserNickname }}</h3>
-                    </div>
-                    <p class="subtitle">등록일자 {{ reReply.replyCreated }}</p>
-                </div>
-                <div class="card-body">
-                    <p>{{ reReply.boardReplyContent }}</p>
-                </div>
-                <div>
-                    boardReplyId {{ reReply.boardReplyId }}
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                    <div>댓글 작성자 id {{ reReply.replyUsersId }}</div>
-                    <div>/ 게시글 id {{ reReply.boardId }}</div>
-                    <div>/ 부모 댓글 id {{ reReply.parentReplyId }}</div>
-                </div>
-            </v-card>
-        </template>
-    </div>
-    <!-- 대댓글 등록 Modal   -->
-    <v-dialog v-model="isReReplyModalOpen" max-width="500px">
-        <v-card>
-            <v-card-title>대댓글 등록</v-card-title>
-            <v-card-text>
-                <v-textarea
-                    no-resize
-                    clearable
-                    clear-icon="mdi-close-circle"
-                    v-model="createdReReplyContent"
-                    label="댓글 내용"
-                    rows="3">
-                </v-textarea>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn color="primary" @click="createReReply">저장</v-btn>
-                <v-btn @click="closeReReplyModal">취소</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-    <!-- 댓글 수정 Modal   -->
-    <v-dialog v-model="isUpdateModalOpen" max-width="500px">
-        <v-card>
-            <v-card-title>댓글 수정</v-card-title>
-            <v-card-text>
-                <v-textarea
-                    no-resize
-                    clearable
-                    clear-icon="mdi-close-circle"
-                    v-model="updatedReplyContent"
-                    label="댓글 내용"
-                    rows="3">
-                </v-textarea>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn color="primary" @click="saveUpdatedReply">저장</v-btn>
-                <v-btn @click="closeUpdateModal">취소</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-</div>
-</template>
 <script setup>
 import {ref, toRef, toRefs, watchEffect} from "vue";
 import {useRouter} from "vue-router";
@@ -183,16 +86,153 @@ const delBoardReply=()=>{
     emit('delBoardReply', deletedReply);
 }
 </script>
+<template>
+    <div class="d-flex align-center flex-column">
+        <v-card class="card-reply" v-if="parentReplyId === 0" variant="outlined">
+            <div class="card-header">
+                <div class="title-wrapper">
+                    <span class="text-overline" v-if="replyUsersId === writerId">  글 작성자 | </span>
+                    <span class="text-subtitle-1">{{ replyUserNickname }}</span>
+                </div>
+                <div v-if="parentReplyId===0">
+                    <v-btn variant="text" @click="openReReplyModal"> 대댓글 등록 </v-btn>
+                </div>
+                <div class="reply-edit-btns" v-if="loginUsersId === replyUsersId">
+                    <v-btn variant="tonal" @click="openUpdateModal">  수정  </v-btn>
+                    <v-btn variant="tonal" @click="delBoardReply">  삭제  </v-btn>
+                </div>
+            </div>
+            <div class="card-desc">
+                <p class="text-caption">등록일자 {{ replyCreated }}</p>
+            </div>
+            <div class="card-body">
+                <p>{{ boardReplyContent }}</p>
+            </div>
+        </v-card>
+        <!-- 대댓글 목록 -->
+        <div  class="rereply-list-frame" v-for="reReply in reReplyList" :key="reReply.boardReplyId">
+            <template v-if="reReply.parentReplyId === boardReplyId">
+                <v-card class="card-re-reply" variant="text" >
+                    <div class="card-re-reply-arrow"><v-icon>mdi-arrow-right</v-icon></div>
+                    <div class="card-re-reply-content">
+                        <div class="re-card-header">
+                            <div class="re-card-hearder-wrapper">
+                                <span class="text-overline" v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
+                                <span class="text-subtitle-1">{{ reReply.replyUserNickname }}</span>
+                            </div>
+                            <p class="text-caption"  style="padding-left:5px">등록일자 {{ reReply.replyCreated }}</p>
+                        </div>
+                        <div class="re-reply-card-body">
+                            <p>{{ reReply.boardReplyContent }}</p>
+                        </div>
+                    </div>
+                </v-card>
+            </template>
+        </div>
+        <!-- 대댓글 등록 Modal   -->
+        <v-dialog v-model="isReReplyModalOpen" max-width="500px">
+            <v-card>
+                <v-card-title>대댓글 등록</v-card-title>
+                <v-card-text>
+                    <v-textarea
+                        no-resize
+                        clearable
+                        clear-icon="mdi-close-circle"
+                        v-model="createdReReplyContent"
+                        label="댓글 내용"
+                        rows="3">
+                    </v-textarea>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="primary" @click="createReReply">저장</v-btn>
+                    <v-btn @click="closeReReplyModal">취소</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <!-- 댓글 수정 Modal   -->
+        <v-dialog v-model="isUpdateModalOpen" max-width="500px">
+            <v-card>
+                <v-card-title>댓글 수정</v-card-title>
+                <v-card-text>
+                    <v-textarea
+                        no-resize
+                        clearable
+                        clear-icon="mdi-close-circle"
+                        v-model="updatedReplyContent"
+                        label="댓글 내용"
+                        rows="3">
+                    </v-textarea>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="primary" @click="saveUpdatedReply">저장</v-btn>
+                    <v-btn @click="closeUpdateModal">취소</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+    </div>
+</template>
 <style scoped>
+/* 댓글 */
 .card-reply{
-    width: 100%;
-    margin-top:  10px;
+    width: 95%;
+    margin:  5px;
+    padding: 5px;
 }
-.frame-card-rereply{
-    width: 100%;
-}
+/* 작성자 & 댓글 관련 버튼 */
 .card-header{
-    margin: 2px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    margin: 3px;
     padding: 2px;
+    gap: 3px;
+}
+.reply-edit-btns{
+    display: flex;
+    gap: 3px;
+}
+.card-desc{ /*  댓글 등록일자 */
+    margin: 3px;
+    padding: 2px;
+}
+.card-body, .reply-card-body{ /*  댓글 내용 */
+    margin: 3px;
+    padding: 2px;
+}
+/* 대댓글 */
+.rereply-list-frame{
+    width: 95%;
+}
+.card-re-reply{
+    width: 100%;
+    display:flex;
+    margin-top:  5px;
+    padding: 5px;
+}
+.card-re-reply-arrow{
+    display: flex;
+    align-items: center;
+}
+.card-re-reply-content{
+    width: 100%;
+    background-color: #D5C2EE;
+}
+.re-card-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 3px;
+    padding: 5px;
+    gap: 3px;
+}
+.re-card-hearder-wrapper{
+    padding-left:  5px;
+}
+.re-reply-card-body{
+    padding-left: 15px;
 }
 </style>
