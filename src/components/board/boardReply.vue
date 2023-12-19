@@ -91,7 +91,7 @@ const delBoardReply=()=>{
         <v-card class="card-reply" v-if="parentReplyId === 0" variant="outlined">
             <div class="card-header">
                 <div class="title-wrapper">
-<!--                    <span class="icon" v-if="replyUsersId === writerId">  글 작성자</span>-->
+                    <span class="text-overline" v-if="replyUsersId === writerId">  글 작성자 | </span>
                     <span class="text-subtitle-1">{{ replyUserNickname }}</span>
                 </div>
                 <div v-if="parentReplyId===0">
@@ -116,10 +116,13 @@ const delBoardReply=()=>{
                     <div class="card-re-reply-arrow"><v-icon>mdi-arrow-right</v-icon></div>
                     <div class="card-re-reply-content">
                         <div class="re-card-header">
-                            <span class="text-subtitle-1">{{ reReply.replyUserNickname }}</span>
-                            <p class="text-caption">등록일자 {{ reReply.replyCreated }}</p>
+                            <div class="re-card-hearder-wrapper">
+                                <span class="text-overline" v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
+                                <span class="text-subtitle-1">{{ reReply.replyUserNickname }}</span>
+                            </div>
+                            <p class="text-caption"  style="padding-left:5px">등록일자 {{ reReply.replyCreated }}</p>
                         </div>
-                        <div class="reply-card-body">
+                        <div class="re-reply-card-body">
                             <p>{{ reReply.boardReplyContent }}</p>
                         </div>
                     </div>
@@ -223,7 +226,13 @@ const delBoardReply=()=>{
     flex-direction: column;
     justify-content: flex-start;
     margin: 3px;
-    padding: 2px;
+    padding: 5px;
     gap: 3px;
+}
+.re-card-hearder-wrapper{
+    padding-left:  5px;
+}
+.re-reply-card-body{
+    padding-left: 15px;
 }
 </style>
