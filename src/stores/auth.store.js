@@ -4,7 +4,7 @@ import axios from 'axios'
 import router from '@/router/index.js'
 import {api} from "@/common.js";
 
-const loginUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_LOGIN_API_PATH;
+const loginUrl = "http://" + window.location.hostname + ":8089" + import.meta.env.VITE_LOGIN_API_PATH;
 
 async function setUser(user, response){
     user.value = {
