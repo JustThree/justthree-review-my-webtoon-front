@@ -37,7 +37,7 @@ import Follow from "@/pages/MyPage/Follow.vue";
 import Admin from "@/pages/Admin.vue";
 import AdminHome from "@/components/admin/AdminHome.vue";
 import BoardAdmin from "@/components/admin/BoardAdmin.vue";
-import NoticeAdmis from "@/components/admin/NoticeAdmis.vue";
+import NoticeAdmin from "@/components/admin/NoticeAdmin.vue";
 import TotalStatistics from "@/components/admin/TotalStatistics.vue";
 import UserAdmin from "@/components/admin/UserAdmin.vue";
 
@@ -113,23 +113,15 @@ const router= createRouter({
             component:Admin,
             children: [
                 {
-                    path : "/home",
-                    component : AdminHome
-                },
-                {
                     path : "/boardAdmin",
                     component : BoardAdmin
                 },
                 {
                     path : "/noticeAdmin",
-                    component : NoticeAdmis
+                    component : NoticeAdmin
                 },
                 {
-                    path : "/totalStatistics",
-                    component : TotalStatistics
-                },
-                {
-                    path : "/userAdmin",
+                    path : "",
                     component : UserAdmin
                 }
             ]},
