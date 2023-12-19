@@ -1,7 +1,19 @@
 <template>
+  <div class="text-center">
+    <hr class="line">
+    <div id="btn_back_line">
+      <v-btn class="ma-2" color="#5041BC" @click="goBack">
+        <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
+      <div id="pagetitle">유저정보</div>
+    </div>
+    <hr class="line">
+  </div>
   <div>
     <div id="myInfoLayout">
-      <div id="userPic"><img src="../../assets/images/blackDUK.png" alt=""></div>
+      <v-avatar size="230" id="profileimg">
+        <img :src="profileUrl" alt="profileimg" style="width: 100%">
+      </v-avatar>
+<!--      <div id="userPic"><img :src="profileUrl" alt=""></div>-->
       <div id="currentUser">{{usersNickname}}</div>
       <div id="currentUserEmail">{{usersEmail}}</div>
       <div class="followerInfo">
@@ -41,7 +53,7 @@
         </div>
       </div>
       <div v-if="isUser" @click="goToUpdateUserInfo" class="col-sm-10">
-        <button type="button" class="btn btn-primary btn-block" >내 정보 수정</button>
+        <v-btn color="#5041BC" type="button" class="btn btn-primary btn-block" >내 정보 수정</v-btn>
       </div>
       <div v-else @click="handleFollowButtonClick(followId)">
         <v-btn variant="text" :class="fav ? 'text-red' : ''" icon="mdi-heart" @click="toggleFav"></v-btn>
@@ -77,6 +89,9 @@ const usersEmail = ref("");
 const loginUsersId=ref();
 const isUser = ref(user.usersId == usersId);
 
+const goBack = () => {
+  window.history.back();
+};
 onBeforeMount( () => {
   console.log("start")
   console.log(user)

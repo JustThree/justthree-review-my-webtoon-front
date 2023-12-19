@@ -3,7 +3,7 @@
     <div class="text-center">
       <hr class="line">
       <div id="btn_back_line">
-        <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+        <v-btn class="ma-2" color="#5041BC" @click="goBack">
           <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
         <div id="pagetitle">관심 웹툰</div>
       </div>
@@ -62,7 +62,9 @@ const getSlice = (index) => {
   const end = start + 13;
   return interested.values.slice(start, end);
 };
-
+const goBack = () => {
+  window.history.back();
+};
 </script>
 <style scoped>
 @import "@/assets/css/ratedlist.css";
