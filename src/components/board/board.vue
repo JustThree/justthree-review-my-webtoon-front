@@ -24,7 +24,7 @@ watchEffect(()=>{
     <div>
         <v-card
             width="100%"
-            height="150px"
+            height="160px"
             @click="$router.push({path: `/boards/${boardId}`, query:{noticeYn: noticeYn}})"
             class="card-frame"
         >
@@ -54,14 +54,11 @@ watchEffect(()=>{
 <style scoped>
 .card-frame {
     border-top: 1px solid;
-    border-radius: 0px;
-    /*border-bottom: 1px solid;
-    margin: 2px 0;*/
+    border-radius: 0;
 }
-
 .card-center-frame {
-    height: 140px;
     width: 100%;
+    height: 150px;
     margin: 5px 0;
     padding: 5px;
     border-left: none;

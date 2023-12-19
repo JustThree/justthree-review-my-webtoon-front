@@ -1,5 +1,6 @@
 <template>
   <v-container>
+      <div class="text-h6 text-md-h5 text-lg-h4 font-weight-black" style="margin: 15px;"> 글 수정하기</div>
     <board-form :board="board" :buttonText="'수정완료'" @submit="updateBoard" @deleteBoard="deleteBoard"></board-form>
   </v-container>
 </template>
