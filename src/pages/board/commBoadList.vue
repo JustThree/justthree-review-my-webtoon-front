@@ -27,7 +27,7 @@ const infiniteScrollRef = ref(null);
 //글 등록하기 버튼
 function gotoCreateBoard(){
     console.log(loginUsersId.value);
-    if(!loginUsersId.value){
+    if(loginUsersId.value===-1){
         alert("로그인해야 가능한 서비스입니다.");
         router.replace("/user/login");
         return;
@@ -119,7 +119,7 @@ const getData = async () => {
 onMounted(async  ()=>{
     const authStore = useAuthStore()
     const { user } = storeToRefs(authStore);
-    //console.log("user", user);
+    console.log("user", user);
     if(user.value!==null){
         loginUsersId.value = user.value.usersId;
     }else {

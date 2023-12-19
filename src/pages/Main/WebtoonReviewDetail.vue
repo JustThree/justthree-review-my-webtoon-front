@@ -83,6 +83,7 @@ fetchData();
 // 좋아요
 function likeReview() {
   if (authStore.user) {
+    console.log(JSON.parse(authStore.user.token).accessToken)
     apiToken("api/webtoon/review/reply/like/" + route.params.reviewId,
         "PATCH",
         {},
@@ -109,11 +110,11 @@ function submitReviewReply() {
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= reviewReplyComment.value.length && reviewReplyComment.value.length <=200) {
             alert(response);
             router.go(0);
+          } else {
+            alert("유효하지 않은 값입니다.")
           }
         }
     )
@@ -133,11 +134,11 @@ function fixReview() {
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
+      if (5 <= fixContent.value.length && fixContent.value.length<= 200) {
+            alert("등록 완료")
+            router.go(0)
           } else {
-            alert(response);
-            router.go(0);
+            alert("5~200자 이내로 적어주세요")
           }
         }
     )
@@ -151,20 +152,25 @@ function fixReview() {
 function removeReview() {
   if (confirm("삭제 하시겠습니까?")) {
     if (authStore.user) {
-      apiToken(
-          "api/webtoon/review/" + route.params.reviewId,
-          "DELETE",
-          {},
-          JSON.parse(authStore.user.token).accessToken
-      ).then((response) => {
-            if (response.status === 400) {
-              alert("값이 유효 하지 않아요")
-            } else {
-              alert(response);
-              router.go(-1);
+      try {
+
+        apiToken(
+            "api/webtoon/review/" + route.params.reviewId,
+            "DELETE",
+            {},
+            JSON.parse(authStore.user.token).accessToken
+        ).then((response) => {
+              if (response.status === 400) {
+                alert("값이 유효 하지 않아요")
+              } else {
+                alert(response);
+                router.go(-1);
+              }
             }
-          }
-      )
+        )
+      } catch (e){
+        alert("5~200자 이내 값을 입력해 주세요")
+      }
     } else {
       alert("로그인을 먼저 해 주세요.")
     }
@@ -196,22 +202,21 @@ function removeReviewReply(replyId) {
 }
 
 // 댓글 수정
-function fixReviewReply(replyId, content) {
-  console.log(content)
+function fixReviewReply(replyId, replyContent) {
   if (authStore.user) {
     apiToken(
         "api/webtoon/review/reply/" + replyId,
         "PATCH",
         {
-          content: content
+          content: replyContent
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= replyContent.length && replyContent.length <= 200) {
             alert(response);
             router.go(0);
+          } else {
+            alert("유효하지 않은 값입니디.")
           }
         }
     )
