@@ -162,27 +162,29 @@ const load = ({ done }) => {
                         </v-list>
                     </v-menu>
                 </div>
-                <div class="search-input-frame">
-                    <div class="search-input">
-                        <v-text-field
-                            variant="standard"
-                            maxlength="20"
-                            bg-color="#EDE7F6"
-                            v-model="searchKeyword"
-                            placeholder="검색 키워드를 작성해주세요(20자 이내)">
-                        </v-text-field>
+                <div class="search-create-frame">
+                    <div class="search-input-frame">
+                        <div class="search-input">
+                            <v-text-field
+                                variant="standard"
+                                maxlength="20"
+                                bg-color="#EDE7F6"
+                                v-model="searchKeyword"
+                                placeholder="검색 키워드를 작성해주세요(20자 이내)">
+                            </v-text-field>
+                        </div>
+                        <v-btn class="search-btn"  variant="text" @click="searchBoard">검색</v-btn>
                     </div>
-                    <v-btn class="search-btn"  variant="text" @click="searchBoard">검색</v-btn>
-                </div>
-                <div class="create-btn-frame">
-                    <v-btn class="create-btn" variant="tonal" @click="gotoCreateBoard" >
-                        <v-icon left>mdi-pencil</v-icon> 글쓰기
-                    </v-btn>
+                    <div class="create-btn-frame">
+                        <v-btn class="create-btn" variant="tonal" @click="gotoCreateBoard" >
+                            <v-icon left>mdi-pencil</v-icon> 글쓰기
+                        </v-btn>
+                    </div>
                 </div>
             </div>
         </v-row>
         <!-- 글 목록   Frame-->
-        <v-infinite-scroll  class="infinte-frame"    :onLoad="load" ref="infiniteScroll">
+        <v-infinite-scroll  class="infinte-frame"  :onLoad="load" ref="infiniteScroll">
             <template v-for="(data, idx) in commBoardList" :key="idx">
                 <Board :boardone="data"></Board>
             </template>
@@ -212,6 +214,13 @@ const load = ({ done }) => {
 }
 .sort-btn{
     width: 100%;
+}
+.search-create-frame{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
 }
 /*  검색 */
 .search-input-frame{
@@ -245,6 +254,7 @@ const load = ({ done }) => {
 /*스크롤 CSS*/
 .infinte-frame {
     height: 800px;
+    margin: 5px;
 }
 ::-webkit-scrollbar {
     display: none;

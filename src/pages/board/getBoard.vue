@@ -1,11 +1,14 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {api} from "@/common.js";
+import {api, apiToken} from "@/common.js";
 import router from "@/router/index.js";
 import BoardReply from "@/components/board/boardReply.vue";
 import {useAuthStore} from "@/stores/auth.store.js";
 import {storeToRefs} from "pinia";
+
+
+const authStore = useAuthStore();
 
 const board = ref({
     title: '',
@@ -51,7 +54,7 @@ async function toggleLike() {
             }
         }
     }else{ //좋아요 취소
-        const response = await api("board/likes/"+board.value.boardId, "DELETE");
+        const response = await apiToken("board/likes/"+board.value.boardId, "DELETE", "", JSON.parse(authStore.user.token).accessToken);
         if (response instanceof Error) {
             console.log(response.response.data);
         } else {
@@ -134,7 +137,8 @@ const handleDeleteReply = async (delBoardReply) =>{
             if (response) {
                 console.log("삭제");
                 alert("댓글이 삭제되었습니다.");
-                await getData();
+                /*await getData();*/
+                router.go(0);
             } else {
                 alert("삭제 실패..");
             }
@@ -201,15 +205,16 @@ const handleCreateReReply = async (newReReply)=>{
 }
 //데이터 조회
 const getData = async () =>{
+    console.log(JSON.parse(authStore.user.token).accessToken );
     console.log(route.params.boardId);
-    api("board/"+route.params.boardId, "GET")
+    apiToken("board/"+route.params.boardId, "GET", "", JSON.parse(authStore.user.token).accessToken)
         .then((response)=>{
             if(response instanceof Error){
                 let errorRes = response;
                 console.log(errorRes.response);
                 //not found 글 목록으로 이동
             }else{
-                //console.log(response);
+                console.log(response);
                 board.value = response;
                 // 댓글, 대댓글
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);

@@ -2,17 +2,17 @@
     <v-container>
         <!-- 검색 Frame -->
         <v-row>
-            <v-col  cols="5">
+            <div class="search-frame">
                 <v-text-field
                     class="input-keyword"
                     variant="standard"
                     maxlength="20"
                     bg-color="#EDE7F6"
-                    :style="{ 'font-weight': 700 }"
+                    :style="{ 'font-weight': 700  }"
                     v-model="searchKeyword"
                     placeholder="검색 키워드를 작성해주세요">
                 </v-text-field>
-            </v-col>
+            </div>
         </v-row>
         <!-- 글 목록   Frame-->
         <v-row>
@@ -158,6 +158,11 @@ onMounted(async () =>{
 </script>
 
 <style scoped>
+.search-frame{
+    width:  50%;
+    display: flex;
+    text-align: center;
+}
 .notice-table-container{
     position: relative;
     display: block;
