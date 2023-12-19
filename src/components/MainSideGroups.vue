@@ -39,7 +39,7 @@ const title = props.title;
               height="100%"
               width="100%"
               style="object-fit: cover"
-              cover="true"
+              :cover=true
               :src="itemWebtoon.imgUrl"
               @click="toggle"
           >

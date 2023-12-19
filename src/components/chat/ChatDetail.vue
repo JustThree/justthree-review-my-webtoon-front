@@ -146,7 +146,7 @@ onMounted(() => {
   const token = JSON.parse(authStore.token).accessToken;
 
   // Connect WebSocket
-  ws = new WebSocket(`ws://localhost:8089/chat?${token}&${masterId}`/*, [token, masterId]*/);
+  ws = new WebSocket(`ws://${window.location.hostname}:8089/chat?${token}&${masterId}`/*, [token, masterId]*/);
   // sender -> sessionStorage(token) 변경 예정
   ws.onmessage = function (onmessage) {
     console.log(onmessage)
