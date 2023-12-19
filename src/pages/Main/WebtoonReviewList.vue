@@ -227,9 +227,10 @@ fetchData()
     </v-row>
     <v-row>
       <v-pagination
+          v-if="totalPages-1"
           class="v-row v-md-12"
           v-model="queryString.page"
-          :length="totalPages-1"
+          :length="(totalPages-1)"
           total-visible="8"
           active-color=#5302FE
       >

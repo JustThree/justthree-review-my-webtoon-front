@@ -78,7 +78,7 @@ let token = null;
 if(useAuthStore().user != undefined){
   token = JSON.parse(useAuthStore().user.token).accessToken;
 }
-const ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
+const ws = new WebSocket(`ws://${window.location.hostname}:8089/chat?${token}`);
 ws.onmessage = () => {
   loadChats();
 }

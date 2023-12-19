@@ -201,7 +201,7 @@ function submitReview(){
           <v-img
               :src="data.imgUrl"
               height="300px"
-              cover="true"
+              :cover=true
           >
           </v-img>
         </div>
@@ -214,10 +214,10 @@ function submitReview(){
               style="display: flex"
           >
             <v-rating
-                half-increments="true"
+                :half-increments=true
                 :length="5"
                 size="x-large"
-                hover="true"
+                :hover=true
                 active-color="red"
                 class="rating"
                 v-model="rating"

@@ -36,9 +36,9 @@ if (authStore.user && authStore.user.token !== null){
       alert("삭제된 게시글 입니다.")
       router.go(-1)
     }
+        console.log(response)
     reviewData.value = response;
     fixContent.value = response.content;
-
     console.log(fixContent)
   }
   )}else {
@@ -49,10 +49,10 @@ if (authStore.user && authStore.user.token !== null){
             alert("삭제된 게시글 입니다.")
             router.go(-1)
           }
+      console.log(response)
           reviewData.value = response;
           fixContent.value = response.content;
 
-          console.log(fixContent)
         }
     )
 
@@ -382,7 +382,7 @@ function copyToClipboard() {
               @click="likeReview"
           >
             <v-icon
-                :color="reviewData.checkLike == true ? 'red' : 'gray'"
+                :color="reviewData.checkLike === true ? 'red' : 'gray'"
                 size="24"
                 icon="mdi-thumb-up"
             ></v-icon>
