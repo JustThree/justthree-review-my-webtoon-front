@@ -43,7 +43,7 @@
 
 <script setup>
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {api} from "@/common.js";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
@@ -52,7 +52,7 @@ const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_
 
 
 const userProfileImageUrl = "@/assets/images/blackDUK.png";
-const selectedFile = ref(null);
+const selectedFile = ref([]);
 const newNickname = ref("");
 const nicknameAvailabilityMsg = ref("");
 
@@ -107,6 +107,7 @@ const checkNickname = async () => {
 }
 const updateUserInfo = () => {
   const formData = new FormData();
+  console.log(selectedFile.value)
   formData.append("file", selectedFile.value);
   formData.append("newNickname", newNickname.value);
   if(!(check.value.nickCheck)){
