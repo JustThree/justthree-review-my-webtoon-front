@@ -131,12 +131,12 @@ watch(
 
 
 function deleteUser(userId){
-  if(confirm("삭제하시겠습니까?")){
+  if(confirm("회원을 비활성화 하시겠습니까?")){
     api('api/deleteUser','POST',userId).then(() => {
-      alert("삭제되었습니다.");
+      alert("비활성화 되었습니다.");
       getUserList();
     }).catch(() =>{
-      alert("삭제에 실패하였습니다.");
+      alert("비활성화에 실패하였습니다.");
     });
   }
 }

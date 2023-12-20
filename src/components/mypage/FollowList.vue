@@ -18,7 +18,7 @@
 
   <v-card
       max-width="400"
-      class="mx-auto"
+      class="mx-auto mt-5"
   >
     <v-container>
         <v-col v-for="(item,index) in follow.values" cols="12">

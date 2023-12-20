@@ -11,6 +11,7 @@ async function setUser(user, response){
         nickname: response.data.nickname,
         profile: response.data.profileImg,
         usersId: response.data.usersId,
+        usersRole: response.data.usersRole,
         token: response.headers.authorization,
         accessToken: JSON.parse(response.headers.authorization).accessToken,
         refreshToken: JSON.parse(response.headers.authorization).refreshToken,
@@ -52,6 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function getTokenkey(){
+        console.log(user);
         let token = ref(JSON.parse(user.value.token));
         let userEmail = ref(token.value.key);
         return userEmail;

@@ -9,13 +9,12 @@
             bg-color="#EDE7F6"
             :style="{ 'font-weight': 700 }"
             v-model="searchKeyword"
-            @keyup.enter="searchBoard"
             placeholder="검색 키워드를 작성해주세요">
         </v-text-field>
       </div>
     </v-col>
     <v-col cols="2">
-      <v-btn color="#EDE7F6" @click="searchBoard">검색</v-btn>
+      <v-btn @keyup.enter="searchBoard" @click="searchBoard">검색</v-btn>
     </v-col>
   </v-row>
   <v-table>
@@ -37,7 +36,7 @@
         작성시간
       </th>
       <th class="text-left">
-        관리
+
       </th>
     </tr>
     </thead>
@@ -52,7 +51,8 @@
       <td id="nicknameTd" class="text-left" @click="$router.push({path: `/mypage/userinfo/${item.usersId}`})">{{ item.userNickname }}</td>
       <td class="text-left">{{ item.created }}</td>
       <td class="text-left"><div class="pt-2">
-        <v-btn @click="deleteBoard(item.boardId)" color="red">삭제</v-btn>
+        <v-btn color="#924AFE" class="mr-3" variant="flat" @click="gotoUpdateBoard(item.boardId)">  수정  </v-btn>
+        <v-btn color="red" @click="deleteBoard(item.boardId)" >삭제</v-btn>
       </div></td>
     </tr>
     </tbody>
@@ -68,13 +68,16 @@
   >
     <!-- totalPages 0부터 시작-->
   </v-pagination>
-
+  <div class="btnContainer">
+    <v-btn color="#924AFE" @click="gotoCreateBoard" >작성하기</v-btn>
+  </div>
 </template>
 
 <script setup>
 import {api} from "@/common.js";
 import {onMounted, ref} from "vue";
 import router from "@/router/index.js";
+import {useAuthStore} from "@/stores/auth.store.js";
 
 const commBoardList = ref([]);//글 목록
 const page = ref(1);
@@ -86,8 +89,26 @@ const searchKeyword = ref("");
 onMounted(() => {
   getData();
 })
+
+//게시글 수정
+function gotoUpdateBoard(bId){
+  console.log(bId);
+
+  router.push(`comm/edit/${bId}`);
+}
+
+//글 등록하기 버튼
+function gotoCreateBoard(){
+
+  if(!useAuthStore().user){
+    alert("로그인해야 가능한 서비스입니다.");
+    router.replace("/user/login");
+    return;
+  }
+  router.replace('/comm/new');
+}
 const getData = async () => {
-  await api("admin/boardlist?page="+page.value+"&size="+itemPerPage+"&keyword="+searchKeyword.value, "GET")
+  await api("admin/notice?page="+page.value+"&size="+itemPerPage+"&keyword="+searchKeyword.value, "GET")
       .then((response) => {
         console.log(response);
         commBoardList.value = response.content;
@@ -116,7 +137,7 @@ const searchBoard = async () => {
 //글 삭제 처리[Component(BoardForm) 관련]
 const deleteBoard = async (boardId) => {
   console.log(boardId);
-  if(confirm("정말 삭제하시겠습니까?")){
+  if(confirm("공지를 삭제하시겠습니까?")){
     await api("board/"+boardId, "DELETE").then(() => {
       alert("글이 삭제되었습니다.");
       getData();
@@ -149,9 +170,9 @@ tr>:nth-child(1){
 tr>:nth-child(2){
   max-width: 300px;
   height: 100%;
-  //display: inline-block;
-  //overflow: hidden;
-  //text-overflow: ellipsis;
+//display: inline-block;
+//overflow: hidden;
+//text-overflow: ellipsis;
 
 }
 
@@ -169,5 +190,9 @@ tr>:nth-child(5){
 tr>:nth-child(6){
   max-width: max-content;
   height: 52px;
+}
+
+.btnContainer {
+  text-align : right;
 }
 </style>
