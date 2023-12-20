@@ -19,7 +19,7 @@
 
       <br>
       <v-autocomplete class="mx-16 my-2" variant="outlined" label="웹툰 제목을 입력해주세요 (2자 이상)"
-                    prepend-inner-icon="mdi-magnify" hide-details v-model="searchWord"gi
+                    prepend-inner-icon="mdi-magnify" hide-details v-model="searchWord"
                       :items="searchItems"></v-autocomplete>
 
       <v-infinite-scroll :height="400" :chats="chats" :onLoad="load" v-if="chats.length>0">
