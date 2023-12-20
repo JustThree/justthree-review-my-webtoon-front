@@ -1,11 +1,13 @@
 <template>
     <v-container>
+        <div class="tab-menu-frame">
         <v-row>
             <v-tabs v-model="activeTab" active-class="custom-active-tab">
-                <v-tab to="/boardslist/comm">커뮤니티</v-tab>
-                <v-tab to="/boardslist/notice">공지사항</v-tab>
+                <v-tab to="/boardslist/comm"><span class="tab-menu">커뮤니티</span></v-tab>
+                <v-tab to="/boardslist/notice"><span class="tab-menu">공지사항</span></v-tab>
             </v-tabs>
             </v-row>
+        </div>
             <v-tabs-items v-model="activeTab">
                 <v-tab-item>
                     <router-view></router-view>
@@ -21,8 +23,15 @@ const activeTab = ref('/boardslist/comm');
 </script>
 
 <style scoped>
-.custom-active-tab {
-    background-color: #BEADFA;
+.tab-menu-frame{
+    margin: 30px;
+}
+.v-tab--selected {
+    background-color: #8F7CEE;
     color: #ffffff;
+}
+.tab-menu{
+    font-size: 20px;
+    font-weight: bold;
 }
 </style>

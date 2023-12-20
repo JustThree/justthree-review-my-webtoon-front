@@ -18,8 +18,9 @@
       </v-tabs>
 
       <br>
-      <v-text-field class="mx-16 my-2" variant="outlined" label="웹툰 제목을 입력해주세요"
-                    prepend-inner-icon="mdi-magnify" hide-details @keyup.enter:append-inner="search"></v-text-field>
+      <v-autocomplete class="mx-16 my-2" variant="outlined" label="웹툰 제목을 입력해주세요 (2자 이상)"
+                    prepend-inner-icon="mdi-magnify" hide-details v-model="searchWord"gi
+                      :items="searchItems"></v-autocomplete>
 
       <v-infinite-scroll :height="400" :chats="chats" :onLoad="load" v-if="chats.length>0">
         <template v-for="chat in chats" :key="chat.masterId">
@@ -78,7 +79,7 @@ let token = null;
 if(useAuthStore().user != undefined){
   token = JSON.parse(useAuthStore().user.token).accessToken;
 }
-const ws = new WebSocket(`ws://localhost:8089/chat?${token}`);
+const ws = new WebSocket(`ws://${window.location.hostname}:8089/chat?${token}`);
 ws.onmessage = () => {
   loadChats();
 }
@@ -88,6 +89,18 @@ const load = async ({ done }) => {
 
 watch(page, () => {
     loadChats();
+})
+
+const searchWord = ref("");
+const searchItems = ref([]);
+watch(searchWord, () => {
+  console.log(searchWord)
+  if(searchWord.value.length >= 2){
+    api(`api/webtoon/search?type=1&word=${searchWord.value}&size=5`, "GET")
+        .then(resp => {
+          searchItems.value = resp;
+        })
+  }
 })
 onUnmounted(() => {
   if (ws) {
@@ -114,10 +127,6 @@ const loadChats = ()=> {
         })
   }
 }
-const search = () => {
-
-}
-
 </script>
 
 <style scoped>

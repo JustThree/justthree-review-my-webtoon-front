@@ -104,7 +104,7 @@ function ratingSend() {
 
 // 관심 등록 api
 function interestAdd(){
-  if (authStore.user.token !== null){
+  if (authStore.user && authStore.user.token !== null){
     apiToken(
         "api/webtoon/interest/" +
         route.params.masterId,
@@ -130,16 +130,19 @@ function submitReview(){
         route.params.masterId,
         "POST",
         {
-          content:reviewContent.value
+          content: reviewContent.value
         },
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
-          alert(response)
-          router.go(0);
-        }
-    )
-  } else {
+          if (5 <= reviewContent.value.length && reviewContent.value.length<= 200) {
+            alert(response)
+            router.go(0)
+          } else{
+            alert("5~ 200자 값을 입력해 주세요")
+          }
+        })
+  }else {
     alert("로그인을 먼저 해 주세요!")
   }
 }
@@ -201,7 +204,7 @@ function submitReview(){
           <v-img
               :src="data.imgUrl"
               height="300px"
-              cover="true"
+              :cover=true
           >
           </v-img>
         </div>
@@ -214,10 +217,10 @@ function submitReview(){
               style="display: flex"
           >
             <v-rating
-                half-increments="true"
+                :half-increments=true
                 :length="5"
                 size="x-large"
-                hover="true"
+                :hover=true
                 active-color="red"
                 class="rating"
                 v-model="rating"

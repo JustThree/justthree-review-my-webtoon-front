@@ -29,7 +29,7 @@
           <div>
             <img :src="item.imageUrl" id="thumbnail">
           </div>
-          <router-link :to="{path:`/`}" id="titletext">{{item.title}}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
+          <router-link :to="{path:`/`}" id="titletext">{{item.title.length > 10 ? item.title.substring(0,10) + '...' : item.title }}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
           <div id="tooninfo">
             {{ item.pictrWritrNm }}<v-icon style="margin-bottom:2px " icon="mdi-star" size="small"></v-icon>{{item.starVal/2}}
           </div>

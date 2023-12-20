@@ -1,5 +1,6 @@
 <template>
   <v-container>
+      <div class="text-h6 text-md-h5 text-lg-h4 font-weight-black" style="margin: 15px;"> 글 작성하기</div>
     <board-form :board="board" :buttonText="'등록하기'" @submit="createBoard"></board-form>
   </v-container>
 </template>
@@ -38,7 +39,7 @@ const createBoard = async (board) => {
     for (let i = 0; i < board.boardFiles.length; i++) {
       formData.append('imageFiles', board.boardFiles[i]);
     }
-    formData.append("noticeYn", 0);// 0: 자유 1: 공지
+    formData.append("noticeYn", useAuthStore().user.nickname === "관리자" || useAuthStore().user.nickname === "admin" ? 1 : 0);// 0: 자유 1: 공지
     formData.append("users", loginUsersId.value ); // users_id
     const response = await api("board", "POST", formData);
     if (response instanceof Error) {

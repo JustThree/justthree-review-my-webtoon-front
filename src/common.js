@@ -7,7 +7,8 @@ import { storeToRefs } from 'pinia';
 import axios from 'axios';
 
 const apiToken = async (urn, method, data, token) => {
-    const url = "http://localhost:8089/" + urn
+    const url = "http://" + window.location.hostname + ":8089/" + urn
+    console.log(url)
     return (await axios({
         url,
         method,
@@ -16,13 +17,13 @@ const apiToken = async (urn, method, data, token) => {
             Authorization: token
         }
     }).catch(e => {
-        console.log("http://localhost:8089/" + urn)
+        console.log("http://" + window.location.hostname + ":8089/" + urn)
         console.log(e);
         return { data: e}; //error 발생 시 e 반환
     })).data
 }
 const api = async (urn, method, data) => {
-    const url = "http://localhost:8089/" + urn;
+    const url = "http://" + window.location.hostname + ":8089/" + urn;
     return (await axios({
         method: method,
         url,

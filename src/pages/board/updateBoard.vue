@@ -1,5 +1,6 @@
 <template>
   <v-container>
+      <div class="text-h6 text-md-h5 text-lg-h4 font-weight-black" style="margin: 15px;"> 글 수정하기</div>
     <board-form :board="board" :buttonText="'수정완료'" @submit="updateBoard" @deleteBoard="deleteBoard"></board-form>
   </v-container>
 </template>
@@ -18,14 +19,14 @@ const router = useRouter();
 let loginUsersId = ref();
 
 const board = ref({
-  title: '',
-  content: '',
-  boardFiles: [],
-  noticeYn: 0,
-  users: '',
-  //기존 데이터 조회
-  boardImgMapList: [new Map([[], []])],
-  boardId: 0
+    title: '',
+    content: '',
+    boardFiles: [],
+    noticeYn: 0,
+    users: '',
+    //기존 데이터 조회
+    boardImgMapList: [new Map([[], []])],
+    boardId: 0,
 });
 const route = useRoute();
 
@@ -53,31 +54,36 @@ onMounted(async () =>{
 });
 //글 수정 처리[Component(BoardForm) 관련]
 const updateBoard = async (board) => {
-  console.log(board);
-  if(board.title.trim() === '' || board.content.trim() === '') {
-    alert("제목과 내용을 입력해주세요");
-  }else {
-    const formData = new FormData();
-    formData.append('title', board.title);
-    formData.append('content', board.content);
-    for (let i = 0; i < board.boardFiles.length; i++) {
-      formData.append('imageFiles', board.boardFiles[i]);
-    }
-    formData.append("noticeYn", 0);// 0: 자유 1: 공지
-    formData.append("users", loginUsersId.value); // users_id
+    console.log(board);
+    if(board.title.trim() === '' || board.content.trim() === '') {
+        alert("제목과 내용을 입력해주세요");
+    }else {
+        const formData = new FormData();
+        formData.append('title', board.title);
+        formData.append('content', board.content);
+        if(board.boardFiles) {
+            for (let i = 0; i < board.boardFiles.length; i++) {
+                formData.append('imageFiles', board.boardFiles[i]);
+            }
+        }
+        for (let i = 0; i < board.boardImgMapList.length; i++) {
+            formData.append('imageIdList', board.boardImgMapList[i].imgId);
+        }
+        formData.append("noticeYn", 0);// 0: 자유 1: 공지
+        formData.append("users", loginUsersId.value); // users_id
 
-    const response = await api("board/"+route.params.boardId, "PUT", formData);
-    if (response instanceof Error) {
-      console.log(response.response.data);
-    } else {
-      if (response) {
-        alert("글이 성공적으로 수정되었습니다.");
-        router.go(-1);
-      } else {
-        alert("수정 실패..");
-      }
+        const response = await api("board/"+route.params.boardId, "PUT", formData);
+        if (response instanceof Error) {
+            console.log(response.response.data);
+        } else {
+            if (response) {
+                alert("글이 성공적으로 수정되었습니다.");
+                router.go(-1);
+            } else {
+                alert("수정 실패..");
+            }
+        }
     }
-  }
 };
 //글 삭제 처리[Component(BoardForm) 관련]
 const deleteBoard = async (board) => {
