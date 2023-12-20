@@ -42,6 +42,8 @@
           <div>{{reviewedCount}}</div>
           </router-link>
 
+
+
         </div>
 
         <div class="infoChartTitle">
@@ -132,4 +134,12 @@ const toggleFav = () => {
 </script>
 <style scoped>
 @import "@/assets/css/mypage.css";
+router-link{
+  color: inherit;
+  text-decoration: none;
+}
+.follow{
+    color: inherit;
+    text-decoration: none;
+}
 </style>

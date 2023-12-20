@@ -11,8 +11,8 @@
 
   <v-card>
     <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
-      <v-tab :value="1">팔로우<span></span></v-tab>
-      <v-tab :value="2">팔로잉<span></span></v-tab>
+      <v-tab :value="1"><span>팔로우</span></v-tab>
+      <v-tab :value="2"><span>팔로잉</span></v-tab>
     </v-tabs>
   </v-card>
 
@@ -22,9 +22,9 @@
           <v-card color="#F5F3FF" theme="dark">
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title v-if="item.followingNickname" class="text-h5">{{ item.followingNickname }}.</v-card-title>
+                <v-card-title v-if="item.followingNickname" class="text-h5">{{ item.followingNickname }}</v-card-title>
                 <v-card-title v-else class="text-h5">{{ item.followerNickname }}</v-card-title>
-                <v-card-subtitle>하이</v-card-subtitle>
+                <v-card-subtitle>{{ item.usersEmail }}</v-card-subtitle>
                 <div @click="handleFollowButtonClick(item.usersId)" >
                   <v-btn variant="text" :class="item.following ? 'text-red' : ''" icon="mdi-heart" @click="toggleFav(item)"></v-btn>
                 </div>

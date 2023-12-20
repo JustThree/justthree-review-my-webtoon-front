@@ -25,13 +25,13 @@
   <div id="listsection" class="responsive-list"><!--반응형 하려고뷰티빠이 바꿈 -->
     <v-container>
       <v-row>
-        <v-col v-for="(item, index) in rated.values" cols="1" >
+        <v-col v-for="(item, index) in rated.values" cols="1" class="overflow-x-hidden">
           <div>
             <img :src="item.imageUrl" id="thumbnail">
           </div>
           <router-link :to="{path:`/`}" id="titletext">{{item.title}}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
           <div id="tooninfo">
-            {{ item.pictrWritrNm }}     <v-icon style="margin-bottom:2px " icon="mdi-star" size="small"></v-icon>{{item.starVal/2}}
+            {{ item.pictrWritrNm }}<v-icon style="margin-bottom:2px " icon="mdi-star" size="small"></v-icon>{{item.starVal/2}}
           </div>
         </v-col>
       </v-row>
