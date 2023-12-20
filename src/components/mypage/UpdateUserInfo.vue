@@ -2,7 +2,7 @@
   <div class="text-center">
     <hr class="line">
     <div id="btn_back_line">
-      <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+      <v-btn class="ma-2" color="#5041BC" @click="goBack">
         <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
       <div id="pagetitle">내 정보 수정</div>
     </div>
@@ -11,12 +11,12 @@
 
   <div>
     <v-card id="updateUserInfoForm_layout" class="mx-auto pa-12 pb-8" elevation="8" max-width="560" rounded="lg" style="text-align: center">
-      <v-avatar size="120" id="profileimg">
-        <img src="@/assets/images/blackDUK.png" alt="profileimg" style="width: 100%">
+      <div id="profileImgLayOut">
+      <v-avatar size="110" id="profileimg">
+        <img :src=user.profile alt="profileimg" style="width: 100%">
       </v-avatar>
-
+      </div>
       <v-file-input label="File input" v-model="selectedFile" @change="handleFileChange" variant="solo-filled"></v-file-input>
-
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">닉네임 변경</div>
     <div style="display: flex">
       <v-text-field v-model="newNickname"
@@ -25,16 +25,12 @@
           prepend-inner-icon="mdi-account-outline"
           variant="outlined"
       ></v-text-field>
-      <v-btn
-          class="vaildateBtn basicBtnColor"
-          @click="checkNickname"
-      >
+      <v-btn class="vaildateBtn basicBtnColor" @click="checkNickname">
         중복확인
       </v-btn>
       <span id="nicknameMsg">{{ nicknameAvailabilityMsg }}</span>
     </div>
-
-      <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="updateUserInfo">회원정보 수정</v-btn>
+      <v-btn block class="mb-8" color="#5041BC" size="large" variant="elevated" @click="updateUserInfo" >회원정보 수정</v-btn>
     </v-card>
   </div>
 </template>
@@ -47,6 +43,7 @@ import {onMounted, reactive, ref} from "vue";
 import {api} from "@/common.js";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
+const { user } = useAuthStore()
 
 const checkNickNameUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_CHECK_NICKNAME_API_PATH;
 
@@ -55,7 +52,7 @@ const userProfileImageUrl = "@/assets/images/blackDUK.png";
 const selectedFile = ref([]);
 const newNickname = ref("");
 const nicknameAvailabilityMsg = ref("");
-
+const currentUser = ref(user.usersId)
 const check = ref(
   {
     nickCheck:false,
@@ -107,10 +104,10 @@ const checkNickname = async () => {
 }
 const updateUserInfo = () => {
   const formData = new FormData();
-  console.log(selectedFile.value)
-  formData.append("file", selectedFile.value);
+  formData.append("file", selectedFile.value[0]);
   formData.append("newNickname", newNickname.value);
-  if(!(check.value.nickCheck)){
+
+  if(newNickname.value != "" && !(check.value.nickCheck)){
     alert("닉네임 중복체크를 완료해주세요")
   }else {
     axios.put("http://localhost:8089/mypage/update", formData,{
