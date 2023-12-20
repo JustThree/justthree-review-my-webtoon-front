@@ -51,8 +51,8 @@
       <td id="nicknameTd" class="text-left" @click="$router.push({path: `/mypage/userinfo/${item.usersId}`})">{{ item.userNickname }}</td>
       <td class="text-left">{{ item.created }}</td>
       <td class="text-left"><div class="pt-2">
-        <v-btn color="#924AFE" class="mr-1" variant="flat" @click="gotoUpdateBoard(item.boardId)">  수정  </v-btn>
-        <v-btn color="#924AFE" @click="deleteBoard(item.boardId)">삭제</v-btn>
+        <v-btn color="#924AFE" class="mr-3" variant="flat" @click="gotoUpdateBoard(item.boardId)">  수정  </v-btn>
+        <v-btn color="red" @click="deleteBoard(item.boardId)" >삭제</v-btn>
       </div></td>
     </tr>
     </tbody>

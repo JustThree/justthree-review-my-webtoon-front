@@ -52,7 +52,7 @@
       <td id="nicknameTd" class="text-left" @click="$router.push({path: `/mypage/userinfo/${item.usersId}`})">{{ item.userNickname }}</td>
       <td class="text-left">{{ item.created }}</td>
       <td class="text-left"><div class="pt-2">
-        <v-btn @click="deleteBoard(item.boardId)">삭제</v-btn>
+        <v-btn @click="deleteBoard(item.boardId)" color="red">삭제</v-btn>
       </div></td>
     </tr>
     </tbody>
