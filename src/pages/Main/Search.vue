@@ -81,7 +81,7 @@ type = 1
 </script>
 
 <template>
-  <v-infinite-scroll :height="800" :items="content[type]"
+  <v-infinite-scroll height=100% :items="content[type]"
                      :onLoad="load"
                      empty-text="검색하신 결과가 더 없어요"
                       aria-hidden="true">

@@ -3,7 +3,7 @@
     <div class="text-center">
       <hr class="line">
       <div id="btn_back_line">
-        <v-btn class="ma-2" color="purple-lighten-2" @click="goBack">
+        <v-btn class="ma-2" color="#5041BC" @click="goBack">
           <v-icon start icon="mdi-arrow-left"></v-icon>뒤로가기</v-btn>
         <div id="pagetitle">관심 웹툰</div>
       </div>
@@ -11,7 +11,7 @@
     </div>
 
     <v-card>
-      <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+      <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center" >
         <v-tab :value="1">기본 순</v-tab>
       </v-tabs>
     </v-card>
@@ -22,7 +22,7 @@
           <div>
             <img :src="item.imageUrl" id="thumbnail">
           </div>
-          <router-link :to="{path:`/`}" id="titletext">{{item.title}}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
+          <router-link :to="{path:`/`}" id="titletext" >{{item.title}}</router-link><!--a태그 아래까지 감싸야 클릭 전체로 되는데 그러면 다른정보들이 안 불러와짐 왜이러노 -->
           <div id="tooninfo">
              {{item.pictrWritrNm}} {{item.sntncWritrNm}}
           </div>
@@ -62,7 +62,9 @@ const getSlice = (index) => {
   const end = start + 13;
   return interested.values.slice(start, end);
 };
-
+const goBack = () => {
+  window.history.back();
+};
 </script>
 <style scoped>
 @import "@/assets/css/ratedlist.css";

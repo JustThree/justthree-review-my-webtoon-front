@@ -38,6 +38,7 @@
           variant="outlined"
           @click:append-inner="visible = !visible"
           :rules="[required]"
+          @keyup.enter="submit"
       ></v-text-field>
 
       <v-btn
