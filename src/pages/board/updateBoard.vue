@@ -70,7 +70,7 @@ const updateBoard = async (board) => {
             formData.append('imageIdList', board.boardImgMapList[i].imgId);
         }
         formData.append("noticeYn", 0);// 0: 자유 1: 공지
-        formData.append("users", loginUsersId.value); // users_id
+        //formData.append("users", loginUsersId.value); // users_id
 
         const response = await api("board/"+route.params.boardId, "PUT", formData);
         if (response instanceof Error) {

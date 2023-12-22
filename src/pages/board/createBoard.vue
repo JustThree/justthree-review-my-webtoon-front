@@ -40,7 +40,7 @@ const createBoard = async (board) => {
       formData.append('imageFiles', board.boardFiles[i]);
     }
     formData.append("noticeYn", useAuthStore().user.nickname === "관리자" || useAuthStore().user.nickname === "admin" ? 1 : 0);// 0: 자유 1: 공지
-    formData.append("users", loginUsersId.value ); // users_id
+    //formData.append("users", loginUsersId.value ); // users_id
     const response = await api("board", "POST", formData);
     if (response instanceof Error) {
       console.log(response.response.data); //서버에서 예외처리 필요
