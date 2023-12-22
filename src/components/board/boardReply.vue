@@ -117,7 +117,9 @@ const delBoardReply=()=>{
                     <div class="card-re-reply-content">
                         <div class="re-card-header">
                             <div class="re-card-hearder-wrapper">
-                                <span class="text-overline" v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
+                                <span
+                                    class="text-overline"
+                                      v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
                                 <span class="text-subtitle-1">{{ reReply.replyUserNickname }}</span>
                             </div>
                             <p class="text-caption"  style="padding-left:5px">등록일자 {{ reReply.replyCreated }}</p>
