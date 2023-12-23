@@ -40,7 +40,6 @@ async function toggleLike() {
     //console.log(board.value.boardLikeYn);
     if(!board.value.boardLikeYn) {  //좋아요 등록
         const response = await api("board/likes", "POST", {
-            "users": {"usersId": loginUsersId.value},
             "boardId": board.value.boardId
         });
         if (response instanceof Error) {
@@ -54,7 +53,7 @@ async function toggleLike() {
             }
         }
     }else{ //좋아요 취소
-        const response = await apiToken("board/likes/"+board.value.boardId, "DELETE", "", JSON.parse(authStore.user.token).accessToken);
+        const response = await api("board/likes/"+board.value.boardId, "DELETE");
         if (response instanceof Error) {
             console.log(response.response.data);
         } else {
@@ -107,7 +106,6 @@ const submitReply = async () => {
             return;
     }
    const response = await api("boardreply", "POST", {
-            "users" : {"usersId": loginUsersId.value},
             "boardId": board.value.boardId,
             "boardReplyContent": txtReply.value,
             "parentReplyId" : 0
@@ -153,7 +151,6 @@ const handleUpdateReply = async (editedReply)=>{
         return;
     }
     const response = await api("boardreply/"+editedReply.boardReplyId, "PUT", {
-        "users" : {"usersId": editedReply.replyUsersId},
         "boardId": editedReply.boardId,
         "boardReplyContent": editedReply.updatedReplyContent
     });
@@ -183,7 +180,6 @@ const handleCreateReReply = async (newReReply)=>{
     }
     if(confirm("대댓글은 수정 및 삭제가 안됩니다. 등록하시겠습니까?")){
         const response = await api("boardreply", "POST", {
-        "users" : {"usersId": loginUsersId.value},
         "boardId": newReReply.boardId,
         "boardReplyContent": newReReply.boardReplyContent,
         "parentReplyId" : newReReply.parentReplyId
@@ -205,9 +201,9 @@ const handleCreateReReply = async (newReReply)=>{
 }
 //데이터 조회
 const getData = async () =>{
-    console.log(JSON.parse(authStore.user.token).accessToken );
+    //console.log(JSON.parse(authStore.user.token).accessToken );
     console.log(route.params.boardId);
-    apiToken("board/"+route.params.boardId, "GET", "", JSON.parse(authStore.user.token).accessToken)
+    api("board/"+route.params.boardId, "GET")
         .then((response)=>{
             if(response instanceof Error){
                 let errorRes = response;
@@ -235,8 +231,6 @@ onMounted(async () =>{
     }else {
         loginUsersId.value =-1;
     }
-    console.log('loginUsersId', loginUsersId.value);
-    console.log(loginUsersId.value);
     await getData();
 });
 </script>
@@ -244,12 +238,16 @@ onMounted(async () =>{
 <template>
     <v-container>
         <v-row>
-            <div v-if="$route.query.noticeYn === '0'"
-                class="text-h6 text-md-h5 text-lg-h4 font-weight-black"
-                 style="margin: 15px;"> 커뮤니티</div>
-            <div v-else
-                class="text-h6 text-md-h5 text-lg-h4 font-weight-black"
-                 style="margin: 15px;"> 공지사항</div>
+            <router-link
+                to="/boardslist/comm"
+                v-if="$route.query.noticeYn === '0'"
+                class="custom-menu-link"
+                style="margin: 15px;">커뮤니티</router-link>
+            <router-link
+                to="/boardslist/notice"
+                v-else
+                class="custom-menu-link"
+                style="margin: 15px;">공지사항</router-link>
         </v-row>
         <v-row>
             <div class="top-frame">
@@ -340,6 +338,12 @@ onMounted(async () =>{
     </v-container>
 </template>
 <style scoped>
+.custom-menu-link{
+    color: inherit;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 700;
+}
 /*게시글 제목 */
 .top-frame{
     width: 100%;
