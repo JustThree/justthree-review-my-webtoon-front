@@ -26,7 +26,6 @@
 </template>
 
 <script setup>
-import {Bar} from 'vue-chartjs'
 import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale} from 'chart.js'
 import {api} from "@/common.js";
 import Chart from 'chart.js/auto';
@@ -93,7 +92,8 @@ onMounted(async () => {
       datasets: [{
         label: '팔로우 제일 많이 한 사람',
         data: followNum1,
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor: ['#C499F3','#F2AFEF','#F2AFEF','#F2AFEF','#F2AFEF',]
       }]
     },
     options: {
@@ -111,7 +111,8 @@ onMounted(async () => {
       datasets: [{
         label: '팔로우 제일 많이 된 사람',
         data: followNum2,
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor: ['#FFAD84','#FFC47E','#FFC47E','#FFC47E','#FFC47E',]
       }]
     },
     options: {
@@ -129,7 +130,8 @@ onMounted(async () => {
       datasets: [{
         label: '평균 별점 순위',
         data: rate3,
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor: ['#FF90BC','#FFC0D9','#FFC0D9','#FFC0D9','#FFC0D9',]
       }]
     },
     options: {
@@ -147,7 +149,8 @@ onMounted(async () => {
       datasets: [{
         label: '가장 많이 즐겨찾기 된 웹툰',
         data: likeCount4,
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor: ['#994D1C','#F5CCA0','#F5CCA0','#F5CCA0','#F5CCA0',]
       }]
     },
     options: {
