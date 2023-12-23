@@ -98,7 +98,7 @@ const delBoardReply=()=>{
                     <v-btn variant="text" @click="openReReplyModal"> 대댓글 등록 </v-btn>
                 </div>
                 <div class="reply-edit-btns" v-if="loginUsersId === replyUsersId">
-                    <v-btn variant="tonal" @click="openUpdateModal">  수정  </v-btn>
+                    <v-btn variant="outlined" @click="openUpdateModal">  수정  </v-btn>
                     <v-btn variant="tonal" @click="delBoardReply">  삭제  </v-btn>
                 </div>
             </div>
@@ -220,7 +220,10 @@ const delBoardReply=()=>{
 }
 .card-re-reply-content{
     width: 100%;
+    margin-left: 10px;
+    padding: 3px;
     background-color: #D5C2EE;
+    border-radius: 5px;
 }
 .re-card-header {
     width: 100%;
