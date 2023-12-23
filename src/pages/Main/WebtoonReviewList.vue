@@ -11,7 +11,7 @@ const authStore = useAuthStore()
 const route = useRoute();
 // 페이징 관련
 const pageContents = ref();
-const totalPages = ref();
+const totalPages = ref(1);
 const reviewContent = ref("");
 const totalCount = ref();
 const queryString = ref({
@@ -162,7 +162,7 @@ fetchData()
             >
 
               <img
-                  style="width:40px;height:40px"
+                  style="width:40px;height:40px; border-radius: 15px;"
                   :src="item.imgUrl">
               <router-link :to="'/mypage/userinfo/' + item.replyUserId"
                            class="no-color-line">
@@ -196,11 +196,11 @@ fetchData()
               class="ml-2 mb-2"
           >
             <v-col
-                class="v-col-1"
+                class="v-col-2"
             >
               <v-icon
                   color="gray "
-                  size="16"
+                  size="12"
                   icon="mdi-thumb-up"
               ></v-icon>
               <span
@@ -209,11 +209,11 @@ fetchData()
               </span>
             </v-col>
             <v-col
-                class="v-col-1"
+                class="v-col-2"
             >
               <v-icon
                   color="gray "
-                  size="16"
+                  size="12"
                   icon="mdi-chat-outline"
               ></v-icon>
               <span
