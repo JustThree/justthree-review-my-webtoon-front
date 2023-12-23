@@ -30,7 +30,6 @@ const deleteBoard = () => {
 }
 const goBack = () => {
     emit('goBack');
-    //router.go(-1);
 }
 </script>
 <template>

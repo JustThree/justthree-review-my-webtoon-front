@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <!-- 검색 Frame -->
-        <v-row>
+        <v-row class="d-flex justify-center align-center">
             <div class="search-frame">
                 <v-text-field
                     class="input-keyword"
