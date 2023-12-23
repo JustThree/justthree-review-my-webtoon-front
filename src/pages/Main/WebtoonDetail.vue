@@ -173,6 +173,7 @@ function submitReview(){
           width="90%"
           :style="
             {
+              borderRadius: '10px',
               backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 1.0)),' +'url(' + data.imgUrl +')'
               }
             ">
@@ -202,9 +203,11 @@ function submitReview(){
             style="width:30%"
         >
           <v-img
+              style="border-radius: 25px;"
               :src="data.imgUrl"
               height="300px"
               :cover=true
+
           >
           </v-img>
         </div>
@@ -420,7 +423,7 @@ function submitReview(){
             </v-col>
             <v-col v-for="(itemCol,idxCol) in reviewData"
                    cols="4"
-                   style="min-width:300px"
+                   style="min-width:300px;border-radius: 15px;"
             >
 
               <v-sheet
