@@ -1,46 +1,3 @@
-<template>
-    <v-container>
-        <v-row>
-            <div class="menu-frame">
-                <div class="sort-menu-frame">
-                    <v-select
-                        v-model="selectedSort"
-                        :items="sortOptions"
-                        class="sort-menu"
-                        @change="sortBoards">
-                    </v-select>
-                </div>
-                <div class="search-create-frame">
-                    <p class="font-weight-medium"><span class="font-weight-bold" style="color:#FB8C00">{{commCount}}</span>건</p>
-                    <div class="search-input-frame">
-                        <div class="search-input">
-                            <v-text-field
-                                variant="standard" maxlength="20"
-                                bg-color="#EDE7F6" v-model="searchKeyword"
-                                placeholder="검색 키워드를 작성해주세요(20자 이내)">
-                            </v-text-field>
-                        </div>
-                        <v-btn class="search-btn"  variant="text" @click="searchBoard">검색</v-btn>
-                    </div>
-                    <div class="create-btn-frame">
-                        <v-btn class="create-btn" variant="tonal" @click="gotoCreateBoard" >
-                            <v-icon left>mdi-pencil</v-icon> 글쓰기
-                        </v-btn>
-                    </div>
-                </div>
-            </div>
-        </v-row>
-        <v-infinite-scroll  class="infinte-frame" :onLoad="load">
-            <template v-for="(data, idx) in commBoardList" :key="idx">
-                <Board :boardone="data"></Board>
-            </template>
-            <template v-slot:loading>
-                <div v-if="isLoading">로딩 중...</div>
-                <div v-else>시간이 조금 걸립니다:)</div>
-            </template>
-        </v-infinite-scroll>
-    </v-container>
-</template>
 <script setup>
 import Board from "@/components/board/board.vue";
 import {onMounted, ref, nextTick, watch} from "vue";
@@ -135,14 +92,61 @@ onMounted(async  ()=>{
     await loadMoreBoards();
 });
 </script>
-
+<template>
+    <v-container>
+        <v-row>
+            <div class="menu-frame">
+                <div class="sort-menu-frame">
+                    <v-select
+                        v-model="selectedSort"
+                        :items="sortOptions"
+                        class="sort-menu"
+                        variant="outlined"
+                        @change="sortBoards">
+                    </v-select>
+                </div>
+                <div class="search-create-frame">
+                    <div class="search-input-frame">
+                        <div class="search-input">
+                            <v-text-field
+                                variant="standard" maxlength="20"
+                                bg-color="#EDE7F6" v-model="searchKeyword"
+                                placeholder="검색 키워드를 작성해주세요(20자 이내)"
+                                @keyup.enter="searchBoard">
+                            </v-text-field>
+                        </div>
+                        <v-btn class="search-btn"  variant="text" @click="searchBoard">검색</v-btn>
+                    </div>
+                    <div class="create-btn-frame">
+                        <v-btn class="create-btn" variant="tonal" @click="gotoCreateBoard" >
+                            <v-icon left>mdi-pencil</v-icon> 글쓰기
+                        </v-btn>
+                    </div>
+                </div>
+            </div>
+        </v-row>
+        <v-row>
+            <div class="board-count-frame">
+                <p class="text-h6 font-weight-medium"><span class="font-weight-bold" style="color:#FB8C00">{{commCount}}</span>건</p>
+            </div>
+        </v-row>
+        <v-infinite-scroll  class="infinte-frame" :onLoad="load">
+            <template v-for="(data, idx) in commBoardList" :key="idx">
+                <Board :boardone="data"></Board>
+            </template>
+            <template v-slot:loading>
+                <div v-if="isLoading">로딩 중...</div>
+                <div v-else>시간이 조금 걸립니다:)</div>
+            </template>
+        </v-infinite-scroll>
+    </v-container>
+</template>
 <style scoped>
 .menu-frame{
     width: 100%;
     height: 100px;
     display: flex;
     justify-content: flex-start;
-    /*justify-content: flex-end;*/
     align-items: center;
     gap: 10px;
     line-height: 100px;
@@ -153,9 +157,15 @@ onMounted(async  ()=>{
 .sort-menu-frame{
     width: 25%;
     margin-right: 130px;
+    padding-top: 25px;
+    display: flex;
+    align-content: center;
+    align-items: center;
 }
 .sort-menu{
     width: 100%;
+    padding-top: 5px;
+    text-decoration: none;
 }
 .search-create-frame{
     width: 100%;
@@ -166,7 +176,7 @@ onMounted(async  ()=>{
 }
 /*  검색 */
 .search-input-frame{
-    width: 45%;
+    min-width: 60%;
     height: 55px;
     line-height: 100px;
     display: flex;
@@ -175,6 +185,7 @@ onMounted(async  ()=>{
 }
 .search-input{
     width: 90%;
+    height: 50px;
 }
 .search-btn {
     color: #8F7CEE;
@@ -193,13 +204,16 @@ onMounted(async  ()=>{
     background-color: #8F7CEE;
     color: white;
 }
+.board-count-frame{
+    margin: 5px;
+    padding-left: 20px;
+}
 /*스크롤 CSS*/
 .infinte-frame {
-    height: 800px;
+    min-height: 700px;
     margin: 5px;
 }
 ::-webkit-scrollbar {
     display: none;
 }
-
 </style>
