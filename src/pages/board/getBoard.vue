@@ -238,12 +238,16 @@ onMounted(async () =>{
 <template>
     <v-container>
         <v-row>
-            <div v-if="$route.query.noticeYn === '0'"
-                class="text-h6 text-md-h5 text-lg-h4 font-weight-black"
-                 style="margin: 15px;"> 커뮤니티</div>
-            <div v-else
-                class="text-h6 text-md-h5 text-lg-h4 font-weight-black"
-                 style="margin: 15px;"> 공지사항</div>
+            <router-link
+                to="/boardslist/comm"
+                v-if="$route.query.noticeYn === '0'"
+                class="custom-menu-link"
+                style="margin: 15px;">커뮤니티</router-link>
+            <router-link
+                to="/boardslist/notice"
+                v-else
+                class="custom-menu-link"
+                style="margin: 15px;">공지사항</router-link>
         </v-row>
         <v-row>
             <div class="top-frame">
@@ -334,6 +338,12 @@ onMounted(async () =>{
     </v-container>
 </template>
 <style scoped>
+.custom-menu-link{
+    color: inherit;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 700;
+}
 /*게시글 제목 */
 .top-frame{
     width: 100%;
