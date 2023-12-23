@@ -199,6 +199,9 @@ const handleCreateReReply = async (newReReply)=>{
         return;
     }
 }
+const addLineBreaks = (text) => {
+    return text.replace(/\n/g, "<br>");
+};
 //데이터 조회
 const getData = async () =>{
     //console.log(JSON.parse(authStore.user.token).accessToken );
@@ -212,6 +215,7 @@ const getData = async () =>{
             }else{
                 console.log(response);
                 board.value = response;
+                board.value.content = board.value.content.split('\n').join('<br>');
                 // 댓글, 대댓글
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);
                 board.value.reReplyList = board.value.boardReplyList.filter(reply => reply.parentReplyId !== 0);
@@ -237,7 +241,7 @@ onMounted(async () =>{
 
 <template>
     <v-container>
-        <v-row>
+<!--        <v-row>
             <router-link
                 to="/boardslist/comm"
                 v-if="$route.query.noticeYn === '0'"
@@ -248,7 +252,7 @@ onMounted(async () =>{
                 v-else
                 class="custom-menu-link"
                 style="margin: 15px;">공지사항</router-link>
-        </v-row>
+        </v-row>-->
         <v-row>
             <div class="top-frame">
                 <div class="top-title-frame" >
@@ -291,15 +295,8 @@ onMounted(async () =>{
         </v-row>
         <!-- 게시글 내용 -->
         <v-row>
-            <div class="content-frame">
-                <v-textarea
-                    class="area-board-content"
-                    no-resize
-                    variant="standard"
-                    bg-color="white"
-                    v-model="board.content"
-                    :readonly="true">
-                </v-textarea>
+            <div class="content-frame" >
+                <div v-html="board.content"></div>
             </div>
         </v-row>
         <!--  댓글 Div     -->
@@ -351,7 +348,7 @@ onMounted(async () =>{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 5px;
+    margin-top: 20px;
     padding: 5px;
     gap: 5px;
     background-color: #EDE7F6;
@@ -395,11 +392,8 @@ onMounted(async () =>{
 /* 게시글 본문 내용 */
 .content-frame{
     width: 100%;
-    height: 400px;
+    min-height: 150px;
     margin: 10px;
-}
-.area-board-content{
-    height: 300px;
 }
 /* 댓글 */
 .reply-title-frame{

@@ -22,7 +22,7 @@ import router from "@/router/index.js";
 
 const activeTab = ref('/boardslist/comm');
 const showCommunityTab = () =>{
-    router.go(0);
+    //router.push('/boardslist/comm');
 }
 </script>
 

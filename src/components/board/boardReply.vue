@@ -113,7 +113,7 @@ const delBoardReply=()=>{
         <div  class="rereply-list-frame" v-for="reReply in reReplyList" :key="reReply.boardReplyId">
             <template v-if="reReply.parentReplyId === boardReplyId">
                 <v-card class="card-re-reply" variant="text" >
-                    <div class="card-re-reply-arrow"><v-icon>mdi-arrow-right</v-icon></div>
+                    <div class="card-re-reply-arrow"> →  </div>
                     <div class="card-re-reply-content">
                         <div class="re-card-header">
                             <div class="re-card-hearder-wrapper">
