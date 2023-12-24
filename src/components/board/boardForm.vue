@@ -10,13 +10,6 @@ const props = defineProps({
     required: true
   },
 })
-/*const board = ref({
-  title: '',
-  content: '',
-  boardFiles: [],
-  noticeYn: 0,
-  users: ''
-});*/
 // [이미지 수정] 삭제 기능 추가
 const removeImage = (imgId) => {
     console.log("imgId", imgId);
@@ -31,10 +24,12 @@ const submitBoard = () => {
   //emit('submit', board.value); //등록
   emit('submit', props.board);
 };
-
 //삭제(수정일 때만)
 const deleteBoard = () => {
   emit('deleteBoard', props.board); // delete 이벤트 emit
+}
+const goBack = () => {
+    emit('goBack');
 }
 </script>
 <template>
@@ -80,11 +75,14 @@ const deleteBoard = () => {
             </v-file-input>
         </v-row>
         <!-- [게시글 수정 시]이미지 첨부파일   -->
-        <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-grey-lighten-4">
+        <div v-if="board.boardImgMapList.length>0" class="d-flex justify-space-around align-center bg-white">
             <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
                 <div class="image-container">
                     <v-img class="bg-white" width="300" :src="imgMap.accessUrl" cover></v-img>
-                    <v-btn class="delete-button" @click="removeImage(imgMap.imgId)">삭제</v-btn>
+                    <v-btn
+                        variant="text"
+                        style="position: absolute; z-index: 1; top: 5px; right: 5px;color: red;font-weight:900;"
+                        @click="removeImage(imgMap.imgId)">X</v-btn>
                 </div>
                 <div class="text-subtitle-2">{{imgMap.originName}}</div>
             </div>
@@ -92,8 +90,9 @@ const deleteBoard = () => {
         <v-row>
             <v-col cols="12">
                 <div class="frame-bottom">
-                    <v-btn variant="tonal" @click="submitBoard" >{{buttonText}}</v-btn>
-                    <v-btn variant="outlined" v-if="buttonText==='수정완료'" @click="deleteBoard" >삭제하기</v-btn>
+                    <v-btn variant="outlined" @click="submitBoard" >{{buttonText}}</v-btn>
+                    <v-btn variant="tonal" v-if="buttonText==='수정완료'" @click="deleteBoard" >글 삭제</v-btn>
+                    <v-btn variant="text" v-if="buttonText==='수정완료'" @click="goBack">수정 취소</v-btn>
                 </div>
             </v-col>
         </v-row>
@@ -108,15 +107,10 @@ const deleteBoard = () => {
 .frame-bottom{
     display: flex;
     justify-content: center;
+    gap: 30px;
 }
 /*  수정일 때  */
 .image-container {
     position: relative; /* 부모 요소에 대해 상대적인 위치 설정 */
-}
-.delete-button {
-    position: absolute;
-    top: 5px; /* 삭제 버튼의 상단 위치 조정 */
-    right: 5px; /* 삭제 버튼의 우측 위치 조정 */
-    z-index: 1; /* 다른 요소 위에 겹쳐지도록 설정 */
 }
 </style>

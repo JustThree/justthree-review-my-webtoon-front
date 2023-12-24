@@ -1,11 +1,11 @@
 <template>
     <v-container>
         <div class="tab-menu-frame">
-        <v-row>
-            <v-tabs v-model="activeTab" active-class="custom-active-tab">
-                <v-tab to="/boardslist/comm"><span class="tab-menu">커뮤니티</span></v-tab>
-                <v-tab to="/boardslist/notice"><span class="tab-menu">공지사항</span></v-tab>
-            </v-tabs>
+            <v-row>
+                <v-tabs v-model="activeTab" active-class="custom-active-tab">
+                    <v-tab to="/boardslist/comm" @click="showCommunityTab"><span class="tab-menu">커뮤니티</span></v-tab>
+                    <v-tab to="/boardslist/notice"><span class="tab-menu">공지사항</span></v-tab>
+                </v-tabs>
             </v-row>
         </div>
             <v-tabs-items v-model="activeTab">
@@ -18,8 +18,12 @@
 
 <script setup>
 import {ref} from "vue";
+import router from "@/router/index.js";
 
 const activeTab = ref('/boardslist/comm');
+const showCommunityTab = () =>{
+    //router.push('/boardslist/comm');
+}
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <v-container>
       <div class="text-h6 text-md-h5 text-lg-h4 font-weight-black" style="margin: 15px;"> 글 수정하기</div>
-    <board-form :board="board" :buttonText="'수정완료'" @submit="updateBoard" @deleteBoard="deleteBoard"></board-form>
+    <board-form :board="board" :buttonText="'수정완료'" @submit="updateBoard" @deleteBoard="deleteBoard" @goBack="cancelUpdate"></board-form>
   </v-container>
 </template>
 
@@ -70,7 +70,6 @@ const updateBoard = async (board) => {
             formData.append('imageIdList', board.boardImgMapList[i].imgId);
         }
         formData.append("noticeYn", 0);// 0: 자유 1: 공지
-        formData.append("users", loginUsersId.value); // users_id
 
         const response = await api("board/"+route.params.boardId, "PUT", formData);
         if (response instanceof Error) {
@@ -103,6 +102,9 @@ const deleteBoard = async (board) => {
   }else{
       return;
   }
+}
+const cancelUpdate = () =>{
+    router.go(-1);
 }
 </script>
 

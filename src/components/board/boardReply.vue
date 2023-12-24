@@ -98,7 +98,7 @@ const delBoardReply=()=>{
                     <v-btn variant="text" @click="openReReplyModal"> 대댓글 등록 </v-btn>
                 </div>
                 <div class="reply-edit-btns" v-if="loginUsersId === replyUsersId">
-                    <v-btn variant="tonal" @click="openUpdateModal">  수정  </v-btn>
+                    <v-btn variant="outlined" @click="openUpdateModal">  수정  </v-btn>
                     <v-btn variant="tonal" @click="delBoardReply">  삭제  </v-btn>
                 </div>
             </div>
@@ -113,11 +113,13 @@ const delBoardReply=()=>{
         <div  class="rereply-list-frame" v-for="reReply in reReplyList" :key="reReply.boardReplyId">
             <template v-if="reReply.parentReplyId === boardReplyId">
                 <v-card class="card-re-reply" variant="text" >
-                    <div class="card-re-reply-arrow"><v-icon>mdi-arrow-right</v-icon></div>
+                    <div class="card-re-reply-arrow"> →  </div>
                     <div class="card-re-reply-content">
                         <div class="re-card-header">
                             <div class="re-card-hearder-wrapper">
-                                <span class="text-overline" v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
+                                <span
+                                    class="text-overline"
+                                      v-if="reReply.replyUsersId === writerUsersId">  글 작성자 | </span>
                                 <span class="text-subtitle-1">{{ reReply.replyUserNickname }}</span>
                             </div>
                             <p class="text-caption"  style="padding-left:5px">등록일자 {{ reReply.replyCreated }}</p>
@@ -218,7 +220,10 @@ const delBoardReply=()=>{
 }
 .card-re-reply-content{
     width: 100%;
+    margin-left: 10px;
+    padding: 3px;
     background-color: #D5C2EE;
+    border-radius: 5px;
 }
 .re-card-header {
     width: 100%;

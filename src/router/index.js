@@ -35,7 +35,7 @@ import Follow from "@/pages/MyPage/Follow.vue";
 
 //Admin
 import Admin from "@/pages/Admin.vue";
-import AdminHome from "@/components/admin/AdminHome.vue";
+import Static from "@/components/admin/Static.vue";
 import BoardAdmin from "@/components/admin/BoardAdmin.vue";
 import NoticeAdmin from "@/components/admin/NoticeAdmin.vue";
 import TotalStatistics from "@/components/admin/TotalStatistics.vue";
@@ -112,6 +112,10 @@ const router= createRouter({
         {path:'/admin/',
             component:Admin,
             children: [
+                {
+                    path: "/static",
+                    component: Static
+                },
                 {
                     path : "/boardAdmin",
                     component : BoardAdmin
