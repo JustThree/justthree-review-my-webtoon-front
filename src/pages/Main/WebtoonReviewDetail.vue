@@ -84,7 +84,7 @@ fetchData();
 function likeReview() {
   if (authStore.user) {
     console.log(JSON.parse(authStore.user.token).accessToken)
-    apiToken("api/webtoon/review/reply/like/" + route.params.reviewId,
+    apiToken("api/webtoon/review/like/" + route.params.reviewId,
         "PATCH",
         {},
         JSON.parse(authStore.user.token).accessToken
