@@ -42,6 +42,7 @@ const title4 = []
 const likeCount4 = []
 
 onMounted(async () => {
+  // api 에서 정보 가져오기
   const [response1, response2, response3, response4] = await Promise.all([
     api("admin/followtop",
         "GET").then(
@@ -60,7 +61,7 @@ onMounted(async () => {
         (response) => response
     )
   ])
-
+  // 변수에 값넣기
   for (const idx in response1.content) {
     nickname1[idx] = response1.content[idx].usersNickname
     followNum1[idx] = response1.content[idx].followCount
@@ -78,13 +79,11 @@ onMounted(async () => {
     likeCount4[idx] = response4.content[idx].likeCount
   }
 
-
-
   const ctx1 = document.getElementById('myChart1');
   const ctx2 = document.getElementById('myChart2');
   const ctx3 = document.getElementById('myChart3');
   const ctx4 = document.getElementById('myChart4');
-
+  // 차트 그리기
   new Chart(ctx1, {
     type: 'bar',
     data: {

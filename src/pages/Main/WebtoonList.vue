@@ -8,7 +8,6 @@ const pageContents = ref();
 const totalPages = ref();
 
 // api query String 정의
-
 const queryString =  ref({
   page:0,
   order:"등록순",
@@ -37,7 +36,7 @@ function sleep(ms){
   while (Date.now() < wakeUpTime) {}
 }
 
-// 뒤로가기 위한 세션값 저장
+// 뒤로가기 위한 세션값 저장 세션 스토리지에 있으면 가져오기
 if (sessionStorage.getItem("page")){
   queryString.value.page = sessionStorage.getItem("page");
 }
@@ -49,13 +48,15 @@ if (sessionStorage.getItem("genre")){
 }
 
 watch(
+    // page가 바끼면 데이터 갱신 후 세션 값 갱신
     () => queryString.value.page,
-    (nowPage, lastPage) => {
+    () => {
       fetchData()
       sessionStorage.setItem("page",queryString.value.page);
     }
 )
 watch(
+    // order가 바끼면 데이터 갱신 후 세션 값 갱신
     () => queryString.value.order,
     (nowOrder, lastOrder) => {
       queryString.value.page = 0
@@ -64,6 +65,7 @@ watch(
     }
 )
 watch(
+    // genre가 바끼면 데이터 갱신 후 세션 값 갱신
     () => queryString.value.genre,
     (nowGenre, lastGenree) => {
       queryString.value.page = 0
@@ -74,7 +76,7 @@ watch(
 
 
 
-// 페이지네이션
+// 페이지네이션 데이터 갱신 api
 const fetchData = async () => {
   loadContent.value = true
   try {
@@ -91,8 +93,6 @@ const fetchData = async () => {
   sleep(500)
   loadContent.value = false
 };
-
-
 // 버튼 누를 경우 쿼리스트링 변경
 const changeGenre = function (a){
   queryString.value.genre = a
@@ -100,7 +100,7 @@ const changeGenre = function (a){
 const changeOrder = function (a){
   queryString.value.order = a
 }
-
+// 데이터 초기 갱신
 fetchData()
 
 </script>

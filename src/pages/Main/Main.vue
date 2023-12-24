@@ -9,13 +9,12 @@ import {ref} from "vue";
 const data = ref([]);
 const apiList = ["recent","famous","recentend","fantasy","love"]
 
+// for 문으로 api 전달 후 데이터에 넣음
 for (const idx in apiList) {
-  console.log(apiList[idx])
   api("api/webtoon/webtoonlist?keyword=" + apiList[idx],
       "GET",
   ).then((response) =>{
         data.value[idx] = response;
-        console.log(data.value)
       }
   );
 }
