@@ -65,7 +65,7 @@ watch(
     () => {
       content = ref([[],[],[],[],[]]);
       pages = ref([0,0,0,0,0]);
-      type = 1;
+      // type = 1;
       size = 24
       fetchData(1)
       fetchData(2)
@@ -120,7 +120,7 @@ type = 1
                 :key="idx"
                 cols="12"
                 md="4"
-            ><router-link :to="/webtoon/ + item.masterId"
+            ><router-link :to="type===4 ? 'mypage/userinfo/' + item.masterId : 'webtoon/' + item.masterId"
                           class="no-color-line"
             >
               <v-img

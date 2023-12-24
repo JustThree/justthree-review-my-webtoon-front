@@ -8,7 +8,7 @@
         <v-btn @click="moveWebtoon"> 웹툰 </v-btn>
         <v-btn href="/boardslist/comm"> 커뮤니티 </v-btn>
         <v-btn href="/chatlist"> 채팅 </v-btn>
-        <v-btn v-if="user && user.usersRole === 'ROLE_USER,ROLE_ADMIN'" href="/admin"> 관리자 </v-btn>
+        <v-btn v-if="user && user.usersRole === 'USER,ADMIN'" href="/admin"> 관리자 </v-btn>
       </v-toolbar-title >
 
       <v-toolbar-items class="w-50">

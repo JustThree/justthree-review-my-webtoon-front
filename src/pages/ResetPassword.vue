@@ -52,7 +52,7 @@ import axios from 'axios';
 const route = useRoute();
 
 onBeforeMount(() => {
-  axios.get('http://localhost:8089/api/verify-code?email=' + route.query.email + '&code=' + route.query.code)
+  axios.get('http://192.168.3.112:8089/api/verify-code?email=' + route.query.email + '&code=' + route.query.code)
       .catch((err) => {
         alert(err.response.data);
         location.href="/";
@@ -69,7 +69,7 @@ function changePassword() {
     data.append("password", usersPw.value);
     data.append("correctPassword", usersPw.value);
 
-    axios.put('http://localhost:8089/api/reset-password', data, {headers:
+    axios.put('http://192.168.3.112:8089/api/reset-password', data, {headers:
           {'secretCode': import.meta.env.VITE_SECRET_CODE}})
         .then((res) => {
           alert(res.data);
