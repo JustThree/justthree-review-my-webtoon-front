@@ -18,8 +18,6 @@ const queryString = ref({
       page: 0
     }
 )
-
-
 // 페이지네이션
 const fetchData = async () => {
   try {
@@ -35,13 +33,14 @@ const fetchData = async () => {
     console.error("Error fetching data:", error);
   }
 };
+// 댓글 페이징을 위한
 watch(
     () => queryString.value.page,
-    (nowPage, lastPage) => {
+    () => {
       fetchData()
     }
 )
-
+// 리뷰 제출
 function submitReview() {
   if (authStore.user) {
     apiToken(
@@ -65,7 +64,7 @@ function submitReview() {
     alert("로그인을 먼저 해 주세요!");
   }
 }
-
+// 데이터 초기화
 fetchData()
 </script>
 
