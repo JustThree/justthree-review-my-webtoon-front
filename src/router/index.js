@@ -11,7 +11,7 @@ import ForgotPassword from "@/pages/ForgotPassword.vue"
 import ResetPassword from "@/pages/ResetPassword.vue"
 
 //board(SY)
-import boadsList  from "@/pages/board/boardsList.vue"
+import boardsList  from "@/pages/board/boardsList.vue"
 import createBoard from "@/pages/board/createBoard.vue"
 import updateBoard from "@/pages/board/updateBoard.vue"
 import getBoard from "@/pages/board/getBoard.vue"
@@ -63,7 +63,7 @@ const router= createRouter({
         //board
         {
             path: '/boardslist',
-            component: boadsList,
+            component: boardsList,
             name: 'boardsList',
             children: [
                 { path: 'comm', component: commBoardList, name: 'commBoardList' },
