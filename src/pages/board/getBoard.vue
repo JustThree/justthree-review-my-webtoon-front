@@ -37,7 +37,6 @@ let boardreReplyList = ref([]);
 
 //게시글 좋아요 등록 및 취소
 async function toggleLike() {
-    //console.log(board.value.boardLikeYn);
     if(!board.value.boardLikeYn) {  //좋아요 등록
         const response = await api("board/likes", "POST", {
             "boardId": board.value.boardId
@@ -73,6 +72,7 @@ function gotoUpdateBoard(){
     let bId = board.value.boardId;
     router.push({ name: 'updatedBoard', params: { bId}});
 }
+
 //게시글 삭제
 async function delBoard(){
     if(confirm("정말 삭제하시겠습니까?")){
@@ -263,7 +263,7 @@ onMounted(async () =>{
                     <span><v-icon left style="color:red">mdi-heart</v-icon> {{  board.boardLikeCount  }} </span>
                     <div class="edit-btns" v-if="loginUsersId === board.writerUsersId">
                         <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
-                        <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
+<!--                        <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>-->
                     </div>
                 </div>
             </div>
