@@ -45,7 +45,7 @@ export function setupAxiosInterceptors(store){
         if (errResStatus === 401 || errResStatus === 403) {
             alert("권한이 없습니다. 로그아웃 되었습니다. 다시 로그인해주세요.");
             store.logout();
-        }else if(errResStatus === 409 && !isRefreshing.value){
+        }else if(errResStatus === 406 && !isRefreshing.value){
             isRefreshing.value = true;
             api("api/auth/accessoken", 'get', '').then(r  => {
                 user.value.accessToken = "Bearer " + r.toString();
