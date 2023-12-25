@@ -15,10 +15,9 @@ const reviewTotalPages = ref();
 const reviewTotalCount = ref();
 const reviewReplyComment = ref([])
 const fixContent = ref();
+
 const fixReplyContent = ref();
 // api query String 정의
-
-
 const reviewQueryString = ref({
       page: 0
     }
@@ -39,7 +38,6 @@ if (authStore.user && authStore.user.token !== null){
         console.log(response)
     reviewData.value = response;
     fixContent.value = response.content;
-    console.log(fixContent)
   }
   )}else {
     api("api/webtoon/review/" + route.params.reviewId,
@@ -57,13 +55,14 @@ if (authStore.user && authStore.user.token !== null){
     )
 
 }
-// 갑이 바끼면 변경
+// page 값이 바끼면 데이터 갱신
 watch(
     () => reviewQueryString.value.page,
-    (nowPage, lastPage) => {
+    () => {
       fetchData()
     }
 )
+// 데이터 수정
 const fetchData = async () => {
   try {
     const response = await api("api/webtoon/review/reply/"
@@ -80,11 +79,11 @@ const fetchData = async () => {
 };
 fetchData();
 
-// 좋아요
+// 리뷰 좋아요
 function likeReview() {
   if (authStore.user) {
     console.log(JSON.parse(authStore.user.token).accessToken)
-    apiToken("api/webtoon/review/reply/like/" + route.params.reviewId,
+    apiToken("api/webtoon/review/like/" + route.params.reviewId,
         "PATCH",
         {},
         JSON.parse(authStore.user.token).accessToken
@@ -123,7 +122,7 @@ function submitReviewReply() {
   }
 }
 
-// 수정
+// 리뷰 수정
 function fixReview() {
   if (authStore.user) {
     apiToken(
@@ -146,9 +145,7 @@ function fixReview() {
     alert("로그인을 먼저 해 주세요.")
   }
 }
-
-
-// 삭제
+// 리뷰 삭제
 function removeReview() {
   if (confirm("삭제 하시겠습니까?")) {
     if (authStore.user) {
@@ -225,7 +222,7 @@ function fixReviewReply(replyId, replyContent) {
   }
 }
 
-//공유 함수
+// 링크 공유용 함수
 function copyToClipboard() {
   try {
     copyText(window.document.URL)
@@ -518,6 +515,7 @@ function copyToClipboard() {
                       v-bind="props"
                       v-if="authStore.user.usersId === item.replyUserId"
                       class="m-2"
+                      @click="() => {fixReplyContent = item.content}"
                   >
                     수정
                   </div>
@@ -535,7 +533,7 @@ function copyToClipboard() {
                   <v-card title="웹툰 리뷰 댓글 수정">
                     <v-divider></v-divider>
                     <v-textarea
-                        v-model="item.content"
+                        v-model="fixReplyContent"
                         class="p-5"
                         bg-color=#F2F2F2
                         placeholder="(글자수 5~200자)"

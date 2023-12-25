@@ -10,7 +10,7 @@
           <router-link to="/admin"><v-list-item prepend-icon="mdi-account-group" title="회원관리" value="User"></v-list-item></router-link>
           <router-link to="/noticeAdmin"><v-list-item prepend-icon="mdi-cube" title="공지글 관리" value="Notice"></v-list-item></router-link>
           <router-link to="/boardAdmin"><v-list-item prepend-icon="mdi-widgets" title="게시글 관리" value="Board"></v-list-item></router-link>
-          <router-link to="/static"><v-list-item prepend-icon="mdi-chart-pie" title="통계" value="User"></v-list-item></router-link>
+          <router-link to="/static"><v-list-item prepend-icon="mdi-chart-pie" title="통계" value="static"></v-list-item></router-link>
 
         </v-list>
     </aside>
