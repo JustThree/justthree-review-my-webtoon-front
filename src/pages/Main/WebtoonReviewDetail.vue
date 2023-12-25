@@ -15,10 +15,9 @@ const reviewTotalPages = ref();
 const reviewTotalCount = ref();
 const reviewReplyComment = ref([])
 const fixContent = ref();
+
 const fixReplyContent = ref();
 // api query String 정의
-
-
 const reviewQueryString = ref({
       page: 0
     }
@@ -26,27 +25,44 @@ const reviewQueryString = ref({
 
 
 // 리뷰 데이터 한번 불러옴
-api("api/webtoon/review/" + route.params.reviewId,
-    "GET",
-).then((response) => {
-  if (response.deleted){
-    alert("삭제된 게시글 입니다.")
-    router.go(-1)
-  }
-      reviewData.value = response;
-      fixContent.value = response.content;
-
-      console.log(fixContent)
+if (authStore.user && authStore.user.token !== null){
+  apiToken("api/webtoon/review/" + route.params.reviewId,
+      "GET",
+      {},
+      JSON.parse(authStore.user.token).accessToken
+  ).then((response) => {
+    if (response.deleted) {
+      alert("삭제된 게시글 입니다.")
+      router.go(-1)
     }
-);
+        console.log(response)
+    reviewData.value = response;
+    fixContent.value = response.content;
+  }
+  )}else {
+    api("api/webtoon/review/" + route.params.reviewId,
+        "GET",
+    ).then((response) => {
+          if (response.deleted) {
+            alert("삭제된 게시글 입니다.")
+            router.go(-1)
+          }
+      console.log(response)
+          reviewData.value = response;
+          fixContent.value = response.content;
 
-// 갑이 바끼면 변경
+        }
+    )
+
+}
+// page 값이 바끼면 데이터 갱신
 watch(
     () => reviewQueryString.value.page,
-    (nowPage, lastPage) => {
+    () => {
       fetchData()
     }
 )
+// 데이터 수정
 const fetchData = async () => {
   try {
     const response = await api("api/webtoon/review/reply/"
@@ -63,10 +79,11 @@ const fetchData = async () => {
 };
 fetchData();
 
-// 좋아요
+// 리뷰 좋아요
 function likeReview() {
   if (authStore.user) {
-    apiToken("api/webtoon/review/reply/like/" + route.params.reviewId,
+    console.log(JSON.parse(authStore.user.token).accessToken)
+    apiToken("api/webtoon/review/like/" + route.params.reviewId,
         "PATCH",
         {},
         JSON.parse(authStore.user.token).accessToken
@@ -92,11 +109,11 @@ function submitReviewReply() {
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= reviewReplyComment.value.length && reviewReplyComment.value.length <=200) {
             alert(response);
             router.go(0);
+          } else {
+            alert("유효하지 않은 값입니다.")
           }
         }
     )
@@ -105,7 +122,7 @@ function submitReviewReply() {
   }
 }
 
-// 수정
+// 리뷰 수정
 function fixReview() {
   if (authStore.user) {
     apiToken(
@@ -116,11 +133,11 @@ function fixReview() {
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
+      if (5 <= fixContent.value.length && fixContent.value.length<= 200) {
+            alert("등록 완료")
+            router.go(0)
           } else {
-            alert(response);
-            router.go(0);
+            alert("5~200자 이내로 적어주세요")
           }
         }
     )
@@ -128,26 +145,29 @@ function fixReview() {
     alert("로그인을 먼저 해 주세요.")
   }
 }
-
-
-// 삭제
+// 리뷰 삭제
 function removeReview() {
   if (confirm("삭제 하시겠습니까?")) {
     if (authStore.user) {
-      apiToken(
-          "api/webtoon/review/" + route.params.reviewId,
-          "DELETE",
-          {},
-          JSON.parse(authStore.user.token).accessToken
-      ).then((response) => {
-            if (response.status === 400) {
-              alert("값이 유효 하지 않아요")
-            } else {
-              alert(response);
-              router.go(-1);
+      try {
+
+        apiToken(
+            "api/webtoon/review/" + route.params.reviewId,
+            "DELETE",
+            {},
+            JSON.parse(authStore.user.token).accessToken
+        ).then((response) => {
+              if (response.status === 400) {
+                alert("값이 유효 하지 않아요")
+              } else {
+                alert(response);
+                router.go(-1);
+              }
             }
-          }
-      )
+        )
+      } catch (e){
+        alert("5~200자 이내 값을 입력해 주세요")
+      }
     } else {
       alert("로그인을 먼저 해 주세요.")
     }
@@ -179,22 +199,21 @@ function removeReviewReply(replyId) {
 }
 
 // 댓글 수정
-function fixReviewReply(replyId, content) {
-  console.log(content)
+function fixReviewReply(replyId, replyContent) {
   if (authStore.user) {
     apiToken(
         "api/webtoon/review/reply/" + replyId,
         "PATCH",
         {
-          content: content
+          content: replyContent
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= replyContent.length && replyContent.length <= 200) {
             alert(response);
             router.go(0);
+          } else {
+            alert("유효하지 않은 값입니디.")
           }
         }
     )
@@ -203,7 +222,7 @@ function fixReviewReply(replyId, content) {
   }
 }
 
-//공유 함수
+// 링크 공유용 함수
 function copyToClipboard() {
   try {
     copyText(window.document.URL)
@@ -262,8 +281,9 @@ function copyToClipboard() {
               >
                 <v-dialog width="1000" height="800px">
             <template v-slot:activator="{ props }">
+
                 <v-btn
-                    v-if="authStore.user.usersId === reviewData.writerId"
+                    v-if="authStore.user && authStore.user.usersId === reviewData.writerId"
                     class="m-2"
                     color="#5302F2"
                     v-bind="props"
@@ -300,15 +320,14 @@ function copyToClipboard() {
           </v-dialog>
 
 
-
-                <v-btn
-                    v-if="authStore.user.usersId === reviewData.writerId"
-                    class="m-2"
-                    color="#5302F2"
-                    @click="removeReview"
-                >
-                  삭제
-                </v-btn>
+                  <v-btn
+                      v-if="authStore.user && authStore.user.usersId === reviewData.writerId"
+                      class="m-2"
+                      color="#5302F2"
+                      @click="removeReview"
+                  >
+                    삭제
+                  </v-btn>
               </span>
             </div>
           </div>
@@ -365,7 +384,7 @@ function copyToClipboard() {
               @click="likeReview"
           >
             <v-icon
-                :color="reviewData.checkLike == true ? 'red' : 'gray'"
+                :color="reviewData.checkLike === true ? 'red' : 'gray'"
                 size="24"
                 icon="mdi-thumb-up"
             ></v-icon>
@@ -496,6 +515,7 @@ function copyToClipboard() {
                       v-bind="props"
                       v-if="authStore.user.usersId === item.replyUserId"
                       class="m-2"
+                      @click="() => {fixReplyContent = item.content}"
                   >
                     수정
                   </div>
@@ -513,7 +533,7 @@ function copyToClipboard() {
                   <v-card title="웹툰 리뷰 댓글 수정">
                     <v-divider></v-divider>
                     <v-textarea
-                        v-model="item.content"
+                        v-model="fixReplyContent"
                         class="p-5"
                         bg-color=#F2F2F2
                         placeholder="(글자수 5~200자)"

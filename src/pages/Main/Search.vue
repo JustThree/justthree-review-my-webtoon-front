@@ -8,6 +8,8 @@ let type = 1;
 let content = ref([[],[],[],[],[]]);
 let pages = ref([0,0,0,0,0]);
 let size = 24;
+
+// 검색 방식
 const typeJson = {
   1:"title",
   2:"outline",
@@ -15,13 +17,13 @@ const typeJson = {
   4:"user"
 }
 
-
+// 버튼을 누를 경우 타입 변경
 const changeType = function (newType) {
   pages = ref([0,0,0,0,0]);
   type = newType;
 }
 
-
+// 데이터 갱신
 const fetchData = async (idx) => {
   try {
     const response = await api(`api/webtoon/search?type=${typeJson[idx]}&word=${route.query.searchword}&page=${pages.value[idx]}&size=${size}`, "GET");
@@ -32,7 +34,6 @@ const fetchData = async (idx) => {
     {
       return "end"
     }
-    console.log(response)
     if (response instanceof Error) {
       // 에러 처리
     } else {
@@ -45,12 +46,16 @@ const fetchData = async (idx) => {
     console.error(error);
   }
 };
+// 갱신
 const load = (
     { done }
 ) => {
   setTimeout(async () => {
+      //페이지배열의 값 1증가
       pages.value[type]++;
+      // 데이터 받기
       const returnVal = await fetchData(type);
+      // 값이 비어있거나 끝났으면 끝...
       if (!returnVal || returnVal==="end"){
         done("empty")
       } else {
@@ -59,13 +64,14 @@ const load = (
     }, 2000)
 }
 
-//
+//검색어가 변경시 수행
 watch(
     () =>route.query.searchword,
     () => {
+      // 초기화 후 데이터를 다시 받음
       content = ref([[],[],[],[],[]]);
       pages = ref([0,0,0,0,0]);
-      type = 1;
+      // type = 1;
       size = 24
       fetchData(1)
       fetchData(2)
@@ -73,6 +79,7 @@ watch(
       fetchData(4)
     }
 )
+// 데이터 초기화
 fetchData(1);
 fetchData(2);
 fetchData(3);
@@ -81,7 +88,7 @@ type = 1
 </script>
 
 <template>
-  <v-infinite-scroll :height="800" :items="content[type]"
+  <v-infinite-scroll height=100% :items="content[type]"
                      :onLoad="load"
                      empty-text="검색하신 결과가 더 없어요"
                       aria-hidden="true">
@@ -120,7 +127,7 @@ type = 1
                 :key="idx"
                 cols="12"
                 md="4"
-            ><router-link :to="/webtoon/ + item.masterId"
+            ><router-link :to="type===4 ? 'mypage/userinfo/' + item.masterId : 'webtoon/' + item.masterId"
                           class="no-color-line"
             >
               <v-img

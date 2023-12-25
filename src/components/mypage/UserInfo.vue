@@ -17,12 +17,12 @@
       <div id="currentUser">{{usersNickname}}</div>
       <div id="currentUserEmail">{{usersEmail}}</div>
       <div class="followerInfo">
-        <router-link :to="{path:`/mypage/follow/${usersId}`}">
+        <router-link :to="{path:`/mypage/follow/${usersId}`}" class="mr-4 text-decoration-none">
         <div class="follow">팔로워
           <div id="follower">{{followerCount}}</div>
         </div>
         </router-link>
-        <router-link :to="{path:`/mypage/follow/${usersId}`}">
+        <router-link :to="{path:`/mypage/follow/${usersId}`}" class="text-decoration-none">
         <div class="follow">팔로잉
           <div id="following">{{followingCount}}</div>
         </div>

@@ -60,6 +60,7 @@ app.use(VueClipboard, {
     autoSetContainer: true,
     appendToBody: true,
 })
+
 app.use(router);
 app.use(createPinia());
 app.use(VueAwesomePaginate);

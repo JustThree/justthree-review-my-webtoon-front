@@ -6,8 +6,9 @@
 
       <v-toolbar-title class="ml-2">
         <v-btn @click="moveWebtoon"> 웹툰 </v-btn>
-        <v-btn herf="/boardslist/comm"> 커뮤니티 </v-btn>
+        <v-btn href="/boardslist/comm"> 커뮤니티 </v-btn>
         <v-btn href="/chatlist"> 채팅 </v-btn>
+        <v-btn v-if="user && user.usersRole === 'USER,ADMIN'" href="/admin"> 관리자 </v-btn>
       </v-toolbar-title >
 
       <v-toolbar-items class="w-50">
@@ -29,12 +30,11 @@
           로그인
         </v-btn>
 
-<!--        <v-btn v-if="user" href="/mypage/userinfo">
-          마이페이지
-        </v-btn>-->
+
         <v-btn v-if="user" @click="goToMymage">
           마이페이지
         </v-btn>
+
         <v-btn v-if="user" @click="authStore.logout()">
           로그아웃
         </v-btn>
@@ -59,7 +59,6 @@ const goToMymage = async () =>{
     router.push(`/mypage/userinfo/${res}`);
   });
 }
-
 const onClick = () => {
   // 검색 중 로딩 표시
   loading.value = true;

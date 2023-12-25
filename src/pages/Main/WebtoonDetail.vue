@@ -5,6 +5,7 @@ import {api, apiToken} from "@/common.js";
 import {useRoute} from "vue-router";
 import {useAuthStore} from "@/stores/auth.store.js";
 import router from "@/router/index.js";
+
 const authStore = useAuthStore()
 const route = useRoute();
 const color = ref('#BEADFA')
@@ -17,7 +18,6 @@ const links = ref({
   link: []
 });
 // 화면 기초 정보
-
 if (authStore.user) {
   apiToken("api/webtoon/" + route.params.masterId,
       "GET",
@@ -25,14 +25,14 @@ if (authStore.user) {
       ,
       JSON.parse(authStore.user.token).accessToken
   ).then((response) => {
-    if (response.ageCheck){
-        alert("성인 웹툰입니다. 메인으로 이동합니다.")
-        router.push("/")
-    }
-
+        if (response.ageCheck) {
+          alert("성인 웹툰입니다. 메인으로 이동합니다.")
+          router.push("/")
+        }
         data.value = response;
         rating.value = response.userStar / 2
-        if (response.links) {
+    // 한 웹툰에 중복 웹툰인 경우 문자열 파싱 후 배열로 만듬
+    if (response.links) {
           if (response.links.indexOf("*") > 0) {
             const linkSplit = response.links.split("*")
             for (const linkSplitIdx in linkSplit) {
@@ -93,24 +93,23 @@ function ratingSend() {
         {},
         JSON.parse(authStore.user.token).accessToken
     ).then(() => {
-    alert("별점 등록!")
-    router.go(0)
-  }
-  )
+          alert("별점 등록!")
+          router.go(0)
+        }
+    )
   } else {
     alert("로그인을 먼저 해 주세요!")
   }
 }
 
 // 관심 등록 api
-function interestAdd(){
-  if (authStore.user.token !== null){
+function interestAdd() {
+  if (authStore.user && authStore.user.token !== null) {
     apiToken(
         "api/webtoon/interest/" +
         route.params.masterId,
         "PUT",
-        {
-        },
+        {},
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
@@ -118,27 +117,32 @@ function interestAdd(){
           router.go(0);
         }
     )
-  } else{
+  } else {
     alert("로그인을 먼저 해 주세요!")
   }
 }
+
 // 리뷰 api => 모달
-function submitReview(){
-  if (authStore.user){
+function submitReview() {
+  if (authStore.user) {
     apiToken(
         "api/webtoon/review/" +
         route.params.masterId,
         "POST",
         {
-          content:reviewContent.value
+          content: reviewContent.value
         },
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
-          alert(response)
-          router.go(0);
-        }
-    )
+          // 프론트 유효성 검사
+          if (5 <= reviewContent.value.length && reviewContent.value.length <= 200) {
+            alert(response)
+            router.go(0)
+          } else {
+            alert("5~ 200자 값을 입력해 주세요")
+          }
+        })
   } else {
     alert("로그인을 먼저 해 주세요!")
   }
@@ -158,7 +162,7 @@ function submitReview(){
     </v-btn>
   </v-card>
   <v-container
-    class="main-container"
+      class="main-container"
   >
 
     <v-row align="center" justify="center"
@@ -170,6 +174,7 @@ function submitReview(){
           width="90%"
           :style="
             {
+              borderRadius: '10px',
               backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 1.0)),' +'url(' + data.imgUrl +')'
               }
             ">
@@ -199,9 +204,11 @@ function submitReview(){
             style="width:30%"
         >
           <v-img
+              style="border-radius: 25px;"
               :src="data.imgUrl"
               height="300px"
-              cover="true"
+              :cover=true
+
           >
           </v-img>
         </div>
@@ -214,10 +221,10 @@ function submitReview(){
               style="display: flex"
           >
             <v-rating
-                half-increments="true"
+                :half-increments=true
                 :length="5"
                 size="x-large"
-                hover="true"
+                :hover=true
                 active-color="red"
                 class="rating"
                 v-model="rating"
@@ -231,7 +238,7 @@ function submitReview(){
                   class="align-items-center justify-content-center"
               >
                 <v-row
-                 class="align-items-center justify-content-center">
+                    class="align-items-center justify-content-center">
                   <v-col>
                     <div>
                       <div
@@ -250,46 +257,46 @@ function submitReview(){
                     ></v-icon>
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
-                  <v-dialog width="1000" height="800px"
-                            scrollable
-                  >
-                    <template v-slot:activator="{ props }">
-                      <v-icon
+                    <v-dialog width="1000" height="800px"
+                              scrollable
+                    >
+                      <template v-slot:activator="{ props }">
+                        <v-icon
                             v-bind="props"
                             color="gray "
                             size="64"
                             icon="mdi-grease-pencil"
                         ></v-icon>
-                    </template>
+                      </template>
 
-                    <template v-slot:default="{ isActive }">
-                      <v-card title="웹툰 리뷰를 써 주세요!">
-                        <v-divider></v-divider>
+                      <template v-slot:default="{ isActive }">
+                        <v-card title="웹툰 리뷰를 써 주세요!">
+                          <v-divider></v-divider>
 
-                        <v-textarea
-                                    v-model="reviewContent"
-                                    class="p-5"
-                                    bg-color=#F2F2F2
-                                    placeholder="(글자수 5~200자)"
-                        >
-                        </v-textarea>
-                        <v-divider></v-divider>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
+                          <v-textarea
+                              v-model="reviewContent"
+                              class="p-5"
+                              bg-color=#F2F2F2
+                              placeholder="(글자수 5~200자)"
+                          >
+                          </v-textarea>
+                          <v-divider></v-divider>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
 
-                          <v-btn
-                              text="Write"
-                              @click="submitReview"
-                              @keyup.enter="submitReview"
-                          ></v-btn>
-                          <v-btn
-                              text="Close"
-                              @click="isActive.value = false"
-                          ></v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                  </v-dialog>
+                            <v-btn
+                                text="Write"
+                                @click="submitReview"
+                                @keyup.enter="submitReview"
+                            ></v-btn>
+                            <v-btn
+                                text="Close"
+                                @click="isActive.value = false"
+                            ></v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-dialog>
                   </v-col>
                   <v-col class="flex-column" style="text-align: center">
                     <router-link :to="'/chat/'+route.params.masterId"
@@ -417,7 +424,7 @@ function submitReview(){
             </v-col>
             <v-col v-for="(itemCol,idxCol) in reviewData"
                    cols="4"
-                   style="min-width:300px"
+                   style="min-width:300px;border-radius: 15px;"
             >
 
               <v-sheet
@@ -442,34 +449,35 @@ function submitReview(){
                                      class="no-color-line"
                         >
                         <span style="margin-left:15px"
-                            v-text="itemCol.userNickName"></span>
+                              v-text="itemCol.userNickName"></span>
                         </router-link>
                         <v-divider></v-divider>
                         <router-link :to="'/review/' +itemCol.reviewId"
                                      class="no-color-line"
                         >
-                        <v-col class="v-col-12"
-                              v-text="itemCol.content.length > 100 ?itemCol.content.substring(0,100)+ '...' : itemCol.content"
-                              style="font-size: 14px;
+                          <v-col class="v-col-12"
+                                 v-text="itemCol.content.length > 100 ?itemCol.content.substring(0,100)+ '...' : itemCol.content"
+                                 style="font-size: 14px;
                                      height:150px">
-                        </v-col>
+                          </v-col>
                         </router-link>
                       </v-col>
 
                     </v-row>
                     <v-row
-                    ><v-col
-                        style="margin: 0 0 0 10px"
                     >
-                      <v-icon
-                          color="red "
-                          icon="mdi-star"
-                      ></v-icon>
-                      <span
-                          class="review-rating"
-                        v-text="itemCol.rating ? (itemCol.rating/2).toFixed(1) : '평가 안함'"
-                      ></span>
-                    </v-col>
+                      <v-col
+                          style="margin: 0 0 0 10px"
+                      >
+                        <v-icon
+                            color="red "
+                            icon="mdi-star"
+                        ></v-icon>
+                        <span
+                            class="review-rating"
+                            v-text="itemCol.rating ? (itemCol.rating/2).toFixed(1) : '평가 안함'"
+                        ></span>
+                      </v-col>
                     </v-row>
                     <v-row class="ma-lg-0"
                            style="max-width: 300px"

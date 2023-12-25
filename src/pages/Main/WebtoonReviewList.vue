@@ -11,15 +11,13 @@ const authStore = useAuthStore()
 const route = useRoute();
 // 페이징 관련
 const pageContents = ref();
-const totalPages = ref();
+const totalPages = ref(1);
 const reviewContent = ref("");
 const totalCount = ref();
 const queryString = ref({
       page: 0
     }
 )
-
-
 // 페이지네이션
 const fetchData = async () => {
   try {
@@ -35,13 +33,14 @@ const fetchData = async () => {
     console.error("Error fetching data:", error);
   }
 };
+// 댓글 페이징을 위한
 watch(
     () => queryString.value.page,
-    (nowPage, lastPage) => {
+    () => {
       fetchData()
     }
 )
-
+// 리뷰 제출
 function submitReview() {
   if (authStore.user) {
     apiToken(
@@ -53,18 +52,19 @@ function submitReview() {
         JSON.parse(authStore.user.token).accessToken
     ).then(
         (response) => {
-          if (response.status === 400) {
-            alert("값이 유효 하지 않아요")
-          } else {
+          if (5 <= reviewContent.value.length && reviewContent.value.length <= 200) {
+
             alert(response);
             router.go(0);
+          } else {
+            alert("5 ~ 200자 이내로 작성해 주세요")
           }
         })
   } else {
     alert("로그인을 먼저 해 주세요!");
   }
 }
-
+// 데이터 초기화
 fetchData()
 </script>
 
@@ -161,7 +161,7 @@ fetchData()
             >
 
               <img
-                  style="width:40px;height:40px"
+                  style="width:40px;height:40px; border-radius: 15px;"
                   :src="item.imgUrl">
               <router-link :to="'/mypage/userinfo/' + item.replyUserId"
                            class="no-color-line">
@@ -195,11 +195,11 @@ fetchData()
               class="ml-2 mb-2"
           >
             <v-col
-                class="v-col-1"
+                class="v-col-2"
             >
               <v-icon
                   color="gray "
-                  size="16"
+                  size="12"
                   icon="mdi-thumb-up"
               ></v-icon>
               <span
@@ -208,11 +208,11 @@ fetchData()
               </span>
             </v-col>
             <v-col
-                class="v-col-1"
+                class="v-col-2"
             >
               <v-icon
                   color="gray "
-                  size="16"
+                  size="12"
                   icon="mdi-chat-outline"
               ></v-icon>
               <span
@@ -227,9 +227,10 @@ fetchData()
     </v-row>
     <v-row>
       <v-pagination
+          v-if="totalPages-1"
           class="v-row v-md-12"
           v-model="queryString.page"
-          :length="totalPages-1"
+          :length="(totalPages-1)"
           total-visible="8"
           active-color=#5302FE
       >

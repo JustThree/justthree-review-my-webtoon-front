@@ -4,13 +4,14 @@ import axios from 'axios'
 import router from '@/router/index.js'
 import {api} from "@/common.js";
 
-const loginUrl = import.meta.env.VITE_SERVER_URL + import.meta.env.VITE_LOGIN_API_PATH;
+const loginUrl = "http://" + window.location.hostname + ":8089" + import.meta.env.VITE_LOGIN_API_PATH;
 
 async function setUser(user, response){
     user.value = {
         nickname: response.data.nickname,
         profile: response.data.profileImg,
         usersId: response.data.usersId,
+        usersRole: response.data.usersRole,
         token: response.headers.authorization,
         accessToken: JSON.parse(response.headers.authorization).accessToken,
         refreshToken: JSON.parse(response.headers.authorization).refreshToken,
@@ -52,6 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function getTokenkey(){
+        console.log(user);
         let token = ref(JSON.parse(user.value.token));
         let userEmail = ref(token.value.key);
         return userEmail;

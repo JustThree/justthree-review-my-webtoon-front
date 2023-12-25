@@ -43,7 +43,7 @@
 
 <script setup>
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {api} from "@/common.js";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
@@ -93,7 +93,7 @@ function isSpaceCharacter(value){
 const checkNickname = async () => {
   if (!checkAlg(nicknameMsg, newNickname.value)) {
 
-    await axios.get(`http://localhost:8089/api/check-nickname?nickname=${newNickname.value}`)
+    await axios.get(`http://192.168.3.112:8089/api/check-nickname?nickname=${newNickname.value}`)
         .then((res) => {
           console.log(res)
           nicknameAvailabilityMsg.value = "사용 가능한 닉네임입니다"
@@ -114,7 +114,7 @@ const updateUserInfo = () => {
   if(newNickname.value != "" && !(check.value.nickCheck)){
     alert("닉네임 중복체크를 완료해주세요")
   }else {
-    axios.put("http://localhost:8089/mypage/update", formData,{
+    axios.put("http://192.168.3.112:8089/mypage/update", formData,{
       headers:{
         'Content-Type': 'multipart/form-data',
       },

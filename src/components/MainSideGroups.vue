@@ -7,7 +7,7 @@ const title = props.title;
 <template>
   <v-sheet
       class="mx-auto"
-      max-width="1300"
+      max-width="1285"
       :color="color"
   >
     <h2 class="ml-5 pt-5  pl-15"
@@ -38,8 +38,9 @@ const title = props.title;
               class="elevation-0"
               height="100%"
               width="100%"
-              style="object-fit: cover"
-              cover="true"
+              style="object-fit: cover;
+                      border-radius: 25px;"
+              :cover=true
               :src="itemWebtoon.imgUrl"
               @click="toggle"
           >

@@ -1,22 +1,24 @@
 <template>
     <v-container>
         <!-- 검색 Frame -->
-        <v-row>
-            <v-col  cols="5">
+        <v-row class="d-flex justify-center align-center">
+            <div class="search-frame">
                 <v-text-field
                     class="input-keyword"
                     variant="standard"
                     maxlength="20"
                     bg-color="#EDE7F6"
-                    :style="{ 'font-weight': 700 }"
+                    :style="{ 'font-weight': 700  }"
                     v-model="searchKeyword"
                     placeholder="검색 키워드를 작성해주세요">
                 </v-text-field>
-            </v-col>
+            </div>
         </v-row>
         <!-- 글 목록   Frame-->
         <v-row>
-            <div><span>{{noticeCount}}</span>건</div>
+            <div class="board-count-frame">
+                <p class="text-h6 font-weight-medium"><span  class="font-weight-bold" style="color:#FB8C00">{{noticeCount}}</span>건</p>
+            </div>
         </v-row>
         <v-row>
             <!-- 글 목록     -->
@@ -158,6 +160,15 @@ onMounted(async () =>{
 </script>
 
 <style scoped>
+.search-frame{
+    width:  50%;
+    display: flex;
+    text-align: center;
+}
+.board-count-frame{
+    margin: 5px;
+    padding-left: 20px;
+}
 .notice-table-container{
     position: relative;
     display: block;

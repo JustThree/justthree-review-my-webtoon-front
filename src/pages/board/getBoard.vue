@@ -1,109 +1,14 @@
-<template>
-  <v-container>
-      <v-row class="frame-top">
-          <v-col class="frame-title" cols="12">
-              <div class="title-text">{{board.title}}</div>
-          </v-col>
-          <v-col class="frame-title" cols="2">
-              <span>{{board.userNickname}}</span>
-          </v-col>
-          <v-col  class="frame-title" cols="3">
-              <span> 등록일자 {{board.created}}</span>
-          </v-col>
-          <v-col class="frame-title" cols="1">
-              <span>{{board.viewCount}}</span>
-          </v-col>
-          <v-col class="frame-title" cols="3">
-              <v-btn
-                  v-if="loginUsersId !== -1"
-                  :variant="board.boardLikeYn ? 'outlined' : 'text'"
-                  @click="toggleLike">
-                  <v-icon left>{{ board.boardLikeYn ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-<!--                  {{ board.boardLikeYn ? '좋아요 취소' : '좋아요' }}-->
-              </v-btn>
-              <span>
-                  <v-icon left>mdi-heart</v-icon>
-                  {{ board.boardLikeCount }}
-              </span>
-          </v-col>
-          <v-col v-if="loginUsersId === board.writerUsersId" class="frame-title" cols="4">
-              <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
-              <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>
-          </v-col>
-      </v-row>
-      <!-- 이미지 첨부파일   -->
-      <v-row v-if="board.boardImgMapList.length>0">
-          <div class="d-flex justify-space-around align-center bg-grey-lighten-4">
-              <div class="ma-4" v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
-                  <div class="text-subtitle-2">{{imgMap.originName}}</div>
-                  <v-img
-                      class="bg-white"
-                      width="300"
-                      :src=imgMap.accessUrl
-                      cover></v-img>
-              </div>
-          </div>
-      </v-row>
-      <!-- 게시글 내용 -->
-      <v-row class="frame-content" style="height: 500px;">
-          <v-col cols="12">
-              <v-textarea
-                  class="area-board-content"
-                  no-resize
-                  variant="standard"
-                  bg-color="white"
-                  v-model="board.content"
-                  style="height: 600px;"
-                  :readonly="true">
-              </v-textarea>
-          </v-col>
-      </v-row>
-      <!--  댓글 Div     -->
-      <v-row v-if="$route.query.noticeYn !== '1'">
-          <v-col cols="12">
-              <div class="text-h5">
-                  댓글  <span class="font-weight-bold">{{board.boardReplyList.length}}</span>개 </div>
-          </v-col>
-      </v-row>
-      <v-row no-gutters v-if="$route.query.noticeYn !== '1'">
-          <v-col cols="10" sm="6" md="4" align-self="stretch" >
-              <v-text-field
-                  v-model="txtReply"
-                  placeholder="댓글을 입력해주세요"
-                  variant="outlined">
-              </v-text-field>
-          </v-col>
-          <v-col cols="2"  sm="6"  md="4" align-self="stretch">
-                  <v-btn @click="submitReply" >등록</v-btn>
-          </v-col>
-      </v-row>
-      <!--  댓글 목록   -->
-      <v-row v-if="board.boardReplyList.length>0">
-          <v-col cols="12">
-              <div v-for="(data, idx) in board.boardReplyList" :key="idx">
-                  <BoardReply
-                      :boardreply="data"
-                      :writer-users-id="board.writerUsersId"
-                      :loginUsersId="loginUsersId"
-                      :reReplyList = "board.reReplyList"
-                      @delBoardReply="handleDeleteReply"
-                      @saveUpdatedReply="handleUpdateReply"
-                      @createReReply="handleCreateReReply">
-                  </BoardReply>
-              </div>
-          </v-col>
-      </v-row>
-  </v-container>
-</template>
-
 <script setup>
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {api} from "@/common.js";
+import {api, apiToken} from "@/common.js";
 import router from "@/router/index.js";
 import BoardReply from "@/components/board/boardReply.vue";
 import {useAuthStore} from "@/stores/auth.store.js";
 import {storeToRefs} from "pinia";
+
+
+const authStore = useAuthStore();
 
 const board = ref({
     title: '',
@@ -132,10 +37,8 @@ let boardreReplyList = ref([]);
 
 //게시글 좋아요 등록 및 취소
 async function toggleLike() {
-    //console.log(board.value.boardLikeYn);
     if(!board.value.boardLikeYn) {  //좋아요 등록
         const response = await api("board/likes", "POST", {
-            "users": {"usersId": loginUsersId.value},
             "boardId": board.value.boardId
         });
         if (response instanceof Error) {
@@ -169,6 +72,7 @@ function gotoUpdateBoard(){
     let bId = board.value.boardId;
     router.push({ name: 'updatedBoard', params: { bId}});
 }
+
 //게시글 삭제
 async function delBoard(){
     if(confirm("정말 삭제하시겠습니까?")){
@@ -202,7 +106,6 @@ const submitReply = async () => {
             return;
     }
    const response = await api("boardreply", "POST", {
-            "users" : {"usersId": loginUsersId.value},
             "boardId": board.value.boardId,
             "boardReplyContent": txtReply.value,
             "parentReplyId" : 0
@@ -232,7 +135,8 @@ const handleDeleteReply = async (delBoardReply) =>{
             if (response) {
                 console.log("삭제");
                 alert("댓글이 삭제되었습니다.");
-                await getData();
+                /*await getData();*/
+                router.go(0);
             } else {
                 alert("삭제 실패..");
             }
@@ -247,7 +151,6 @@ const handleUpdateReply = async (editedReply)=>{
         return;
     }
     const response = await api("boardreply/"+editedReply.boardReplyId, "PUT", {
-        "users" : {"usersId": editedReply.replyUsersId},
         "boardId": editedReply.boardId,
         "boardReplyContent": editedReply.updatedReplyContent
     });
@@ -276,8 +179,7 @@ const handleCreateReReply = async (newReReply)=>{
         return;
     }
     if(confirm("대댓글은 수정 및 삭제가 안됩니다. 등록하시겠습니까?")){
-        const response = await api("board/reply", "POST", {
-        "users" : {"usersId": loginUsersId.value},
+        const response = await api("boardreply", "POST", {
         "boardId": newReReply.boardId,
         "boardReplyContent": newReReply.boardReplyContent,
         "parentReplyId" : newReReply.parentReplyId
@@ -297,8 +199,12 @@ const handleCreateReReply = async (newReReply)=>{
         return;
     }
 }
+const addLineBreaks = (text) => {
+    return text.replace(/\n/g, "<br>");
+};
 //데이터 조회
 const getData = async () =>{
+    //console.log(JSON.parse(authStore.user.token).accessToken );
     console.log(route.params.boardId);
     api("board/"+route.params.boardId, "GET")
         .then((response)=>{
@@ -307,8 +213,9 @@ const getData = async () =>{
                 console.log(errorRes.response);
                 //not found 글 목록으로 이동
             }else{
-                //console.log(response);
+                console.log(response);
                 board.value = response;
+                board.value.content = board.value.content.split('\n').join('<br>');
                 // 댓글, 대댓글
                 board.value.replyList = board.value.boardReplyList.filter(reply => reply.parentReplyId === 0);
                 board.value.reReplyList = board.value.boardReplyList.filter(reply => reply.parentReplyId !== 0);
@@ -328,20 +235,195 @@ onMounted(async () =>{
     }else {
         loginUsersId.value =-1;
     }
-    console.log('loginUsersId', loginUsersId.value);
-    console.log(loginUsersId.value);
     await getData();
 });
-
 </script>
 
+<template>
+    <v-container>
+        <v-row>
+            <div class="top-frame">
+                <div class="top-title-frame" >
+                    <span class="top-title-text">{{board.title}}</span>
+                </div>
+                <div class="top-desc-frame" >
+                    <span>{{board.userNickname}}</span>
+                    <span v-if="board.created === board.updated"  class="font-weight-light"> 등록일자 {{board.created}}</span>
+                    <span v-else-if="board.created !== board.updated" class="font-weight-light">수정일자 {{ board.updated}}</span>
+                    <span><v-icon>mdi-eye</v-icon>{{board.viewCount}}</span>
+                </div>
+                <div class="top-bottom-frame">
+                    <v-btn
+                        v-if="loginUsersId !== -1"
+                        :variant="board.boardLikeYn ? 'plain' : 'text'"
+                        @click="toggleLike">
+                        <v-icon left >{{ board.boardLikeYn ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                        <span>{{ board.boardLikeYn ? '좋아요 취소' : '좋아요' }}</span>
+                    </v-btn>
+                    <span><v-icon left style="color:red">mdi-heart</v-icon> {{  board.boardLikeCount  }} </span>
+                    <div class="edit-btns" v-if="loginUsersId === board.writerUsersId">
+                        <v-btn variant="flat" @click="gotoUpdateBoard">  수정  </v-btn>
+<!--                        <v-btn variant="tonal" @click="delBoard">  삭제  </v-btn>-->
+                    </div>
+                </div>
+            </div>
+        </v-row>
+        <!-- 이미지 첨부파일   -->
+        <v-row v-if="board.boardImgMapList.length > 0">
+            <v-carousel show-arrows="hover">
+                <v-carousel-item v-for="(imgMap, index) in board.boardImgMapList" :key="index" >
+                    <div>
+                        <div class="images-frame">
+                            <div class="text-overline">{{imgMap.originName}}</div>
+                            <v-img class="bg-white" width="300" :src="imgMap.accessUrl" cover></v-img>
+                        </div>
+                    </div>
+                </v-carousel-item>
+            </v-carousel>
+        </v-row>
+        <!-- 게시글 내용 -->
+        <v-row>
+            <div class="content-frame" >
+                <div v-html="board.content"></div>
+            </div>
+        </v-row>
+        <!--  댓글 Div     -->
+        <v-row v-if="$route.query.noticeYn !== '1'">
+            <div class="reply-title-frame">
+                <span class="text-h5">
+                    댓글  <span class="font-weight-bold">{{board.boardReplyList.length}}</span>개 </span>
+            </div>
+        </v-row>
+        <v-row no-gutters v-if="$route.query.noticeYn !== '1'">
+            <div class="reply-input-frame">
+                <v-text-field
+                    v-model="txtReply"
+                    placeholder="댓글을 입력해주세요"
+                    variant="outlined"
+                @keyup.enter="submitReply">
+                </v-text-field>
+                <v-btn class="reply-submit-btn" variant="tonal" @click="submitReply" >등록</v-btn>
+            </div>
+        </v-row>
+        <!--  댓글 목록   -->
+        <v-row v-if="board.boardReplyList.length>0">
+            <div class="reply-list-frame">
+                <div v-for="(data, idx) in board.boardReplyList" :key="idx">
+                    <BoardReply
+                        :boardreply="data"
+                        :writer-users-id="board.writerUsersId"
+                        :loginUsersId="loginUsersId"
+                        :reReplyList = "board.reReplyList"
+                        @delBoardReply="handleDeleteReply"
+                        @saveUpdatedReply="handleUpdateReply"
+                        @createReReply="handleCreateReReply">
+                    </BoardReply>
+                </div>
+            </div>
+        </v-row>
+    </v-container>
+</template>
 <style scoped>
-.frame-top{
+.custom-menu-link{
+    color: inherit;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 700;
+}
+/*게시글 제목 */
+.top-frame{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    padding: 10px;
     background-color: #EDE7F6;
     border-top: 1px;
     border-bottom: 1px;
 }
-.area-board-content{
-    height: 600px;
+.top-title-frame{
+    padding: 5px;
+    margin-bottom: 3px;
+}
+.top-title-text{
+    padding-left: 15px;
+    font-size: 22px;
+    font-weight: 600;
+}
+.top-desc-frame{
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+    padding-left: 15px;
+    gap: 20px;
+}
+.top-bottom-frame{
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+    gap: 20px;
+}
+.edit-btns{
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+/* 게시글 본문 이미지 */
+.images-frame {
+    margin: 10px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    background-color:  #ffffff;
+}
+::v-deep .v-carousel__controls {
+    background: #ffffff;
+}
+::v-deep .v-carousel__controls .v-carousel__control-dots{
+    background: #7B68EE;
+}
+/* 게시글 본문 내용 */
+.content-frame{
+    width: 100%;
+    min-height: 200px;
+    margin: 10px;
+}
+/* 댓글 */
+.reply-title-frame{
+    margin: 10px;
+}
+.reply-input-frame{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 5px;
+    padding: 10px;
+}
+.reply-input-frame .v-btn--size-default {
+    --v-btn-size: 0.875rem;
+    --v-btn-height: 57px;
+    font-size: var(--v-btn-size);
+    min-width: 65px;
+    padding: 0 16px;
+}
+.reply-submit-btn{
+    height: 30px;
+    color:white;
+    background-color: #7B68EE;
+}
+.reply-list-frame{
+    width: 95%;
 }
 </style>
