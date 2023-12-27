@@ -80,7 +80,7 @@ const updateBoard = async (board) => {
     }
 };
 //글 삭제 처리[Component(BoardForm) 관련]
-/*const deleteBoard = async (board) => {
+const deleteBoard = async (board) => {
   console.log(board);
   if(confirm("정말 삭제하시겠습니까?")){
       const response = await api("board/"+board.boardId, "DELETE");
@@ -97,7 +97,7 @@ const updateBoard = async (board) => {
   }else{
       return;
   }
-}*/
+}
 const cancelUpdate = () =>{
     router.go(-1);
 }
