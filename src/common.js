@@ -14,7 +14,7 @@ const apiToken = async (urn, method, data, token) => {
         method,
         data,
         headers: {
-            Authorization: token
+            Authorization: token,
         }
     }).catch(e => {
         console.log("http://" + window.location.hostname + ":8089/" + urn)
@@ -27,7 +27,7 @@ const api = async (urn, method, data) => {
     return (await axios({
         method: method,
         url,
-        data
+        data,
     }).catch(e => {
         return { data: e}; //error 발생 시 e 반환
     })).data;

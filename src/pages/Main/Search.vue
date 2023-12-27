@@ -26,7 +26,7 @@ const changeType = function (newType) {
 // 데이터 갱신
 const fetchData = async (idx) => {
   try {
-    const response = await api(`api/webtoon/search?type=${typeJson[idx]}&word=${route.query.searchword}&page=${pages.value[idx]}&size=${size}`, "GET");
+    const response = await api(`webtoon/search?type=${typeJson[idx]}&word=${route.query.searchword}&page=${pages.value[idx]}&size=${size}`, "GET");
     if (!response.size){
       return response.size;
     }
