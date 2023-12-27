@@ -19,7 +19,7 @@ const links = ref({
 });
 // 화면 기초 정보
 if (authStore.user) {
-  apiToken("api/webtoon/" + route.params.masterId,
+  apiToken("webtoon/" + route.params.masterId,
       "GET",
       {}
       ,
@@ -50,7 +50,7 @@ if (authStore.user) {
       }
   );
 } else {
-  api("api/webtoon/" + route.params.masterId,
+  api("webtoon/" + route.params.masterId,
       "GET",
   ).then((response) => {
         data.value = response;
@@ -73,7 +73,7 @@ if (authStore.user) {
       }
   );
 }
-api("api/webtoon/reviews/" + route.params.masterId,
+api("webtoon/reviews/" + route.params.masterId,
     "GET"
 ).then((response) => {
       reviewData.value = response.content
@@ -86,7 +86,7 @@ api("api/webtoon/reviews/" + route.params.masterId,
 // 별점 남기기 api
 function ratingSend() {
   if (authStore.user) {
-    apiToken("api/webtoon/rating?" +
+    apiToken("webtoon/rating?" +
         "masterId=" + route.params.masterId +
         "&star=" + rating.value * 2,
         "PUT",
@@ -106,7 +106,7 @@ function ratingSend() {
 function interestAdd() {
   if (authStore.user && authStore.user.token !== null) {
     apiToken(
-        "api/webtoon/interest/" +
+        "webtoon/interest/" +
         route.params.masterId,
         "PUT",
         {},
@@ -126,7 +126,7 @@ function interestAdd() {
 function submitReview() {
   if (authStore.user) {
     apiToken(
-        "api/webtoon/review/" +
+        "webtoon/review/" +
         route.params.masterId,
         "POST",
         {

@@ -21,7 +21,7 @@ const queryString = ref({
 // 페이지네이션
 const fetchData = async () => {
   try {
-    const response = await api("api/webtoon/reviews/"
+    const response = await api("webtoon/reviews/"
         + route.params.masterId
         + "?page=" + (queryString.value.page - 1)
         , "GET");
@@ -44,7 +44,7 @@ watch(
 function submitReview() {
   if (authStore.user) {
     apiToken(
-        "api/webtoon/review/" + route.params.masterId,
+        "webtoon/review/" + route.params.masterId,
         "POST",
         {
           "content": reviewContent.value
