@@ -12,24 +12,28 @@
   <div>
     <v-card id="updateUserInfoForm_layout" class="mx-auto pa-12 pb-8" elevation="8" max-width="560" rounded="lg" style="text-align: center">
       <div id="profileImgLayOut">
-      <v-avatar size="110" id="profileimg">
-        <img :src=user.profile alt="profileimg" style="width: 100%">
-      </v-avatar>
+      <v-avatar size="110" id="profileimg"><img :src=user.profile alt="profileimg" style="width: 100%"></v-avatar>
       </div>
-      <v-file-input label="File input" v-model="selectedFile" @change="handleFileChange" variant="solo-filled"></v-file-input>
+<!--      파일 인풋 -->
+      <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">프로필 사진 변경</div>
+      <v-file-input label="File input" v-model="selectedFile" @change="handleFileChange" icon="none" variant="solo-filled"></v-file-input>
+
+<!--      닉네임 변경 -->
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">닉네임 변경</div>
-    <div style="display: flex">
-      <v-text-field v-model="newNickname"
-          density="compact"
-          placeholder="변경할 닉네임을 입력하세요"
-          prepend-inner-icon="mdi-account-outline"
-          variant="outlined"
-      ></v-text-field>
-      <v-btn class="vaildateBtn basicBtnColor" @click="checkNickname">
-        중복확인
-      </v-btn>
-      <span id="nicknameMsg">{{ nicknameAvailabilityMsg }}</span>
+    <div style="display: flex" class="form-group">
+      <div class="input-group">
+        <v-text-field v-model="newNickname" density="compact"
+                      placeholder="변경할 닉네임을 입력하세요" prepend-inner-icon="mdi-account-outline"
+                      variant="outlined"></v-text-field>
+        <div class="input-group-append">
+        <v-btn class="vaildateBtn basicBtnColor" @click="checkNickname">중복확인</v-btn>
+        </div>
+      </div>
     </div>
+      <small id="nicknameMsg" class="form-text text-info">{{ nicknameAvailabilityMsg }}</small>
+
+
+
       <v-btn block class="mb-8" color="#5041BC" size="large" variant="elevated" @click="updateUserInfo" >회원정보 수정</v-btn>
     </v-card>
   </div>
