@@ -26,7 +26,7 @@ const reviewQueryString = ref({
 
 // 리뷰 데이터 한번 불러옴
 if (authStore.user && authStore.user.token !== null){
-  apiToken("api/webtoon/review/" + route.params.reviewId,
+  apiToken("webtoon/review/" + route.params.reviewId,
       "GET",
       {},
       JSON.parse(authStore.user.token).accessToken
@@ -40,7 +40,7 @@ if (authStore.user && authStore.user.token !== null){
     fixContent.value = response.content;
   }
   )}else {
-    api("api/webtoon/review/" + route.params.reviewId,
+    api("webtoon/review/" + route.params.reviewId,
         "GET",
     ).then((response) => {
           if (response.deleted) {
@@ -65,7 +65,7 @@ watch(
 // 데이터 수정
 const fetchData = async () => {
   try {
-    const response = await api("api/webtoon/review/reply/"
+    const response = await api("webtoon/review/reply/"
         + route.params.reviewId
         + "?page=" + (reviewQueryString.value.page - 1)
         , "GET");
@@ -83,7 +83,7 @@ fetchData();
 function likeReview() {
   if (authStore.user) {
     console.log(JSON.parse(authStore.user.token).accessToken)
-    apiToken("api/webtoon/review/like/" + route.params.reviewId,
+    apiToken("webtoon/review/like/" + route.params.reviewId,
         "PATCH",
         {},
         JSON.parse(authStore.user.token).accessToken
@@ -102,7 +102,7 @@ function likeReview() {
 function submitReviewReply() {
   if (authStore.user) {
     apiToken(
-        "api/webtoon/review/reply/" + route.params.reviewId,
+        "webtoon/review/reply/" + route.params.reviewId,
         "POST",
         {
           content: reviewReplyComment.value
@@ -126,7 +126,7 @@ function submitReviewReply() {
 function fixReview() {
   if (authStore.user) {
     apiToken(
-        "api/webtoon/review/" + route.params.reviewId,
+        "webtoon/review/" + route.params.reviewId,
         "PATCH",
         {
           content: fixContent.value
@@ -152,7 +152,7 @@ function removeReview() {
       try {
 
         apiToken(
-            "api/webtoon/review/" + route.params.reviewId,
+            "webtoon/review/" + route.params.reviewId,
             "DELETE",
             {},
             JSON.parse(authStore.user.token).accessToken
@@ -179,7 +179,7 @@ function removeReviewReply(replyId) {
   if (confirm("삭제 하시겠습니까?")) {
     if (authStore.user) {
       apiToken(
-          "api/webtoon/review/reply/" + replyId,
+          "webtoon/review/reply/" + replyId,
           "DELETE",
           {},
           JSON.parse(authStore.user.token).accessToken
@@ -199,17 +199,17 @@ function removeReviewReply(replyId) {
 }
 
 // 댓글 수정
-function fixReviewReply(replyId, replyContent) {
+function fixReviewReply(replyId, fixReplyContents) {
   if (authStore.user) {
     apiToken(
-        "api/webtoon/review/reply/" + replyId,
+        "webtoon/review/reply/" + replyId,
         "PATCH",
         {
-          content: replyContent
+          content: fixReplyContents
         },
         JSON.parse(authStore.user.token).accessToken
     ).then((response) => {
-          if (5 <= replyContent.length && replyContent.length <= 200) {
+          if (5 <= fixReplyContents.length && fixReplyContents.length <= 200) {
             alert(response);
             router.go(0);
           } else {
@@ -545,7 +545,7 @@ function copyToClipboard() {
 
                       <v-btn
                           text="Write"
-                          @click="fixReviewReply(item.replyId,item.content)"
+                          @click="fixReviewReply(item.replyId,fixReplyContent)"
                       ></v-btn>
                       <v-btn
                           text="Close"

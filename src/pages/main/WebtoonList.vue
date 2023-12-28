@@ -80,7 +80,7 @@ watch(
 const fetchData = async () => {
   loadContent.value = true
   try {
-    const response = await api("api/webtoon?page="
+    const response = await api("webtoon?page="
     + (queryString.value.page -1)
     + "&genre=" + genreObj[queryString.value.genre]
     + "&order=" + orderObj[queryString.value.order]

@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 import ChatListPage from "@/pages/chat/ChatList.vue"
-import ChatDetailPage from "@/pages/Chat/ChatBoard.vue"
+import ChatDetailPage from "@/pages/chat/ChatBoard.vue"
 import TestUserInfo from "@/pages/TestUserInfo.vue"
 import Login from "@/pages/Login.vue";
 import Join from "@/pages/Join.vue";
-import Main from "@/pages/Main/Main.vue";
+import Main from "@/pages/main/Main.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue"
 import ResetPassword from "@/pages/ResetPassword.vue"
 
@@ -19,26 +19,25 @@ import commBoardList from "@/pages/board/commBoadList.vue"
 import noticeBoardList from "@/pages/board/noticeBoardList.vue"
 
 //Main
-import WebtoonDetail from "@/pages/Main/WebtoonDetail.vue"
-import WebtoonList from "@/pages/Main/WebtoonList.vue";
-import Search from "@/pages/Main/Search.vue";
-import WebtoonReviewList from "@/pages/Main/WebtoonReviewList.vue"
-import WebtoonReviewDetail from "@/pages/Main/WebtoonReviewDetail.vue"
+import WebtoonDetail from "@/pages/main/WebtoonDetail.vue"
+import WebtoonList from "@/pages/main/WebtoonList.vue";
+import Search from "@/pages/main/Search.vue";
+import WebtoonReviewList from "@/pages/main/WebtoonReviewList.vue"
+import WebtoonReviewDetail from "@/pages/main/WebtoonReviewDetail.vue"
 
 //mypage
-import Interest from "@/pages/MyPage/Interest.vue";
-import Rated from "@/pages/MyPage/Rated.vue";
-import Reviewed from "@/pages/MyPage/Reviewed.vue";
-import UserInfo from "@/pages/MyPage/UserInfo.vue";
-import UpdateUserInfo from "@/pages/MyPage/UpdateUserInfo.vue";
-import Follow from "@/pages/MyPage/Follow.vue";
+import Interest from "@/pages/myPage/Interest.vue";
+import Rated from "@/pages/myPage/Rated.vue";
+import Reviewed from "@/pages/myPage/Reviewed.vue";
+import UserInfo from "@/pages/myPage/UserInfo.vue";
+import UpdateUserInfo from "@/pages/myPage/UpdateUserInfo.vue";
+import Follow from "@/pages/myPage/Follow.vue";
 
 //Admin
 import Admin from "@/pages/Admin.vue";
 import Static from "@/components/admin/Static.vue";
 import BoardAdmin from "@/components/admin/BoardAdmin.vue";
 import NoticeAdmin from "@/components/admin/NoticeAdmin.vue";
-import TotalStatistics from "@/components/admin/TotalStatistics.vue";
 import UserAdmin from "@/components/admin/UserAdmin.vue";
 
 const router= createRouter({

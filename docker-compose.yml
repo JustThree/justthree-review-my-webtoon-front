@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  front_img:
+    container_name: APG_Front
+    build:
+      context: ./file
+      dockerfile: Vue.Dockerfile
+
+    ports:
+      - "80:80"
+      - "3000:3000"
+    extra_hosts:
+      - "loc.apg.com:192.168.3.111"
+    privileged: true
+    command: /sbin/init
+    user: 0:0
+    environment:
+      TZ: "Asia/Seoul"
+    networks:
+      server_net:
+        ipv4_address: "192.168.3.111"
+networks:
+  server_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.3.111"/16"
