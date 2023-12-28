@@ -200,7 +200,13 @@ function checkPassword(password, confirmPassword){
     alert("비밀번호가 일치하지 않습니다");
     return false;
   } else {
-    return true;
+    let reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/;
+    if(reg.test(password)){
+      return true;
+    }else {
+      alert("비밀번호는 영문, 숫자, 특수문자 조합으로 이루어진 8~15자로 구성해주세요");
+    }
+
   }
 }
 
