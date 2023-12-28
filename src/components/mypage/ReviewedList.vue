@@ -9,7 +9,7 @@
     <hr class="line">
   </div>
 
-  <v-card>
+  <v-card id="hder">
     <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
       <v-tab :value="1">기본 순</v-tab>
       <v-tab :value="2">좋아요 순</v-tab>
@@ -32,15 +32,16 @@
         <a id="image_a"><img :src="review.imageUrl" id="webtoonimg"></a>
           </div>
           <div id="midcontent_text">
-            <div>{{ review.title }}</div>
-            <div>{{ review.pictrWritrNm }} {{review.sntncWritrNm}}</div>
-            <div>{{review.content}}</div>
+            <div id="text_title">{{ review.title }}</div>
+            <div id="text_aurthor">작가명 :  {{review.sntncWritrNm}}</div>
+<!--            <div id="text_aurthor">{{ review.pictrWritrNm }} {{review.sntncWritrNm}}</div>-->
+            <div id="text_content">{{review.content}}</div>
 
           </div>
         </div>
         <hr>
             <div id="botcontetnt">
-              <v-btn size="small" color="surface-variant" variant="text" icon="mdi-heart"></v-btn>{{review.reviewHeartCount}}
+              <v-btn class="text-red" size="small" color="surface-variant" variant="text" icon="mdi-heart" @click="toggleFavorite"></v-btn>{{review.reviewHeartCount}}
               <v-btn size="small" color="surface-variant" variant="text" icon="mdi-account"></v-btn>{{review.reviewReplyCount}}
             </div>
           </v-col>
@@ -72,9 +73,12 @@ const props = defineProps(['usersId']);
 let usersId=props.usersId;
 let reviewed = reactive([]);
 const tab = ref(null);
+const fav = ref(true);
 
 
-
+const toggleFavorite = () => {
+  fav.value = !fav.value;
+};
 onBeforeMount(()=>{
   console.log("start")
   try {

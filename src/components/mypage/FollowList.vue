@@ -26,7 +26,10 @@
                 <v-card-title v-else class="text-h5">{{ item.followerNickname }}</v-card-title>
                 <v-card-subtitle>{{ item.usersEmail }}</v-card-subtitle>
                 <div @click="handleFollowButtonClick(item.usersId)" >
-                  <v-btn variant="text" :class="item.following ? 'text-red' : ''" icon="mdi-heart" @click="toggleFav(item)"></v-btn>
+                  <v-btn variant="text"
+                         :class="item.following ? 'text-red' : ''"
+                         icon="mdi-heart"
+                         @click="toggleFav(item)"></v-btn>
                 </div>
               </div>
               <v-avatar class="ma-6" size="125" rounded="10">
@@ -51,7 +54,6 @@ let usersId=props.usersId;
 const tab = ref(1);
 let follow = reactive([]);
 let resp;
-const fav = ref(true);
 
 watch(tab,()=>{
   sortBtn();
@@ -73,8 +75,6 @@ const sortBtn=()=>{
   }
 }
 const toggleFav = (item) => {
-  // item.fav.value = !item.fav.value;
-  // follow.values.push();
   item.following = !item.following;
 };
 const goBack = () => {
