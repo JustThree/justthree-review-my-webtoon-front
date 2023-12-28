@@ -79,3 +79,16 @@ div#nickname {
 #botcontetnt{
     text-align: left;
 }
+div#hder {
+    margin-bottom: 60px;
+}
+div#text_title {
+    font-weight: bold;
+}
+div#text_aurthor {
+    font-size: small;
+}
+div#text_content{
+    margin-top: 5px;
+}
+

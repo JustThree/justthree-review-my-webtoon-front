@@ -12,7 +12,7 @@
   <div>
     <v-card id="updateUserInfoForm_layout" class="mx-auto pa-12 pb-8" elevation="8" max-width="560" rounded="lg" style="text-align: center">
       <div id="profileImgLayOut">
-      <v-avatar size="110" id="profileimg"><img :src=user.profile alt="profileimg" style="width: 100%"></v-avatar>
+      <v-avatar size="110" id="profileimg"><img :src=profileImg alt="profileimg" style="width: 100%"></v-avatar>
       </div>
 <!--      파일 인풋 -->
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">프로필 사진 변경</div>
@@ -43,7 +43,7 @@
 
 <script setup>
 import axios from "axios";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {api} from "@/common.js";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/stores/auth.store.js";
@@ -57,11 +57,17 @@ const selectedFile = ref([]);
 const newNickname = ref("");
 const nicknameAvailabilityMsg = ref("");
 const currentUser = ref(user.usersId)
+const profileImg = ref(user.profile)
+
 const check = ref(
   {
     nickCheck:false,
   }
 )
+
+watch(selectedFile,()=> {
+  profileImg.value = URL.createObjectURL(selectedFile.value[0]);
+})
 
 const goBack = () => {
   window.history.back();
@@ -90,10 +96,12 @@ function isSpaceCharacter(value){
   else
     return false;
 }
+
+
 const checkNickname = async () => {
   if (!checkAlg(nicknameMsg, newNickname.value)) {
 
-     api(`api/check-nickname?nickname=${newNickname.value}`,'get')
+    await axios.get(`http://localhost:8089/api/check-nickname?nickname=${newNickname.value}`)
         .then((res) => {
           console.log(res)
           nicknameAvailabilityMsg.value = "사용 가능한 닉네임입니다"
@@ -114,7 +122,7 @@ const updateUserInfo = () => {
   if(newNickname.value != "" && !(check.value.nickCheck)){
     alert("닉네임 중복체크를 완료해주세요")
   }else {
-    api("mypage/update",'put', formData,{
+    axios.put("http://localhost:8089/mypage/update", formData,{
       headers:{
         'Content-Type': 'multipart/form-data',
       },
