@@ -1,7 +1,7 @@
 # 첫 번째 단계: 빌드 환경
 # Node.js 이미지를 기반으로 설정합니다.
 FROM node:18 AS build-stage
-WORKDIR /app
+
 
 # 패키지 파일과 잠금 파일을 복사합니다.
 COPY package*.json ./
@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx:stable as production-stage
 
 # 빌드된 애플리케이션을 Nginx 서버에 복사합니다.
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage dist /usr/share/nginx/html
 # Nginx 설정 파일을 복사합니다.
 COPY default.conf /etc/nginx/conf.d/default.conf
 
